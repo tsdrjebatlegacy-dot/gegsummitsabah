@@ -27,99 +27,112 @@
 
   <style>
 
-    :root{
-      --blue:#4285f4;
-      --red:#ea4335;
-      --yellow:#fbbc04;
-      --green:#34a853;
+    :root {
 
-      --dark:#03101e;
-      --dark2:#092844;
+      --blue: #4285f4;
+      --red: #ea4335;
+      --yellow: #fbbc04;
+      --green: #34a853;
+
+      --dark: #03101e;
+      --dark2: #092844;
+
     }
 
 
-    *{
-      box-sizing:border-box;
+    * {
+
+      box-sizing: border-box;
+
     }
 
 
     html,
-    body{
+    body {
 
-      margin:0;
-      padding:0;
+      margin: 0;
+      padding: 0;
 
-      width:100%;
-      height:100%;
+      width: 100%;
+      height: 100%;
 
-      overflow:hidden;
+      overflow: hidden;
 
       font-family:
         Arial,
         Helvetica,
         sans-serif;
 
-      background:#03101e;
+      background: #03101e;
 
     }
 
 
-    /* GOOGLE COLOUR LINE */
+    /******************************************************
+     * GOOGLE COLOUR LINE
+     ******************************************************/
 
-    .google-line{
+    .google-line {
 
-      position:fixed;
+      position: fixed;
 
-      top:0;
-      left:0;
+      top: 0;
+      left: 0;
 
-      width:100%;
-      height:5px;
+      width: 100%;
+      height: 5px;
 
-      z-index:9999;
+      z-index: 9999;
 
       background:
         linear-gradient(
           90deg,
+
           var(--blue) 0 25%,
+
           var(--red) 25% 50%,
+
           var(--yellow) 50% 75%,
+
           var(--green) 75% 100%
         );
 
     }
 
 
-    /* LOADING SCREEN */
+    /******************************************************
+     * LOADING SCREEN
+     ******************************************************/
 
-    #loading{
+    #loading {
 
-      position:fixed;
+      position: fixed;
 
-      inset:0;
+      inset: 0;
 
-      z-index:9998;
+      z-index: 9998;
 
-      display:flex;
+      display: flex;
 
-      align-items:center;
-      justify-content:center;
+      align-items: center;
 
-      text-align:center;
+      justify-content: center;
 
-      color:white;
+      text-align: center;
+
+      color: white;
 
       background:
 
         radial-gradient(
           circle at 15% 15%,
-          rgba(66,133,244,.28),
+          rgba(66, 133, 244, .28),
           transparent 32%
         ),
 
         radial-gradient(
           circle at 85% 80%,
-          rgba(52,168,83,.18),
+          rgba(52, 168, 83, .18),
           transparent 30%
         ),
 
@@ -136,37 +149,41 @@
     }
 
 
-    #loading.hide{
+    #loading.hide {
 
-      opacity:0;
-      visibility:hidden;
+      opacity: 0;
 
-    }
+      visibility: hidden;
 
-
-    .loader-card{
-
-      width:min(
-        440px,
-        calc(100% - 40px)
-      );
-
-      padding:35px;
+      pointer-events: none;
 
     }
 
 
-    .spinner{
+    .loader-card {
 
-      width:68px;
-      height:68px;
+      width:
+        min(
+          440px,
+          calc(100% - 40px)
+        );
+
+      padding: 35px;
+
+    }
+
+
+    .spinner {
+
+      width: 68px;
+      height: 68px;
 
       margin:
         0 auto 22px;
 
-      border-radius:50%;
+      border-radius: 50%;
 
-      position:relative;
+      position: relative;
 
       background:
         conic-gradient(
@@ -183,46 +200,48 @@
     }
 
 
-    .spinner::after{
+    .spinner::after {
 
-      content:"";
+      content: "";
 
-      position:absolute;
+      position: absolute;
 
-      inset:7px;
+      inset: 7px;
 
-      border-radius:50%;
+      border-radius: 50%;
 
-      background:#07192e;
+      background: #07192e;
 
     }
 
 
-    @keyframes rotate{
+    @keyframes rotate {
 
-      to{
-        transform:rotate(360deg);
+      to {
+
+        transform: rotate(360deg);
+
       }
 
     }
 
 
-    .loading-label{
+    .loading-label {
 
-      font-size:11px;
+      font-size: 11px;
 
-      font-weight:800;
+      font-weight: 800;
 
-      letter-spacing:.15em;
+      letter-spacing: .15em;
 
-      color:#8ab4f8;
+      color: #8ab4f8;
 
-      margin-bottom:9px;
+      margin-bottom: 9px;
 
     }
 
 
-    .loading-title{
+    .loading-title {
 
       font-size:
         clamp(
@@ -231,20 +250,20 @@
           38px
         );
 
-      font-weight:900;
+      font-weight: 900;
 
-      line-height:1.05;
+      line-height: 1.05;
 
-      margin-bottom:11px;
+      margin-bottom: 11px;
 
     }
 
 
-    .loading-text{
+    .loading-text {
 
-      font-size:13px;
+      font-size: 13px;
 
-      line-height:1.6;
+      line-height: 1.6;
 
       color:
         rgba(
@@ -257,108 +276,67 @@
     }
 
 
-    /* APPS SCRIPT */
+    /******************************************************
+     * APPS SCRIPT FRAME
+     ******************************************************/
 
-    #appFrame{
+    #appFrame {
 
-      position:fixed;
+      position: fixed;
 
-      top:5px;
-      left:0;
+      top: 5px;
+      left: 0;
 
-      width:100%;
+      width: 100%;
 
       height:
         calc(
           100dvh - 5px
         );
 
-      border:0;
+      margin: 0;
+      padding: 0;
 
-      display:block;
+      border: 0;
 
-      background:white;
+      display: block;
 
-    }
-
-
-    /* FALLBACK BUTTON */
-
-    .fallback{
-
-      position:fixed;
-
-      bottom:15px;
-      right:15px;
-
-      z-index:9997;
+      background: white;
 
     }
 
 
-    .fallback a{
+    /******************************************************
+     * MOBILE
+     ******************************************************/
 
-      display:inline-flex;
+    @media(max-width:600px) {
 
-      align-items:center;
-      justify-content:center;
+      .loader-card {
 
-      text-decoration:none;
-
-      padding:
-        10px 15px;
-
-      border-radius:999px;
-
-      font-size:11px;
-
-      font-weight:800;
-
-      color:white;
-
-      background:
-        rgba(
-          5,
-          27,
-          51,
-          .88
-        );
-
-      border:
-        1px solid
-        rgba(
-          255,
-          255,
-          255,
-          .17
-        );
-
-      backdrop-filter:
-        blur(10px);
-
-      box-shadow:
-        0 8px 30px
-        rgba(0,0,0,.25);
-
-    }
-
-
-    @media(max-width:600px){
-
-      .fallback{
-
-        bottom:9px;
-        right:9px;
+        padding: 24px;
 
       }
 
 
-      .fallback a{
+      .spinner {
 
-        font-size:9px;
+        width: 58px;
+        height: 58px;
 
-        padding:
-          8px 11px;
+      }
+
+
+      .loading-label {
+
+        font-size: 9px;
+
+      }
+
+
+      .loading-text {
+
+        font-size: 12px;
 
       }
 
@@ -372,10 +350,13 @@
 <body>
 
 
+  <!-- GOOGLE COLOUR LINE -->
+
   <div class="google-line"></div>
 
 
-  <!-- LOADING -->
+
+  <!-- LOADING SCREEN -->
 
   <div id="loading">
 
@@ -395,7 +376,9 @@
       <div class="loading-title">
 
         GEG Summit Sabah
+
         <br>
+
         Official Jersey
 
       </div>
@@ -404,6 +387,9 @@
       <div class="loading-text">
 
         Memuatkan sistem tempahan rasmi
+
+        <br>
+
         GEG Summit Sabah 2026...
 
       </div>
@@ -415,7 +401,11 @@
 
 
 
-  <!-- APPS SCRIPT WEB APP -->
+  <!--
+  ==========================================================
+  GOOGLE APPS SCRIPT WEB APP
+  ==========================================================
+  -->
 
   <iframe
 
@@ -437,58 +427,68 @@
 
 
 
-  <!-- FALLBACK -->
+  <script>
 
-  <div class="fallback">
+    /******************************************************
+     * APP LOADED
+     ******************************************************/
 
-    <a
-      href="https://script.google.com/macros/s/AKfycbxeHgM__Fee7YhygcE6qtFuCV8iAu0c0RPkYLI8QB75PKpue-ZWTXgRAe6acjmCXht5Lg/exec"
-      target="_blank"
-      rel="noopener"
-    >
+    function appLoaded() {
 
-      Buka Sistem Secara Terus ↗
+      setTimeout(
+        function() {
 
-    </a>
-
-  </div>
+          const loading =
+            document.getElementById(
+              'loading'
+            );
 
 
+          if (loading) {
 
-<script>
+            loading.classList.add(
+              'hide'
+            );
 
-  function appLoaded(){
+          }
+
+        },
+        650
+      );
+
+    }
+
+
+
+    /******************************************************
+     * SAFETY TIMEOUT
+     *
+     * Loader akan ditutup selepas 12 saat jika browser
+     * mengambil masa lama untuk trigger iframe onload.
+     ******************************************************/
 
     setTimeout(
-      function(){
+      function() {
 
-        document
-          .getElementById('loading')
-          .classList.add('hide');
+        const loading =
+          document.getElementById(
+            'loading'
+          );
+
+
+        if (loading) {
+
+          loading.classList.add(
+            'hide'
+          );
+
+        }
 
       },
-      650
+      12000
     );
 
-  }
-
-
-  /*
-   * Fallback jika Apps Script lambat load.
-   */
-
-  setTimeout(
-    function(){
-
-      document
-        .getElementById('loading')
-        .classList.add('hide');
-
-    },
-    12000
-  );
-
-</script>
+  </script>
 
 
 </body>
