@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#07111f">
+
+  <title>Googleyness Voice in Sabah</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #07111f;
+      font-family: Arial, sans-serif;
+    }
+
+    .app-shell {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #07111f;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #07111f;
+    }
+
+    .fallback {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      text-align: center;
+      color: white;
+      background: #07111f;
+      z-index: 5;
+    }
+
+    .fallback a {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      background: #4285F4;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <iframe
+      id="galaApp"
+      src="https://script.google.com/macros/s/AKfycbweBkF22mF5NgdHKExnafwWnJ1lrW_Eaq60mXxB_eDk34loCp5y18h4cwJPIsQwxeHxrA/exec"
+      title="Googleyness Voice in Sabah"
+      allow="fullscreen"
+      loading="eager">
+    </iframe>
+
+    <div class="fallback" id="fallback">
+      <div>
+        <strong>Googleyness Voice in Sabah</strong>
+        <br>
+        Jika aplikasi tidak dipaparkan, buka melalui butang di bawah.
+
+        <br>
+
+        <a
+          href="https://script.google.com/macros/s/AKfycbweBkF22mF5NgdHKExnafwWnJ1lrW_Eaq60mXxB_eDk34loCp5y18h4cwJPIsQwxeHxrA/exec">
+          BUKA GALA COMMAND APP
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
