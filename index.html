@@ -3,12 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06101e">
 
   <title>Googleyness Voice in Sabah</title>
 
   <style>
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+
+    :root {
+      --blue:#4285F4;
+      --red:#EA4335;
+      --yellow:#FBBC05;
+      --green:#34A853;
     }
 
     body {
@@ -20,7 +26,10 @@
       font-family: Arial, sans-serif;
       color: white;
       text-align: center;
-      padding: 24px;
+      padding:
+        calc(24px + env(safe-area-inset-top))
+        18px
+        calc(30px + env(safe-area-inset-bottom));
 
       background:
         radial-gradient(circle at 20% 20%, rgba(52,168,83,.25), transparent 30%),
@@ -30,7 +39,7 @@
 
     .card {
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
     }
 
     .google-line {
@@ -38,14 +47,13 @@
       height: 5px;
       margin: 0 auto 28px;
       border-radius: 20px;
-
       background:
         linear-gradient(
           90deg,
-          #4285F4 0 25%,
-          #EA4335 25% 50%,
-          #FBBC05 50% 75%,
-          #34A853 75% 100%
+          var(--blue) 0 25%,
+          var(--red) 25% 50%,
+          var(--yellow) 50% 75%,
+          var(--green) 75% 100%
         );
     }
 
@@ -63,34 +71,119 @@
       margin: 14px 0;
     }
 
-    p {
+    .intro {
       line-height: 1.7;
       opacity: .75;
-      margin-bottom: 30px;
+      margin: 0 auto 24px;
+      max-width: 500px;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 18px 0 24px;
+    }
+
+    .time-box {
+      padding: 12px 6px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.09);
+      backdrop-filter: blur(10px);
+    }
+
+    .time-value {
+      display: block;
+      font-size: clamp(21px, 6vw, 30px);
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .time-label {
+      display: block;
+      margin-top: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .55;
     }
 
     .enter {
       display: block;
       width: 100%;
       padding: 18px 20px;
-
       border-radius: 16px;
       text-decoration: none;
-
-      background: #4285F4;
+      background: var(--blue);
       color: white;
-
       font-size: 15px;
       font-weight: bold;
-
-      box-shadow:
-        0 15px 35px rgba(66,133,244,.35);
+      box-shadow: 0 15px 35px rgba(66,133,244,.35);
     }
 
     .date {
-      margin-top: 20px;
+      margin-top: 18px;
       font-size: 12px;
-      opacity: .65;
+      opacity: .7;
+    }
+
+    .qr-card {
+      margin-top: 26px;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .qr-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .75;
+      margin-bottom: 12px;
+    }
+
+    #qrcode {
+      width: 148px;
+      height: 148px;
+      margin: 0 auto;
+      padding: 9px;
+      border-radius: 14px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qrcode img,
+    #qrcode canvas {
+      width: 130px !important;
+      height: 130px !important;
+    }
+
+    .qr-note {
+      margin-top: 11px;
+      font-size: 10px;
+      line-height: 1.5;
+      opacity: .6;
+    }
+
+    .short-link {
+      margin-top: 9px;
+      font-size: 11px;
+      font-weight: 700;
+      word-break: break-all;
+      color: rgba(255,255,255,.85);
+    }
+
+    @media (max-width: 420px) {
+      body { align-items: flex-start; }
+      .card { padding-top: 28px; }
+      .countdown { gap: 6px; }
+      .time-box { padding: 11px 4px; }
     }
   </style>
 </head>
@@ -110,22 +203,135 @@
       Voice in Sabah
     </h1>
 
-    <p>
+    <p class="intro">
       Portal rasmi AJK, aturcara dan operasi
       GEG Sabah Gala Night 2026.
     </p>
 
-   <a
-  class="enter"
-  href="https://script.google.com/macros/s/AKfycbweBkF22mF5NgdHKExnafwWnJ1lrW_Eaq60mXxB_eDk34loCp5y18h4cwJPIsQwxeHxrA/exec">
-  ENTER GALA COMMAND APP
-</a>
+    <div class="countdown">
+      <div class="time-box">
+        <span class="time-value" id="days">--</span>
+        <span class="time-label">Hari</span>
+      </div>
 
-    <div class="date">
-      Ahad • 8 November 2026
+      <div class="time-box">
+        <span class="time-value" id="hours">--</span>
+        <span class="time-label">Jam</span>
+      </div>
+
+      <div class="time-box">
+        <span class="time-value" id="minutes">--</span>
+        <span class="time-label">Minit</span>
+      </div>
+
+      <div class="time-box">
+        <span class="time-value" id="seconds">--</span>
+        <span class="time-label">Saat</span>
+      </div>
     </div>
 
+    <a
+      class="enter"
+      href="https://script.google.com/macros/s/AKfycbweBkF22mF5NgdHKExnafwWnJ1lrW_Eaq60mXxB_eDk34loCp5y18h4cwJPIsQwxeHxrA/exec">
+      ENTER GALA COMMAND APP
+    </a>
+
+    <div class="date">
+      Ahad • 8 November 2026 • 7.00 malam
+    </div>
+
+    <section class="qr-card">
+      <div class="qr-title">
+        QR Rasmi Gala Night
+      </div>
+
+      <div id="qrcode"></div>
+
+      <div class="qr-note">
+        Imbas QR ini untuk kembali ke portal rasmi.
+      </div>
+
+      <div class="short-link">
+        tsdrjebatlegacy-dot.github.io/gegsummitsabah/
+      </div>
+    </section>
+
   </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    const GALA_TIME =
+      new Date('2026-11-08T19:00:00+08:00').getTime();
+
+    const LANDING_URL =
+      'https://tsdrjebatlegacy-dot.github.io/gegsummitsabah/';
+
+    function pad(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function updateCountdown() {
+
+      const now = Date.now();
+      let distance = GALA_TIME - now;
+
+      if (distance <= 0) {
+
+        document.getElementById('days').textContent = '00';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+
+        return;
+      }
+
+      const days =
+        Math.floor(distance / 86400000);
+
+      distance %= 86400000;
+
+      const hours =
+        Math.floor(distance / 3600000);
+
+      distance %= 3600000;
+
+      const minutes =
+        Math.floor(distance / 60000);
+
+      distance %= 60000;
+
+      const seconds =
+        Math.floor(distance / 1000);
+
+      document.getElementById('days').textContent =
+        pad(days);
+
+      document.getElementById('hours').textContent =
+        pad(hours);
+
+      document.getElementById('minutes').textContent =
+        pad(minutes);
+
+      document.getElementById('seconds').textContent =
+        pad(seconds);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    new QRCode(
+      document.getElementById('qrcode'),
+      {
+        text: LANDING_URL,
+        width: 130,
+        height: 130,
+        colorDark: '#07111f',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      }
+    );
+  </script>
 
 </body>
 </html>
