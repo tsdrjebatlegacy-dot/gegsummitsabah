@@ -298,13 +298,17 @@
       font-size:10px;
     }
 
+    .brand-text{max-width:calc(100vw - 210px)}
+    .status{display:none}
     .fallback{
-      display:none;
+      display:inline-flex;
       position:fixed;
       z-index:40;
-      left:50%;
-      bottom:18px;
-      transform:translateX(-50%);
+      left:auto;
+      right:10px;
+      top:9px;
+      bottom:auto;
+      transform:none;
       text-decoration:none;
       padding:10px 14px;
       border-radius:999px;
@@ -342,7 +346,7 @@
     <div class="loader-card">
       <div class="eyebrow">Kinabalu // Matrix // Digital</div>
       <h1>Bengkel JPN Sabah</h1>
-      <p>Memuatkan sistem bengkel, data, jadual dan dashboard interaktif.</p>
+      <p>Memuatkan bahan, jadual, kemajuan peserta dan serahan dashboard.</p>
       <div class="progress"><i></i></div>
       <div class="bits">01001011 01001001 01001110 01000001 01000010 01000001 01001100 01010101</div>
     </div>
@@ -385,8 +389,12 @@
     });
 
     setTimeout(() => {
-      if (!loaded) fallback.style.display = 'inline-flex';
+      if (!loaded) loader.querySelector("p").textContent = "Memuatkan mengambil masa. Anda boleh buka sistem secara terus melalui pautan di atas.";
     }, 8000);
+
+    frame.addEventListener("error", () => {
+      loader.querySelector("p").textContent = "Sistem belum dapat dibuka. Gunakan pautan buka terus di atas.";
+    });
 
     // Matrix digital background
     const canvas = document.getElementById('matrix');
@@ -427,7 +435,7 @@
     }
 
     resizeMatrix();
-    drawMatrix();
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) drawMatrix();
     addEventListener('resize', resizeMatrix);
   </script>
 </body>
