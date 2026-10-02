@@ -1,1655 +1,434 @@
-\<!DOCTYPE html>
-
-\<html lang="ms">
-
-\<head>
-
-\<base target="\_top">
-
-\<meta charset="utf-8">
-
-\<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-\<meta name="theme-color" content="#12304A">
-
-\<link rel="preconnect" href="https\://fonts.googleapis.com">
-
-\<link href="https\://fonts.googleapis.com/css2?family=Rubik:wght\@400..700&family=Nunito+Sans:wght\@400..800&display=swap" rel="stylesheet">
-
-\<style>
-
-  :root{
-
-    --dark:#12304A; --dark2:#0B1F30; --light:#F6F4EE; --card:#FFFDF8; --line:#E2DDD0;
-
-    --accent:#E0A43A; --accent-text:#8C5C0E; --accent-soft:#F6E9CF; --teal:#2A7F7A; --teal-soft:#E3F0EE;
-
-    --body:#44505C; --muted:#6A7580; --soft:#C9D6DF; --red:#A8322D; --red-soft:#F6E1DF;
-
-    --nav-h:68px; --safe-b:env(safe-area-inset-bottom,0px);
-
-  }
-
-  \*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-
-  html,body{margin:0;background:var(--light);color:var(--dark);font-family:'Nunito Sans',Arial,sans-serif;font-size:16px;line-height:1.5}
-
-  h1,h2,h3{font-family:'Rubik',Arial,sans-serif;font-weight:600;margin:0}
-
-  button{font-family:inherit;color:inherit}
-
-
-
-  header{background:var(--dark);color:var(--light);padding:20px 16px 18px;position:relative;overflow:hidden}
-
-  header::after{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:var(--accent);opacity:.18}
-
-  .eyebrow{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
-
-  header h1{font-size:22px;line-height:1.2;margin:6px 0 4px;max-width:520px}
-
-  header .meta{color:var(--soft);font-size:14px}
-
-  .tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-
-  .tools span{font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12);color:var(--light)}
-
-  .hdr-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-
-  .icon-btn{background:rgba(255,255,255,.12);border:0;color:var(--light);width:40px;height:40px;border-radius:12px;font-size:18px;cursor:pointer;flex:none;position:relative;z-index:1}
-
-  .icon-btn.spin{animation:spin 1s linear infinite}
-
-  @keyframes spin{to{transform:rotate(360deg)}}
-
-
-
-  main{padding:16px 16px calc(var(--nav-h) + var(--safe-b) + 24px);max-width:720px;margin:0 auto}
-
-  .view{display:none;animation:fade .25s ease}
-
-  .view\.on{display:block}
-
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-  h2{font-size:22px;margin:4px 0}
-
-  .sub{color:var(--body);font-size:15px;margin:0 0 14px}
-
-  .sec{margin-top:28px}
-
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-
-  .stack>.card{margin-bottom:10px}
-
-  .muted{color:var(--muted)} .small{font-size:13px}
-
-  .teal{color:var(--teal);font-weight:700}
-
-  .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-text)}
-
-  .tag.teal{background:var(--teal-soft);color:var(--teal)}
-
-  .tag.me{background:var(--dark);color:var(--light)}
-
-  .tag.red{background:var(--red-soft);color:var(--red)}
-
-  .note{font-size:14px;color:var(--body);background:var(--accent-soft);border-radius:14px;padding:12px 14px;margin-top:12px}
-
-  .note.teal{background:var(--teal-soft)}
-
-  .src{font-size:12px;color:var(--muted);margin-top:8px}
-
-
-
-  /\* Hero \*/
-
-  .hero{background:linear-gradient(135deg,var(--teal),#1F5F5B);color:#fff;border-radius:20px;padding:18px;box-shadow:0 8px 24px rgba(18,48,74,.18)}
-
-  .hero .lbl{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;opacity:.85}
-
-  .hero h3{font-size:20px;margin:6px 0}
-
-  .hero p{margin:4px 0 0;font-size:14px;opacity:.95}
-
-  .hero .row{display:flex;justify-content:space-between;gap:8px;font-size:14px;opacity:.95}
-
-  .hero .bar{height:6px;background:rgba(255,255,255,.25);border-radius:4px;margin-top:12px;overflow:hidden}
-
-  .hero .bar div{height:100%;background:var(--accent)}
-
-  .count{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-
-  .count div{background:rgba(255,255,255,.15);border-radius:12px;padding:8px 4px;text-align:center}
-
-  .count b{display:block;font-family:'Rubik';font-size:24px;line-height:1.1}
-
-  .count span{font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.85}
-
-  .next{margin-top:10px;font-size:14px;background:rgba(0,0,0,.15);border-radius:12px;padding:10px 12px}
-
-
-
-  .me-card{border:2px solid var(--dark)}
-
-  select,input{font:inherit;font-size:16px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;width:100%;color:var(--dark)}
-
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;margin-top:12px}
-
-  .kv b{font-family:'Rubik';font-weight:600}
-
-
-
-  /\* Hasil akhir \*/
-
-  .deliv{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
-
-  .deliv:last-child{border-bottom:0}
-
-  .deliv .num{flex:none;width:34px;height:34px;border-radius:11px;background:var(--accent);color:var(--dark);display:grid;place-items:center;font-weight:800}
-
-  .deliv b{display:block}
-
-
-
-  /\* Keperluan \*/
-
-  .need{padding:12px 0;border-bottom:1px solid var(--line)}
-
-  .need:last-child{border-bottom:0}
-
-  .need .arrow{display:flex;gap:8px;align-items:flex-start;margin-top:6px;font-size:14px}
-
-  .need .arrow i{font-style:normal;color:var(--teal);font-weight:800}
-
-
-
-  .quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-
-  .quick button{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:left;cursor:pointer;font-weight:700;font-size:15px;display:flex;gap:10px;align-items:center}
-
-  .quick button i{font-style:normal;font-size:22px}
-
-
-
-  /\* Chips \*/
-
-  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
-
-  .chips::-webkit-scrollbar{display:none}
-
-  .chip{flex:none;border:1px solid var(--line);background:var(--card);padding:9px 14px;border-radius:999px;font-weight:700;font-size:14px;cursor:pointer}
-
-  .chip.on{background:var(--dark);color:var(--light);border-color:var(--dark)}
-
-
-
-  /\* Timeline \*/
-
-  .dayhead{margin:4px 0 10px}
-
-  .dayhead .small{font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-
-  .dayhead h3{font-size:18px}
-
-  .tl{position:relative;padding-left:22px}
-
-  .tl::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
-
-  .ev{position:relative;margin-bottom:10px}
-
-  .ev::before{content:"";position:absolute;left:-20px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--teal)}
-
-  .ev.rehat::before{border-color:var(--line)}
-
-  .ev.now::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 5px rgba(224,164,58,.25)}
-
-  .ev.past{opacity:.55}
-
-  .ev .card{cursor:pointer;transition:transform .15s}
-
-  .ev .card:active{transform:scale(.98)}
-
-  .ev.mine .card{border-left:4px solid var(--dark)}
-
-  .ev.now .card{border-color:var(--accent);box-shadow:0 4px 16px rgba(224,164,58,.25)}
-
-  .ev.rehat .card{background:transparent;border-style:dashed;padding:10px 14px;cursor:default}
-
-  .ev-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
-
-  .ev-time{font-weight:800;font-size:13px;color:var(--teal)}
-
-  .ev h3{font-size:16px;margin:4px 0 2px}
-
-  .ev .who{font-size:14px;color:var(--muted)}
-
-  .ev .hasil{font-size:14px;margin-top:6px}
-
-  .more{max-height:0;overflow:hidden;transition:max-height .3s ease}
-
-  .open>.card .more,.open .more{max-height:400px}
-
-  .flow{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px}
-
-  .flow div{background:var(--light);border-radius:12px;padding:10px}
-
-  .flow .ar{background:none;display:grid;place-items:center;color:var(--teal);font-weight:800;padding:0}
-
-  .chev{transition:transform .2s;color:var(--muted)}
-
-  .open .chev{transform:rotate(180deg)}
-
-
-
-  /\* People \*/
-
-  .person{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
-
-  .avatar{flex:none;width:46px;height:46px;border-radius:14px;background:var(--dark);color:var(--accent);display:grid;place-items:center;font-family:'Rubik';font-weight:600;font-size:16px}
-
-  .avatar.gold{background:var(--accent);color:var(--dark)}
-
-  .person h3{font-size:16px}
-
-  .pdetail ul{margin:10px 0 0;padding-left:18px;font-size:14px}
-
-  .pdetail li{margin-bottom:4px}
-
-  .acc{cursor:pointer}
-
-  .acc-h{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800}
-
-
-
-  /\* Contoh latihan interaktif \*/
-
-  .demo-table{width:100%;border-collapse:collapse;font-size:14px}
-
-  .demo-table th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:6px 4px}
-
-  .demo-table td{padding:8px 4px;border-top:1px solid var(--line)}
-
-  .st{border:0;border-radius:999px;padding:6px 12px;font-weight:800;font-size:13px;cursor:pointer}
-
-  .st.Lengkap{background:var(--teal-soft);color:var(--teal)}
-
-  .st.Belum{background:var(--red-soft);color:var(--red)}
-
-  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-
-  .kpis div{background:var(--light);border-radius:12px;padding:10px;text-align:center}
-
-  .kpis b{display:block;font-family:'Rubik';font-size:26px;color:var(--teal);line-height:1.1;transition:all .3s}
-
-  .kpis span{font-size:12px;color:var(--muted)}
-
-  .bars{margin-top:12px;display:grid;gap:8px}
-
-  .bars .b{display:grid;grid-template-columns:80px 1fr 28px;gap:8px;align-items:center;font-size:13px}
-
-  .bars .t{height:14px;background:var(--line);border-radius:7px;overflow:hidden}
-
-  .bars .t i{display:block;height:100%;background:var(--teal);transition:width .4s}
-
-  .bars .t i.r{background:var(--red)}
-
-
-
-  /\* Checklist \*/
-
-  .ring{display:flex;align-items:center;gap:16px}
-
-  .ring svg{flex:none}
-
-  .check{display:flex;gap:14px;align-items:flex-start;padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
-
-  .check:last-child{border-bottom:0}
-
-  .box{flex:none;width:28px;height:28px;border:2px solid var(--teal);border-radius:9px;display:grid;place-items:center;color:#fff;font-weight:800;transition:all .2s}
-
-  .check.done .box{background:var(--teal)}
-
-  .check.done .txt{text-decoration:line-through;color:var(--muted)}
-
-  .check.busy{opacity:.5;pointer-events:none}
-
-  .grouphead{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
-
-
-
-  /\* Kemajuan \*/
-
-  .prow{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
-
-  .prow:last-child{border-bottom:0}
-
-  .prow .meter{flex:1;min-width:0}
-
-  .seg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:6px}
-
-  .seg i{height:8px;border-radius:3px;background:var(--line)}
-
-  .seg i.s{background:var(--teal)} .seg i.p{background:var(--accent)}
-
-  .legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:8px}
-
-  .legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--line)}
-
-  .legend .s::before{background:var(--teal)} .legend .p::before{background:var(--accent)}
-
-  .sum{display:grid;gap:8px}
-
-  .sum .b{display:grid;grid-template-columns:1fr 70px;gap:8px;align-items:center;font-size:13px}
-
-  .sum .t{height:10px;background:var(--line);border-radius:5px;overflow:hidden;display:flex;grid-column:1/-1}
-
-  .sum .t i{display:block;height:100%}
-
-  .add{display:grid;grid-template-columns:1fr 90px;gap:8px;margin-top:10px}
-
-  .btn{width:100%;background:var(--dark);color:var(--light);border:0;border-radius:14px;padding:14px;font-weight:800;font-size:16px;cursor:pointer}
-
-  .btn:disabled{opacity:.5}
-
-
-
-  /\* Bottom sheet \*/
-
-  .scrim{position:fixed;inset:0;background:rgba(11,31,48,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:15}
-
-  .scrim.on{opacity:1;pointer-events:auto}
-
-  .sheet{position:fixed;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--card);border-radius:22px 22px 0 0;padding:10px 16px calc(20px + var(--safe-b));transform:translateY(100%);transition:transform .3s ease;z-index:16;max-width:720px;margin:0 auto}
-
-  .sheet.on{transform:none}
-
-  .grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
-
-  .li{padding:12px 0;border-bottom:1px solid var(--line)}
-
-  .li:last-child{border-bottom:0}
-
-  .li-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-
-  .two-btn{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-
-  .two-btn button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 6px;font-weight:800;font-size:14px;cursor:pointer;transition:transform .1s}
-
-  .two-btn button:active{transform:scale(.95)}
-
-  .two-btn button.s.on{background:var(--teal);color:#fff;border-color:var(--teal)}
-
-  .two-btn button.p.on{background:var(--accent);color:var(--dark);border-color:var(--accent)}
-
-
-
-  /\* Bottom nav \*/
-
-  .bnav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px calc(6px + var(--safe-b));z-index:5;box-shadow:0 -4px 16px rgba(18,48,74,.06)}
-
-  .bnav button{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:11px;font-weight:800;color:var(--muted);cursor:pointer;border-radius:12px}
-
-  .bnav button i{font-style:normal;font-size:21px;line-height:1}
-
-  .bnav button.on{color:var(--dark);background:var(--teal-soft)}
-
-  @media(min-width:760px){.bnav{max-width:720px;margin:0 auto;border-radius:20px 20px 0 0;border:1px solid var(--line)}}
-
-
-
-  .toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--safe-b) + 16px);transform:translateX(-50%) translateY(20px);background:var(--dark);color:var(--light);padding:12px 18px;border-radius:14px;font-weight:700;font-size:14px;opacity:0;transition:all .25s;z-index:40;max-width:90vw;text-align:center;pointer-events:none}
-
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-  .toast.err{background:var(--red)}
-
-  .skel{height:90px;border-radius:16px;background:linear-gradient(90deg,#ECE8DE 25%,#F4F1EA 50%,#ECE8DE 75%);background-size:200% 100%;animation:sh 1.2s infinite;margin-bottom:12px}
-
-  @keyframes sh{to{background-position:-200% 0}}
-
-  footer{font-size:13px;color:var(--muted);text-align:center;margin-top:28px}
-
-  footer a{color:var(--teal)}
-
-
-
-  /\* Mod taklimat \*/
-
-  #deck{position:fixed;inset:0;background:var(--dark2);display:none;z-index:30;align-items:center;justify-content:center}
-
-  #deck.on{display:flex}
-
-  #stage{width:1920px;height:1080px;position:relative;transform-origin:center center;flex:none}
-
-  .slide{position:absolute;inset:0;padding:96px 128px 120px;display:none;flex-direction:column;gap:32px;background:var(--light);color:var(--dark)}
-
-  .slide.on{display:flex}
-
-  .slide.dk{background:var(--dark);color:var(--light);border-left:24px solid var(--accent)}
-
-  .slide .eyebrow{font-size:26px;color:var(--teal)} .slide.dk .eyebrow{color:var(--accent)}
-
-  .slide h1{font-size:96px;line-height:1.05;max-width:1600px}
-
-  .slide h2{font-size:60px;line-height:1.1}
-
-  .slide p,.slide li,.slide td,.slide th{font-size:27px}
-
-  .slide .lead{font-size:30px;color:var(--body)}
-
-  .slide .big{font-size:40px;color:var(--soft)}
-
-  .slide table{width:100%;border-collapse:collapse;background:var(--card)}
-
-  .slide th{background:var(--dark);color:var(--light);text-align:left;padding:12px 18px}
-
-  .slide td{padding:12px 18px;border-bottom:1px solid var(--line);vertical-align:top}
-
-  .slide .foot{position:absolute;left:128px;bottom:48px;font-size:22px;color:var(--muted)}
-
-  .deckbar{position:fixed;bottom:calc(14px + var(--safe-b));left:50%;transform:translateX(-50%);display:none;gap:8px;z-index:31}
-
-  .deckbar button{background:rgba(255,255,255,.16);color:#fff;border:0;border-radius:12px;padding:12px 16px;font-weight:800;font-size:15px;cursor:pointer}
-
-  .rotate{position:fixed;top:14px;left:0;right:0;text-align:center;color:var(--soft);font-size:13px;z-index:31;display:none}
-
-  @media (orientation:portrait) and (max-width:700px){#deck.on \~ .rotate{display:block}}
-
-\
-/* =========================================================
-   DIGITAL KINABALU SIGNATURE
-   Kinabalu • Matrix • Digital • Google-inspired
-   Heroic by Funtype Co. is loaded locally if the font file
-   exists in /fonts/Heroic.woff2 or /fonts/Heroic.otf.
-   ========================================================= */
-
-@font-face{
-  font-family:'Heroic';
-  src:
-    url('https://tsdrjebatlegacy-dot.github.io/gegsummitsabah/assets/fonts/Heroic.woff2') format('woff2'),
-    url('https://tsdrjebatlegacy-dot.github.io/gegsummitsabah/assets/fonts/Heroic.otf') format('opentype');
-  font-weight:400;
-  font-style:normal;
-  font-display:swap;
-}
-
-:root{
-  --dk-bg:#020711;
-  --dk-panel:rgba(7,18,31,.82);
-  --dk-panel-2:rgba(10,27,44,.76);
-  --dk-cyan:#35E7FF;
-  --dk-blue:#4285F4;
-  --dk-green:#34A853;
-  --dk-yellow:#FBBC05;
-  --dk-red:#EA4335;
-  --dk-white:#F3FBFF;
-  --dk-text:#D7ECF6;
-  --dk-muted:#85A8B9;
-  --dk-line:rgba(53,231,255,.18);
-  --dk-glow:0 0 28px rgba(53,231,255,.12);
-}
-
-/* Global digital canvas */
-html,body{
-  background:
-    radial-gradient(circle at 50% -10%, rgba(53,231,255,.15), transparent 34%),
-    radial-gradient(circle at 90% 20%, rgba(66,133,244,.11), transparent 26%),
-    linear-gradient(rgba(53,231,255,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(53,231,255,.035) 1px, transparent 1px),
-    var(--dk-bg) !important;
-  background-size:auto,auto,32px 32px,32px 32px,auto;
-  color:var(--dk-text) !important;
-}
-
-body{
-  position:relative;
-  min-height:100vh;
-}
-
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  opacity:.17;
-  background:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0 18px,
-      rgba(53,231,255,.13) 19px,
-      transparent 20px 38px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 74px,
-      rgba(52,168,83,.08) 75px,
-      transparent 76px 150px
-    );
-  mix-blend-mode:screen;
-  animation:matrixDrift 18s linear infinite;
-}
-
-@keyframes matrixDrift{
-  from{transform:translateY(-24px)}
-  to{transform:translateY(24px)}
-}
-
-header,main,.bnav,.scrim,.sheet,.toast,#deck,.rotate,.deckbar{
-  position:relative;
-  z-index:1;
-}
-
-/* Heroic typography */
-h1,h2,h3,
-.eyebrow,.tag,.btn,
-.bnav button,.chip,
-.ev-time,.grouphead,
-.count b,.kpis b,
-.avatar,.slide h1,.slide h2{
-  font-family:'Heroic','Rubik','Arial Narrow',Arial,sans-serif !important;
-  letter-spacing:.035em;
-}
-
-h1,h2,h3{
-  text-transform:uppercase;
-}
-
-body,input,select,button,table{
-  font-family:'Nunito Sans',Arial,sans-serif;
-}
-
-/* Header = mountain + digital horizon */
-header{
-  isolation:isolate;
-  min-height:210px;
-  padding:26px 18px 28px;
-  background:
-    linear-gradient(90deg,
-      var(--dk-blue) 0 25%,
-      var(--dk-red) 25% 50%,
-      var(--dk-yellow) 50% 75%,
-      var(--dk-green) 75% 100%
-    ) bottom / 100% 3px no-repeat,
-    radial-gradient(circle at 50% 10%, rgba(53,231,255,.13), transparent 42%),
-    linear-gradient(180deg,#071523 0%,#03101c 72%,#020711 100%) !important;
-  color:var(--dk-white) !important;
-  border-bottom:1px solid rgba(53,231,255,.18);
-  box-shadow:0 16px 44px rgba(0,0,0,.28);
-}
-
-header::after{
-  content:"";
-  position:absolute;
-  left:-6%;
-  right:-6%;
-  bottom:3px;
-  top:auto;
-  width:auto;
-  height:132px;
-  border-radius:0;
-  opacity:.92;
-  z-index:-1;
-  background:
-    linear-gradient(180deg,rgba(53,231,255,.12),rgba(2,7,17,.88)),
-    linear-gradient(90deg,#06121e,#0b2235);
-  clip-path:polygon(
-    0 100%, 0 84%, 7% 82%, 12% 75%, 18% 79%,
-    24% 65%, 29% 69%, 35% 45%, 40% 55%,
-    45% 31%, 49% 42%, 54% 20%, 59% 36%,
-    63% 26%, 68% 48%, 74% 58%, 81% 70%,
-    87% 73%, 94% 84%, 100% 80%, 100% 100%
-  );
-  filter:drop-shadow(0 -8px 18px rgba(53,231,255,.10));
-}
-
-header::before{
-  content:"KINABALU // MATRIX // DIGITAL";
-  position:absolute;
-  right:16px;
-  bottom:16px;
-  z-index:0;
-  font-family:'Heroic','Rubik',sans-serif;
-  font-size:10px;
-  letter-spacing:.28em;
-  color:rgba(215,236,246,.44);
-  text-transform:uppercase;
-}
-
-header h1{
-  font-size:clamp(28px,7vw,48px) !important;
-  line-height:.96 !important;
-  max-width:650px;
-  text-shadow:0 0 24px rgba(53,231,255,.18);
-}
-
-header .meta{color:#A8C7D8 !important}
-.eyebrow{color:var(--dk-cyan) !important}
-.tools span{
-  background:rgba(3,13,24,.56) !important;
-  border:1px solid rgba(53,231,255,.18);
-  color:#DFF8FF !important;
-  backdrop-filter:blur(10px);
-}
-
-.icon-btn{
-  background:rgba(2,10,18,.64) !important;
-  border:1px solid rgba(53,231,255,.20) !important;
-  color:var(--dk-cyan) !important;
-  box-shadow:var(--dk-glow);
-}
-
-/* Main */
-main{
-  max-width:920px !important;
-  padding-left:16px;
-  padding-right:16px;
-}
-
-h2{color:var(--dk-white) !important}
-.sub,.muted,.small,.src,footer{color:var(--dk-muted) !important}
-
-.card{
-  background:
-    linear-gradient(145deg,rgba(12,30,48,.84),rgba(4,13,24,.84)) !important;
-  color:var(--dk-text) !important;
-  border:1px solid var(--dk-line) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.025),
-    0 12px 28px rgba(0,0,0,.22),
-    var(--dk-glow);
-  backdrop-filter:blur(14px);
-}
-
-.card:hover{
-  border-color:rgba(53,231,255,.34) !important;
-}
-
-.hero{
-  position:relative;
-  overflow:hidden;
-  background:
-    linear-gradient(rgba(53,231,255,.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(53,231,255,.055) 1px, transparent 1px),
-    linear-gradient(135deg,#0A3A4D 0%,#09263B 48%,#071321 100%) !important;
-  background-size:24px 24px,24px 24px,auto !important;
-  border:1px solid rgba(53,231,255,.35);
-  box-shadow:
-    0 18px 42px rgba(0,0,0,.28),
-    0 0 38px rgba(53,231,255,.12);
-}
-
-.hero::after{
-  content:"01 10 01 11 00 10 01";
-  position:absolute;
-  right:12px;
-  top:10px;
-  font-family:monospace;
-  font-size:10px;
-  letter-spacing:.25em;
-  color:rgba(53,231,255,.25);
-}
-
-.hero .bar{background:rgba(255,255,255,.12) !important}
-.hero .bar div{
-  background:linear-gradient(90deg,var(--dk-cyan),var(--dk-blue),var(--dk-green)) !important;
-  box-shadow:0 0 12px rgba(53,231,255,.45);
-}
-
-.hero .next,.count div{
-  background:rgba(1,9,17,.38) !important;
-  border:1px solid rgba(53,231,255,.10);
-}
-
-.tag{
-  background:rgba(251,188,5,.13) !important;
-  border:1px solid rgba(251,188,5,.26);
-  color:#FFD968 !important;
-}
-
-.tag.teal{
-  background:rgba(53,231,255,.09) !important;
-  border-color:rgba(53,231,255,.28);
-  color:var(--dk-cyan) !important;
-}
-
-.tag.me{
-  background:rgba(66,133,244,.15) !important;
-  border-color:rgba(66,133,244,.35);
-  color:#9BC3FF !important;
-}
-
-.tag.red{
-  background:rgba(234,67,53,.12) !important;
-  border-color:rgba(234,67,53,.28);
-  color:#FF8A80 !important;
-}
-
-.note{
-  color:#D9EAF2 !important;
-  background:linear-gradient(135deg,rgba(251,188,5,.10),rgba(7,18,31,.78)) !important;
-  border:1px solid rgba(251,188,5,.18);
-}
-
-.note.teal{
-  background:linear-gradient(135deg,rgba(53,231,255,.08),rgba(7,18,31,.78)) !important;
-  border-color:rgba(53,231,255,.18);
-}
-
-.teal,.ev-time{color:var(--dk-cyan) !important}
-
-/* Controls */
-select,input{
-  background:#071522 !important;
-  color:var(--dk-white) !important;
-  border:1px solid rgba(53,231,255,.20) !important;
-  outline:none;
-}
-
-select:focus,input:focus{
-  border-color:var(--dk-cyan) !important;
-  box-shadow:0 0 0 3px rgba(53,231,255,.08);
-}
-
-.quick button,.chip,.two-btn button{
-  background:rgba(7,18,31,.86) !important;
-  color:#DCEFF7 !important;
-  border-color:rgba(53,231,255,.18) !important;
-}
-
-.quick button:hover,.chip:hover,.two-btn button:hover{
-  border-color:rgba(53,231,255,.44) !important;
-  box-shadow:0 0 18px rgba(53,231,255,.08);
-}
-
-.chip.on{
-  background:linear-gradient(135deg,#0A4859,#0A2B42) !important;
-  color:#E7FCFF !important;
-  border-color:var(--dk-cyan) !important;
-}
-
-.btn{
-  background:linear-gradient(90deg,#0A4052,#0D3152) !important;
-  color:#EAFDFF !important;
-  border:1px solid rgba(53,231,255,.32) !important;
-  box-shadow:0 0 20px rgba(53,231,255,.09);
-}
-
-/* Timeline */
-.tl::before{background:rgba(53,231,255,.18) !important}
-.ev::before{
-  background:#04101C !important;
-  border-color:var(--dk-cyan) !important;
-}
-.ev.now::before{
-  background:var(--dk-yellow) !important;
-  border-color:var(--dk-yellow) !important;
-  box-shadow:0 0 0 5px rgba(251,188,5,.16),0 0 18px rgba(251,188,5,.25) !important;
-}
-.ev.mine .card{border-left-color:var(--dk-blue) !important}
-.ev.now .card{
-  border-color:rgba(251,188,5,.40) !important;
-  box-shadow:0 0 30px rgba(251,188,5,.08) !important;
-}
-.flow div{
-  background:rgba(2,10,18,.55) !important;
-  color:var(--dk-text) !important;
-}
-
-/* People + data */
-.avatar{
-  background:linear-gradient(145deg,#09283D,#06121E) !important;
-  color:var(--dk-cyan) !important;
-  border:1px solid rgba(53,231,255,.22);
-  box-shadow:0 0 16px rgba(53,231,255,.07);
-}
-.avatar.gold{
-  background:linear-gradient(145deg,#5A4105,#2E2307) !important;
-  color:#FFD85C !important;
-  border-color:rgba(251,188,5,.26);
-}
-
-.demo-table th,.demo-table td{
-  color:var(--dk-text) !important;
-  border-color:rgba(53,231,255,.13) !important;
-}
-.kpis div{
-  background:rgba(2,10,18,.48) !important;
-  border:1px solid rgba(53,231,255,.10);
-}
-.kpis b{color:var(--dk-cyan) !important}
-.bars .t,.seg i{background:rgba(133,168,185,.17) !important}
-.bars .t i,.seg i.s{background:linear-gradient(90deg,var(--dk-cyan),var(--dk-blue)) !important}
-.bars .t i.r{background:var(--dk-red) !important}
-.seg i.p{background:var(--dk-yellow) !important}
-
-/* Bottom nav */
-.bnav{
-  background:rgba(3,11,20,.91) !important;
-  border-color:rgba(53,231,255,.14) !important;
-  box-shadow:0 -12px 34px rgba(0,0,0,.35);
-  backdrop-filter:blur(18px);
-}
-.bnav button{color:#7195A7 !important}
-.bnav button.on{
-  color:var(--dk-cyan) !important;
-  background:rgba(53,231,255,.07) !important;
-}
-
-/* Bottom sheet */
-.scrim{background:rgba(0,3,8,.68) !important}
-.sheet{
-  background:linear-gradient(180deg,#0A1C2D,#04101B) !important;
-  color:var(--dk-text) !important;
-  border:1px solid rgba(53,231,255,.20);
-  box-shadow:0 -22px 52px rgba(0,0,0,.50);
-}
-.grab{background:rgba(53,231,255,.30) !important}
-
-/* Presentation deck */
-#deck{
-  background:
-    linear-gradient(rgba(53,231,255,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(53,231,255,.035) 1px,transparent 1px),
-    #01060D !important;
-  background-size:32px 32px;
-}
-
-.slide{
-  background:
-    radial-gradient(circle at 88% 10%,rgba(53,231,255,.11),transparent 25%),
-    linear-gradient(135deg,#071725,#020812) !important;
-  color:var(--dk-white) !important;
-  border:1px solid rgba(53,231,255,.14);
-}
-
-.slide.dk{
-  background:
-    radial-gradient(circle at 72% 28%,rgba(66,133,244,.16),transparent 32%),
-    linear-gradient(135deg,#051322,#01050C) !important;
-  color:var(--dk-white) !important;
-  border-left:24px solid var(--dk-cyan) !important;
-}
-
-.slide .lead{color:#AFCAD7 !important}
-.slide .big{color:#A9C9D9 !important}
-.slide table{background:rgba(6,19,31,.82) !important}
-.slide th{
-  background:#082337 !important;
-  color:#EAFEFF !important;
-}
-.slide td{
-  color:#D2E8F2 !important;
-  border-color:rgba(53,231,255,.12) !important;
-}
-.slide .foot{color:#7396A8 !important}
-
-/* Google accent stripe for visual identity */
-.slide::after{
-  content:"";
-  position:absolute;
-  left:128px;
-  right:128px;
-  top:54px;
-  height:4px;
-  border-radius:999px;
-  background:linear-gradient(
-    90deg,
-    var(--dk-blue) 0 25%,
-    var(--dk-red) 25% 50%,
-    var(--dk-yellow) 50% 75%,
-    var(--dk-green) 75% 100%
-  );
-  opacity:.9;
-}
-
-/* Better desktop scale */
-@media(min-width:760px){
-  header{padding:34px 28px 32px}
-  main{padding-left:24px;padding-right:24px}
-  .card{border-radius:18px}
-}
-
-@media(max-width:520px){
-  header{min-height:200px}
-  header h1{font-size:30px !important}
-  header::before{font-size:8px;letter-spacing:.18em}
-  .hero{border-radius:18px}
-}
-
-</style>
-
-\</head>
-
-\<body>
-
-
-
-\<header>
-
-  \<div class="hdr-row">
-
-    \<div>
-
-      \<div class="eyebrow">Taklimat Penceramah dan Fasilitator\</div>
-
-      \<h1 id="hTitle">Memuatkan…\</h1>
-
-      \<div class="meta" id="hMeta">\</div>
-
-      \<div class="tools" id="hTools">\</div>
-
-    \</div>
-
-    \<button class="icon-btn" id="btnRefresh" aria-label="Muat semula">⟳\</button>
-
-  \</div>
-
-\</header>
-
-
-
-\<main>
-
-  \<div id="loading">\<div class="skel">\</div>\<div class="skel">\</div>\<div class="skel">\</div>\</div>
-
-  \<section class="view on" id="v-utama">\</section>
-
-  \<section class="view" id="v-jadual">\</section>
-
-  \<section class="view" id="v-pasukan">\</section>
-
-  \<section class="view" id="v-kemajuan">\</section>
-
-  \<section class="view" id="v-semak">\</section>
-
-  \<footer id="foot">\</footer>
-
-\</main>
-
-
-
-\<nav class="bnav" id="bnav">
-
-  \<button data-v="utama" class="on">\<i>🏠\</i>Utama\</button>
-
-  \<button data-v="jadual">\<i>🗓️\</i>Jadual\</button>
-
-  \<button data-v="pasukan">\<i>👥\</i>Pasukan\</button>
-
-  \<button data-v="kemajuan">\<i>📈\</i>Kemajuan\</button>
-
-  \<button data-v="semak">\<i>✅\</i>Persediaan\</button>
-
-\</nav>
-
-
-
-\<div class="scrim" id="scrim">\</div>
-
-\<div class="sheet" id="sheet">\</div>
-
-\<div class="toast" id="toast">\</div>
-
-\<div id="deck">\<div id="stage">\</div>\</div>
-
-\<div class="rotate">Pusingkan telefon ke landskap untuk paparan lebih besar\</div>
-
-\<div class="deckbar" id="deckbar">\<button id="dPrev">←\</button>\<button id="dCount">1/1\</button>\<button id="dNext">→\</button>\<button id="dClose">✕\</button>\</div>
-
-
-
-\<script>
-
-let D = null, me = '', dayFilter = 'semua', grpFilter = 'semua', openPid = '';
-
-let demo = [];
-
-const $ = s => document.querySelector(s);
-
-const $$ = s => Array.from(document.querySelectorAll(s));
-
-const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-const store = { get(k){ try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
-
-const buzz = () => { try { navigator.vibrate && navigator.vibrate(12); } catch(e){} };
-
-function toast(t, err) { const el = $('#toast'); el.textContent = t; el.className = 'toast show' + (err ? ' err' : ''); clearTimeout(toast.t); toast.t = setTimeout(() => el.className = 'toast', 2600); }
-
-const run = (fn, args, ok, fail) => google.script.run.withSuccessHandler(ok).withFailureHandler(e => { toast(e.message, true); fail && fail(e); })[fn].apply(null, args);
-
-
-
-/\* ---------- Penceramah ---------- \*/
-
-const P = k => D.penceramah.find(p => p.panggilan === k);
-
-const fullName = k => (P(k) || {}).nama || k;
-
-const initials = n => n.replace(/^Ts\\.\s\*/, '').split(' ').filter(w => /^[A-Z]/.test(w) && w !== 'bin').slice(0, 2).map(w => w[0]).join('');
-
-
-
-/\* ---------- Navigasi ---------- \*/
-
-function go(v) {
-
-  $$('#bnav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
-
-  $$('.view').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
-
-  scrollTo({ top: 0, behavior: 'smooth' }); buzz();
-
-  if (v === 'jadual') setTimeout(() => { const n = $('.ev.now'); n && n.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 250);
-
-}
-
-$$('#bnav button').forEach(b => b.onclick = () => go(b.dataset.v));
-
-
-
-/\* ---------- Data ---------- \*/
-
-function load(silent) {
-
-  $('#btnRefresh').classList.add('spin');
-
-  google.script.run.withSuccessHandler(d => {
-
-    D = d; me = store.get('bengkel_me2');
-
-    if (me && !P(me)) me = '';
-
-    demo = D.contoh.map(r => Object.assign({}, r));
-
-    $('#loading').style.display = 'none'; $('#btnRefresh').classList.remove('spin');
-
-    renderAll(); if (silent) toast('Data dikemas kini');
-
-  }).withFailureHandler(e => {
-
-    $('#btnRefresh').classList.remove('spin');
-
-    $('#loading').innerHTML = '\<div class="card" style="color:var(--red)">' + esc(e.message) + '\</div>';
-
-  }).getData();
-
-}
-
-$('#btnRefresh').onclick = () => load(true);
-
-load();
-
-
-
-function renderAll() {
-
-  const I = D.info;
-
-  $('#hTitle').textContent = I.tajuk || 'Bengkel';
-
-  $('#hMeta').textContent = [I.tempoh, I.lokasi].filter(Boolean).join(' · ');
-
-  $('#hTools').innerHTML = (I.alat || '').split('|').map(t => t.trim()).filter(Boolean).map(t => '\<span>' + esc(t) + '\</span>').join('');
-
-  document.title = I.tajuk || 'Bengkel';
-
-  $('#foot').innerHTML = 'Data diurus dalam \<a href="' + esc(D.sheetUrl) + '" target="\_blank">Google Sheet bengkel\</a>' + (D.pengguna ? '\<br>Log masuk: ' + esc(D.pengguna) : '');
-
-  renderUtama(); renderJadual(); renderPasukan(); renderKemajuan(); renderSemak();
-
-}
-
-
-
-/\* ---------- Masa ---------- \*/
-
-const dayNames = () => [...new Set(D.jadual.map(r => r.hari))];
-
-function startDate() {
-
-  const s = (D.info.tarikh_mula || '').trim(); if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
-
-  const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d);
-
-}
-
-const toMin = t => { const [h, m] = t.trim().split(/[:.]/).map(Number); return ((h < 7 ? h + 12 : h) \* 60) + (m || 0); };
-
-function rowsTimed() {
-
-  const base = startDate();
-
-  return D.jadual.map((r, idx) => {
-
-    const o = Object.assign({ idx }, r);
-
-    if (base) {
-
-      const di = dayNames().indexOf(r.hari), parts = r.masa.split(/[–-]/);
-
-      const a = new Date(base); a.setDate(base.getDate() + di); const b = new Date(a);
-
-      a.setHours(0, toMin(parts[0]), 0, 0); b.setHours(0, toMin(parts[1] || parts[0]), 0, 0);
-
-      o.a = a; o.b = b;
-
-    }
-
-    return o;
-
-  });
-
-}
-
-const isMine = r => me && r.penceramah === me;
-
-const fmtT = d => d.toLocaleTimeString('ms-MY', { hour: 'numeric', minute: '2-digit' });
-
-
-
-/\* ---------- Utama ---------- \*/
-
-function heroHTML() {
-
-  const I = D.info, rows = rowsTimed(), now = new Date();
-
-  if (!rows[0] || !rows[0].a) {
-
-    return '\<div class="hero">\<div class="lbl">Tarikh belum disahkan\</div>\<h3>' + esc(I.subtajuk) + '\</h3>\<p>' + esc(I.tarikh) + '. Isi \<b>tarikh_mula\</b> dalam helaian Info untuk kiraan detik dan paparan sesi semasa.\</p>\</div>';
-
-  }
-
-  const first = rows[0], last = rows[rows.length - 1];
-
-  const cur = rows.find(r => now >= r.a && now < r.b), nxt = rows.find(r => r.a > now && r.jenis !== 'rehat');
-
-  if (now < first.a) {
-
-    const ms = first.a - now, d = Math.floor(ms / 864e5), h = Math.floor(ms % 864e5 / 36e5), m = Math.floor(ms % 36e5 / 6e4), s = Math.floor(ms % 6e4 / 1e3);
-
-    return '\<div class="hero">\<div class="lbl">Bengkel bermula dalam\</div>\<div class="count">\<div>\<b>' + d + '\</b>\<span>hari\</span>\</div>\<div>\<b>' + h + '\</b>\<span>jam\</span>\</div>\<div>\<b>' + m + '\</b>\<span>minit\</span>\</div>\<div>\<b>' + s + '\</b>\<span>saat\</span>\</div>\</div>' +
-
-      '\<div class="next">Mula: \<b>' + esc(first.sesi) + '\</b> · ' + esc(first.hari) + ', ' + esc(first.masa) + '\</div>\</div>';
-
-  }
-
-  if (now >= last.b) return '\<div class="hero">\<div class="lbl">Bengkel telah selesai\</div>\<h3>Terima kasih, semua penceramah dan fasi!\</h3>\<p>Rekod bantuan yang masih diperlukan dalam tab Kemajuan.\</p>\</div>';
-
-  if (cur) {
-
-    const p = Math.min(100, (now - cur.a) / (cur.b - cur.a) \* 100), left = Math.ceil((cur.b - now) / 6e4);
-
-    return '\<div class="hero">\<div class="lbl">● Sedang berlangsung · ' + esc(cur.hari) + '\</div>\<h3>' + esc((cur.kod ? cur.kod + ' · ' : '') + cur.sesi) + '\</h3>' +
-
-      '\<div class="row">\<span>' + esc(fullName(cur.penceramah) || '—') + '\</span>\<span>' + left + ' min lagi\</span>\</div>\<div class="bar">\<div style="width:' + p + '%">\</div>\</div>' +
-
-      (cur.hasil ? '\<div class="next">Hasil wajib: \<b>' + esc(cur.hasil) + '\</b>\</div>' : '') +
-
-      (nxt ? '\<div class="next">Seterusnya ' + fmtT(nxt.a) + ': \<b>' + esc(nxt.sesi) + '\</b>\</div>' : '') + '\</div>';
-
-  }
-
-  return '\<div class="hero">\<div class="lbl">Di luar waktu sesi\</div>\<h3>' + (nxt ? 'Seterusnya: ' + esc(nxt.sesi) : 'Tiada sesi lagi hari ini') + '\</h3>' +
-
-    (nxt ? '\<div class="row">\<span>' + esc(nxt.hari) + ', ' + esc(nxt.masa) + '\</span>\<span>' + esc(fullName(nxt.penceramah)) + '\</span>\</div>' : '') + '\</div>';
-
-}
-
-
-
-function meHTML() {
-
-  const opts = D.penceramah.map(p => '\<option value="' + esc(p.panggilan) + '"' + (p.panggilan === me ? ' selected' : '') + '>' + esc(p.nama) + '\</option>').join('');
-
-  let body = '';
-
-  if (me) {
-
-    const p = P(me), sesi = D.jadual.filter(isMine);
-
-    const rumah = D.kumpulan.filter(k => k.fasi_rumah === me), ganti = D.kumpulan.filter(k => k.fasi_ganti === me);
-
-    const bahan = D.persediaan.filter(x => x.pemilik === me);
-
-    body = '\<div class="kv">\<b>Fokus\</b>\<span>' + esc(p.fokus) + '\</span>' +
-
-      '\<b>Sesi\</b>\<span>' + (sesi.length ? sesi.map(s => esc(s.sesi) + ' \<span class="muted">(' + esc(s.hari) + ', ' + esc(s.masa) + ')\</span>').join('\<br>') : 'Tiada') + '\</span>' +
-
-      '\<b>Hasil peserta\</b>\<span>' + esc(p.hasil) + '\</span>' +
-
-      '\<b>Fasi rumah\</b>\<span>' + (rumah.length ? rumah.map(k => 'Kumpulan ' + esc(k.kumpulan)).join(', ') : '—') + '\</span>' +
-
-      '\<b>Fasi ganti\</b>\<span>' + (ganti.length ? ganti.map(k => 'Kumpulan ' + esc(k.kumpulan)).join(', ') : '—') + '\</span>' +
-
-      '\<b>Pengurusan\</b>\<span>' + (rumah.length ? esc(rumah[0].tugas_pengurusan) : '—') + '\</span>' +
-
-      '\<b>Bahan\</b>\<span>' + (bahan.length ? bahan.map(b => (b.selesai === 'YA' ? '✅ ' : '⬜ ') + esc(b.item)).join('\<br>') : '—') + '\</span>\</div>';
-
-  }
-
-  return '\<div class="card me-card">\<div class="tag me">Tugasan saya\</div>\<select id="meSel" style="margin-top:8px">\<option value="">Pilih nama anda…\</option>' + opts + '\</select>' + body + '\</div>';
-
-}
-
-
-
-function renderUtama() {
-
-  const I = D.info;
-
-  $('#v-utama').innerHTML =
-
-    '\<div id="hero">' + heroHTML() + '\</div>' +
-
-    '\<div class="sec">' + meHTML() + '\</div>' +
-
-    '\<div class="sec">\<span class="tag teal">Hasil akhir\</span>\<h2 style="margin-top:6px">Dashboard asas yang peserta faham dan boleh kemas kini\</h2>\<p class="sub">' + esc(I.ringkasan) + '\</p>\<div class="card">' +
-
-      D.serahan.map((s, i) => '\<div class="deliv">\<div class="num">' + (i + 1) + '\</div>\<div>\<b>' + esc(s.serahan) + '\</b>\<span class="small muted">' + esc(s.sasaran) + '\</span>\</div>\</div>').join('') +
-
-      '\</div>\<div class="note">' + esc(I.nota_hasil) + '\</div>\</div>' +
-
-    '\<div class="sec">\<span class="tag teal">Keperluan peserta\</span>\<h2 style="margin-top:6px">Aras asas dipilih berdasarkan respons peserta\</h2>\<div class="card">' +
-
-      D.keperluan.map(k => '\<div class="need">\<b>' + esc(k.aspek) + '\</b> \<span class="muted small">· ' + esc(k.dapatan) + '\</span>\<div class="arrow">\<i>→\</i>\<span>' + esc(k.tindakan) + '\</span>\</div>\</div>').join('') +
-
-      '\</div>\<div class="note teal">' + esc(I.nota_keperluan) + '\</div>\<div class="src">Sumber: ' + esc(I.sumber_keperluan) + '\</div>\</div>' +
-
-    '\<div class="sec">\<h2>Akses pantas\</h2>\<div class="quick" style="margin-top:12px">' +
-
-      '\<button data-go="jadual">\<i>🗓️\</i>Jadual 2 hari\</button>\<button data-go="kemajuan">\<i>📈\</i>Log kemajuan\</button>' +
-
-      '\<button data-go="pasukan">\<i>🧪\</i>Contoh latihan\</button>\<button id="btnPresent">\<i>📽️\</i>Mod taklimat\</button>\</div>\</div>' +
-
-    '\<div class="sec card">\<span class="tag">Bengkel susulan\</span>\<p class="small" style="margin:8px 0 0">' + esc(I.susulan) + '\</p>\</div>';
-
-  $('#meSel').onchange = e => { me = e.target.value; store.set('bengkel_me2', me); buzz(); renderUtama(); renderJadual(); renderPasukan(); toast(me ? 'Hai, ' + fullName(me) + '!' : 'Pilihan nama dibuang'); };
-
-  $$('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go));
-
-  $('#btnPresent').onclick = openDeck;
-
-}
-
-setInterval(() => { if (D && $('#hero')) $('#hero').innerHTML = heroHTML(); }, 1000);
-
-setInterval(() => { if (D && $('#v-jadual').classList.contains('on')) renderJadual(); }, 60000);
-
-
-
-/\* ---------- Jadual ---------- \*/
-
-function renderJadual() {
-
-  const rows = rowsTimed(), now = new Date(), days = dayNames();
-
-  const chips = ['semua'].concat(days).concat(me ? ['saya'] : []);
-
-  const list = rows.filter(r => dayFilter === 'semua' || r.hari === dayFilter || (dayFilter === 'saya' && isMine(r)));
-
-  const kes = k => D.kesinambungan.find(x => x.sesi === k);
-
-  let html = '\<h2>Jadual bengkel\</h2>\<p class="sub">Cadangan jadual untuk pengesahan SSTP. Ketik sesi untuk lihat input dan output yang diteruskan.\</p>\<div class="chips">' +
-
-    chips.map(c => '\<button class="chip' + (c === dayFilter ? ' on' : '') + '" data-c="' + esc(c) + '">' + (c === 'semua' ? 'Semua' : c === 'saya' ? '⭐ Sesi saya' : esc(c)) + '\</button>').join('') + '\</div>';
-
-  let lastDay = '';
-
-  html += '\<div class="tl">';
-
-  list.forEach(r => {
-
-    if (r.hari !== lastDay && dayFilter !== 'saya') {
-
-      html += '\</div>\<div class="dayhead"' + (lastDay ? ' style="margin-top:18px"' : '') + '>\<div class="small">' + esc(r.hari) + '\</div>\<h3>' + esc(r.tajuk_hari) + '\</h3>\</div>\<div class="tl">';
-
-      lastDay = r.hari;
-
-    }
-
-    const timed = r.a && r.b;
-
-    const cls = ['ev', r.jenis === 'rehat' ? 'rehat' : '', isMine(r) ? 'mine' : '', timed && now >= r.b ? 'past' : '', timed && now >= r.a && now < r.b ? 'now' : ''].join(' ');
-
-    if (r.jenis === 'rehat') { html += '\<div class="' + cls + '">\<div class="card">\<span class="ev-time">' + esc(r.masa) + '\</span> · \<span class="muted">☕ ' + esc(r.sesi) + '\</span>\</div>\</div>'; return; }
-
-    const k = r.kod ? kes(r.kod) : null;
-
-    html += '\<div class="' + cls + '">\<div class="card">\<div class="ev-top">\<span class="ev-time">' + esc(r.masa) + (dayFilter === 'saya' ? ' · ' + esc(r.hari) : '') + '\</span>' +
-
-      (r.kod ? '\<span class="tag' + (isMine(r) ? ' me' : ' teal') + '">' + esc(r.kod) + '\</span>' : '') + '\</div>' +
-
-      '\<h3>' + esc(r.sesi) + '\</h3>\<div class="who">' + esc(fullName(r.penceramah)) + '\</div>' +
-
-      (r.hasil ? '\<div class="hasil">\<b>Hasil wajib:\</b> ' + esc(r.hasil) + '\</div>' : '') +
-
-      (k ? '\<div class="more">\<div class="flow">\<div>\<span class="tag">Input\</span>\<br>' + esc(k.input) + '\</div>\<div class="ar">→\</div>\<div>\<span class="tag teal">Output\</span>\<br>' + esc(k.output) + '\</div>\</div>\</div>' : '') +
-
-      '\</div>\</div>';
-
-  });
-
-  if (!list.length) html += '\<div class="card muted">Tiada sesi untuk paparan ini.\</div>';
-
-  html += '\</div>\<div class="note">' + esc(D.info.nota_kesinambungan) + '\</div>\<div class="note teal">' + esc(D.info.nota_demo) + '\</div>';
-
-  $('#v-jadual').innerHTML = html;
-
-  $$('#v-jadual .chip').forEach(c => c.onclick = () => { dayFilter = c.dataset.c; buzz(); renderJadual(); });
-
-  $$('#v-jadual .ev:not(.rehat)').forEach(e => e.onclick = () => { if (e.querySelector('.more')) { e.classList.toggle('open'); buzz(); } });
-
-}
-
-
-
-/\* ---------- Pasukan ---------- \*/
-
-function renderPasukan() {
-
-  const I = D.info;
-
-  $('#v-pasukan').innerHTML =
-
-    '\<h2>Lima penceramah, hasil kerja bersambung\</h2>\<p class="sub">Setiap penceramah menggunakan contoh demonstrasi yang sama. Ketik nama untuk butiran.\</p>\<div class="stack" id="plist">' +
-
-    D.penceramah.map(p => {
-
-      const sesi = D.jadual.filter(r => r.penceramah === p.panggilan);
-
-      const rumah = D.kumpulan.filter(k => k.fasi_rumah === p.panggilan), ganti = D.kumpulan.filter(k => k.fasi_ganti === p.panggilan);
-
-      return '\<div class="card acc' + (p.panggilan === me ? ' me-card' : '') + '">\<div class="person">\<div class="avatar">' + esc(initials(p.nama)) + '\</div>\<div style="flex:1">\<h3>' + esc(p.nama) + '\</h3>\<div class="small muted">' + esc(p.sekolah) + '\</div>\<div class="teal small" style="margin-top:4px">' + esc(p.fokus) + '\</div>\</div>\<span class="chev">⌄\</span>\</div>' +
-
-        '\<div class="more pdetail">\<div class="kv">\<b>Hasil peserta\</b>\<span>' + esc(p.hasil) + '\</span>\<b>Fasi rumah\</b>\<span>' + (rumah.map(k => 'Kumpulan ' + esc(k.kumpulan)).join(', ') || '—') + '\</span>\<b>Fasi ganti\</b>\<span>' + (ganti.map(k => 'Kumpulan ' + esc(k.kumpulan)).join(', ') || '—') + '\</span>\</div>' +
-
-        '\<ul>' + sesi.map(s => '\<li>\<b>' + esc(s.masa) + '\</b> ' + esc(s.hari) + ' · ' + esc(s.sesi) + '\</li>').join('') + '\</ul>\</div>\</div>';
-
-    }).join('') + '\</div>' +
-
-    '\<div class="sec">\<h2>Fasilitasi kumpulan\</h2>\<p class="sub">Lima fasi membimbing hasil individu.\</p>' +
-
-    D.kumpulan.map(k => '\<div class="card" style="margin-bottom:10px;display:flex;gap:12px;align-items:flex-start">\<div class="avatar gold">' + esc(k.kumpulan) + '\</div>\<div class="small" style="flex:1">\<b>Rumah: ' + esc(fullName(k.fasi_rumah)) + '\</b>\<br>\<span class="muted">Ganti: ' + esc(fullName(k.fasi_ganti)) + '\</span>\<div style="margin-top:6px">' + esc(k.tugas_pengurusan) + '\</div>\</div>\</div>').join('') +
-
-    '\<div class="note">' + esc(I.nota_fasi) + '\</div>\</div>' +
-
-    '\<div class="sec">\<h2>Kaedah bimbingan\</h2>\<p class="sub">Sesuaikan bantuan tanpa menambah beban peserta.\</p>\<div class="stack">' +
-
-    D.bimbingan.map(b => '\<div class="card acc">\<div class="acc-h">\<span>' + esc(b.keperluan) + '\</span>\<span class="chev">⌄\</span>\</div>\<div class="more">\<div class="small" style="margin-top:10px">\<span class="tag">Bimbingan\</span>\<br>' + esc(b.bimbingan) + '\</div>\<div class="small" style="margin-top:10px">\<span class="tag teal">Latihan peserta\</span>\<br>' + esc(b.latihan) + '\</div>\</div>\</div>').join('') +
-
-    '\</div>\<div class="note teal">' + esc(I.nota_bimbingan) + '\</div>\</div>' +
-
-    '\<div class="sec" id="contoh">\<h2>Contoh latihan: cuba sendiri\</h2>\<p class="sub">Data rekaan yang digunakan sepanjang bengkel. Ketik status untuk ubah, dan lihat angka serta carta berubah.\</p>\<div class="card" id="demo">\</div>' +
-
-    '\<div class="note">' + esc(I.nota_contoh) + '\</div>\<div class="note teal">\<b>Ujian asas:\</b> ' + esc(I.ujian_contoh) + '\</div>\</div>';
-
-  $$('#v-pasukan .acc').forEach(c => c.onclick = () => { c.classList.toggle('open'); buzz(); });
-
-  renderDemo();
-
-}
-
-
-
-function renderDemo() {
-
-  const n = demo.length, lengkap = demo.filter(r => r.status === 'Lengkap').length, kadar = n ? Math.round(lengkap / n \* 100) : 0;
-
-  const daerah = [...new Set(demo.map(r => r.daerah))];
-
-  const maxD = Math.max(1, ...daerah.map(d => demo.filter(r => r.daerah === d).length));
-
-  $('#demo').innerHTML =
-
-    '\<table class="demo-table">\<tr>\<th>Sekolah\</th>\<th>Daerah\</th>\<th>Status\</th>\</tr>' +
-
-    demo.map((r, i) => '\<tr>\<td>' + esc(r.sekolah) + '\</td>\<td>' + esc(r.daerah) + '\</td>\<td>\<button class="st ' + esc(r.status) + '" data-i="' + i + '">' + esc(r.status) + '\</button>\</td>\</tr>').join('') + '\</table>' +
-
-    '\<div class="kpis">\<div>\<b>' + n + '\</b>\<span>rekod laporan\</span>\</div>\<div>\<b>' + lengkap + '\</b>\<span>lengkap\</span>\</div>\<div>\<b>' + kadar + '%\</b>\<span>kadar lengkap\</span>\</div>\</div>' +
-
-    '\<div class="small muted" style="margin-top:14px;font-weight:800">Carta 1 · Lengkap dan Belum\</div>\<div class="bars">' +
-
-      '\<div class="b">\<span>Lengkap\</span>\<div class="t">\<i style="width:' + (n ? lengkap / n \* 100 : 0) + '%">\</i>\</div>\<b>' + lengkap + '\</b>\</div>' +
-
-      '\<div class="b">\<span>Belum\</span>\<div class="t">\<i class="r" style="width:' + (n ? (n - lengkap) / n \* 100 : 0) + '%">\</i>\</div>\<b>' + (n - lengkap) + '\</b>\</div>\</div>' +
-
-    '\<div class="small muted" style="margin-top:14px;font-weight:800">Carta 2 · Laporan lengkap mengikut daerah\</div>\<div class="bars">' +
-
-      daerah.map(d => { const c = demo.filter(r => r.daerah === d && r.status === 'Lengkap').length; return '\<div class="b">\<span>' + esc(d) + '\</span>\<div class="t">\<i style="width:' + c / maxD \* 100 + '%">\</i>\</div>\<b>' + c + '\</b>\</div>'; }).join('') + '\</div>' +
-
-    '\<button class="btn" id="demoReset" style="margin-top:14px;background:transparent;color:var(--dark);border:1px solid var(--line)">Set semula contoh\</button>';
-
-  $$('#demo .st').forEach(b => b.onclick = () => { const r = demo[b.dataset.i]; r.status = r.status === 'Lengkap' ? 'Belum' : 'Lengkap'; buzz(); renderDemo(); });
-
-  $('#demoReset').onclick = () => { demo = D.contoh.map(r => Object.assign({}, r)); renderDemo(); toast('Contoh diset semula'); };
-
-}
-
-
-
-/\* ---------- Kemajuan ---------- \*/
-
-const statusOf = (pid, iid) => { const k = D.kemajuan.find(x => x.peserta === pid && x.item === iid); return k ? k.status : ''; };
-
-function renderKemajuan() {
-
-  const items = D.logItem, chips = ['semua'].concat(D.kumpulan.map(k => k.kumpulan));
-
-  const ps = D.peserta.filter(p => grpFilter === 'semua' || p.kumpulan === grpFilter);
-
-  const sumRow = it => { const s = ps.filter(p => statusOf(p.id, it.id) === 'Selesai').length, b = ps.filter(p => statusOf(p.id, it.id) === 'Perlu bimbingan').length, n = ps.length || 1;
-
-    return '\<div class="b">\<span>\<b>' + esc(it.sesi) + '\</b> ' + esc(it.item) + '\</span>\<span class="small muted" style="text-align:right">' + s + '✓ ' + b + '⚑\</span>\<div class="t">\<i style="width:' + s / n \* 100 + '%;background:var(--teal)">\</i>\<i style="width:' + b / n \* 100 + '%;background:var(--accent)">\</i>\</div>\</div>'; };
-
-  $('#v-kemajuan').innerHTML =
-
-    '\<h2>Log kemajuan individu\</h2>\<p class="sub">Fasi rekod status \<b>Selesai\</b> atau \<b>Perlu bimbingan\</b> bagi setiap langkah. Ketik nama peserta untuk merekod.\</p>' +
-
-    '\<div class="chips">' + chips.map(c => '\<button class="chip' + (c === grpFilter ? ' on' : '') + '" data-g="' + esc(c) + '">' + (c === 'semua' ? 'Semua' : 'Kumpulan ' + esc(c)) + '\</button>').join('') + '\</div>' +
-
-    '\<div class="card">\<b>Ringkasan ' + (grpFilter === 'semua' ? 'semua kumpulan' : 'Kumpulan ' + esc(grpFilter)) + '\</b> \<span class="small muted">· ' + ps.length + ' peserta\</span>\<div class="sum" style="margin-top:10px">' + items.map(sumRow).join('') + '\</div>' +
-
-      '\<div class="legend">\<span class="s">Selesai\</span>\<span class="p">Perlu bimbingan\</span>\<span>Belum direkod\</span>\</div>\</div>' +
-
-    '\<div class="card" style="margin-top:12px">' + (ps.length ? ps.map(p => {
-
-        const st = items.map(it => statusOf(p.id, it.id)), s = st.filter(x => x === 'Selesai').length, b = st.filter(x => x === 'Perlu bimbingan').length;
-
-        return '\<div class="prow" data-p="' + esc(p.id) + '">\<div class="avatar gold" style="width:40px;height:40px;font-size:14px">' + esc(p.kumpulan) + '\</div>\<div class="meter">\<b>' + esc(p.nama) + '\</b> \<span class="small muted">· ' + s + '/' + items.length + (b ? ' · ' + b + ' perlu bimbingan' : '') + '\</span>' +
-
-          '\<div class="seg">' + st.map(x => '\<i class="' + (x === 'Selesai' ? 's' : x === 'Perlu bimbingan' ? 'p' : '') + '">\</i>').join('') + '\</div>\</div>\<span class="chev">›\</span>\</div>';
-
-      }).join('') : '\<div class="muted small">Belum ada peserta. Tambah di bawah.\</div>') + '\</div>' +
-
-    '\<div class="card" style="margin-top:12px">\<b>Tambah peserta\</b>\<div class="add">\<input id="npNama" placeholder="Nama peserta">\<select id="npKump">' + D.kumpulan.map(k => '\<option' + (k.kumpulan === grpFilter ? ' selected' : '') + '>' + esc(k.kumpulan) + '\</option>').join('') + '\</select>\</div>\<button class="btn" id="npAdd" style="margin-top:10px">Tambah\</button>\</div>' +
-
-    '\<div class="sec">\<h2>Semakan pembelajaran\</h2>\<p class="sub">Bukti mudah yang ditunjukkan semasa demonstrasi individu.\</p>\<div class="stack">' +
-
-      D.semakan.map(s => '\<div class="card">\<b>' + esc(s.semakan) + '\</b>\<div class="small muted">' + esc(s.bukti) + '\</div>\</div>').join('') + '\</div>' +
-
-      '\<div class="note">' + esc(D.info.nota_semakan) + '\</div>\<div class="note teal">\<b>Serahan:\</b> ' + esc(D.info.serahan_akhir) + '\</div>\</div>';
-
-  $$('#v-kemajuan .chip').forEach(c => c.onclick = () => { grpFilter = c.dataset.g; buzz(); renderKemajuan(); });
-
-  $$('#v-kemajuan .prow').forEach(r => r.onclick = () => openSheet(r.dataset.p));
-
-  $('#npAdd').onclick = () => {
-
-    const nama = $('#npNama').value.trim(), k = $('#npKump').value; if (!nama) return toast('Masukkan nama peserta', true);
-
-    $('#npAdd').disabled = true;
-
-    run('tambahPeserta', [nama, k], list => { D.peserta = list; renderKemajuan(); toast(nama + ' ditambah ke Kumpulan ' + k); }, () => $('#npAdd').disabled = false);
-
-  };
-
-}
-
-
-
-function openSheet(pid) {
-
-  openPid = pid; const p = D.peserta.find(x => x.id === pid); if (!p) return;
-
-  const sesiItem = it => D.jadual.find(j => j.kod === it.sesi);
-
-  $('#sheet').innerHTML = '\<div class="grab">\</div>\<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">\<div>\<span class="tag">Kumpulan ' + esc(p.kumpulan) + '\</span>\<h2 style="margin-top:4px">' + esc(p.nama) + '\</h2>\</div>\<button class="chip" id="shClose">Tutup\</button>\</div>' +
-
-    D.logItem.map(it => { const st = statusOf(pid, it.id), j = sesiItem(it);
-
-      return '\<div class="li">\<div class="li-h">\<b>' + esc(it.item) + '\</b>\<span class="tag teal">' + esc(it.sesi) + '\</span>\</div>' + (j ? '\<div class="small muted">' + esc(j.hasil) + '\</div>' : '') +
-
-        '\<div class="two-btn" data-i="' + esc(it.id) + '">\<button class="s' + (st === 'Selesai' ? ' on' : '') + '" data-s="Selesai">✓ Selesai\</button>\<button class="p' + (st === 'Perlu bimbingan' ? ' on' : '') + '" data-s="Perlu bimbingan">⚑ Perlu bimbingan\</button>\</div>\</div>'; }).join('');
-
-  $('#scrim').classList.add('on'); $('#sheet').classList.add('on'); buzz();
-
-  $('#shClose').onclick = closeSheet;
-
-  $$('#sheet .two-btn').forEach(g => g.onclick = e => {
-
-    const btn = e.target.closest('button'); if (!btn) return;
-
-    const iid = g.dataset.i, cur = statusOf(pid, iid), val = cur === btn.dataset.s ? '' : btn.dataset.s;
-
-    g.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.s === val)); buzz();
-
-    run('setKemajuan', [pid, iid, val, ''], list => { D.kemajuan = list; renderKemajuan(); toast(val ? val : 'Status dikosongkan'); }, () => openSheet(pid));
-
-  });
-
-}
-
-function closeSheet() { $('#scrim').classList.remove('on'); $('#sheet').classList.remove('on'); openPid = ''; }
-
-$('#scrim').onclick = closeSheet;
-
-
-
-/\* ---------- Persediaan ---------- \*/
-
-function renderSemak() {
-
-  const L = D.persediaan, done = L.filter(s => s.selesai === 'YA').length, n = L.length, p = n ? done / n : 0, C = 2 \* Math.PI \* 30;
-
-  const groups = [...new Set(L.map(x => x.bila))];
-
-  $('#v-semak').innerHTML =
-
-    '\<h2>Persediaan penceramah\</h2>\<p class="sub">Sediakan bahan asas untuk satu projek bersama. Ketik untuk tanda; semua penceramah nampak status yang sama.\</p>' +
-
-    '\<div class="card ring">\<svg width="76" height="76" viewBox="0 0 76 76">\<circle cx="38" cy="38" r="30" fill="none" stroke="#E2DDD0" stroke-width="8"/>\<circle cx="38" cy="38" r="30" fill="none" stroke="#2A7F7A" stroke-width="8" stroke-linecap="round" stroke-dasharray="' + C + '" stroke-dashoffset="' + C \* (1 - p) + '" transform="rotate(-90 38 38)" style="transition:stroke-dashoffset .5s"/>\<text x="38" y="44" text-anchor="middle" font-family="Rubik, Arial" font-size="18" font-weight="600" fill="#12304A">' + Math.round(p \* 100) + '%\</text>\</svg>' +
-
-    '\<div>\<b style="font-family:Rubik;font-size:20px">' + done + ' daripada ' + n + ' selesai\</b>\<div class="small muted">' + (done === n ? 'Semua persediaan lengkap 🎉' : (n - done) + ' item lagi') + '\</div>\</div>\</div>' +
-
-    groups.map(g => '\<div class="grouphead">' + esc(g) + '\</div>\<div class="card" style="padding:4px 14px">' + L.filter(x => x.bila === g).map(s =>
-
-      '\<div class="check' + (s.selesai === 'YA' ? ' done' : '') + '" data-id="' + esc(s.id) + '">\<div class="box">' + (s.selesai === 'YA' ? '✓' : '') + '\</div>' +
-
-      '\<div>\<span class="tag' + (s.pemilik === me ? ' me' : ' teal') + '">' + esc(s.pemilik === 'Semua' || s.pemilik === 'Penganjur' ? s.pemilik : fullName(s.pemilik)) + '\</span>\<div class="txt" style="margin-top:4px">' + esc(s.item) + '\</div>' + (s.oleh ? '\<div class="small muted">✓ ' + esc(s.oleh) + ' · ' + esc(s.masa) + '\</div>' : '') + '\</div>\</div>').join('') + '\</div>').join('') +
-
-    '\<div class="note">' + esc(D.info.nota_persediaan) + '\</div>' +
-
-    (D.info.rujukan ? '\<div class="src">Rujukan kaedah semakan Gemini Notebook: \<a href="' + esc(D.info.rujukan) + '" target="\_blank">' + esc(D.info.rujukan.replace(/^https?:\\/\\//, '')) + '\</a>\</div>' : '');
-
-  $$('#v-semak .check').forEach(el => el.onclick = () => {
-
-    const id = el.dataset.id, item = L.find(s => String(s.id) === id), val = item.selesai !== 'YA';
-
-    el.classList.toggle('done', val); el.querySelector('.box').textContent = val ? '✓' : ''; el.classList.add('busy'); buzz();
-
-    run('togglePersediaan', [id, val], list => { D.persediaan = list; renderSemak(); renderUtama(); toast(val ? 'Ditanda selesai' : 'Tanda dibuang'); }, () => renderSemak());
-
-  });
-
-}
-
-
-
-/\* ---------- Mod taklimat ---------- \*/
-
-let cur = 0, slides = [], tx = 0;
-
-function tbl(head, rows) { return '\<table>\<tr>' + head.map(h => '\<th>' + esc(h) + '\</th>').join('') + '\</tr>' + rows.map(r => '\<tr>' + r.map(c => '\<td>' + esc(c) + '\</td>').join('') + '\</tr>').join('') + '\</table>'; }
-
-function buildDeck() {
-
-  const I = D.info, f = '\<div class="foot">Bengkel JPN Sabah · Cadangan pembahagian tugas\</div>', s = [];
-
-  const sl = (eb, h, body, dark) => s.push('\<div class="slide' + (dark ? ' dk' : '') + '">\<div class="eyebrow">' + esc(eb) + '\</div>\<h2>' + esc(h) + '\</h2>' + body + (dark ? '' : f) + '\</div>');
-
-  s.push('\<div class="slide dk" style="justify-content:center">\<div class="eyebrow">Taklimat Penceramah dan Fasilitator\</div>\<h1>' + esc(I.tajuk) + '\</h1>\<div class="big">' + esc(I.subtajuk) + '\</div>\<div class="big" style="color:var(--accent)">' + esc(I.alat) + '\</div>\<div class="big" style="font-size:30px">' + esc(I.tempoh) + ' · ' + esc(I.lokasi) + ' · ' + esc(I.tarikh) + '\</div>\</div>');
-
-  sl('Keperluan peserta', 'Aras asas dipilih berdasarkan respons peserta', tbl(['Aspek', 'Dapatan', 'Tindakan dalam bengkel'], D.keperluan.map(k => [k.aspek, k.dapatan, k.tindakan])) + '\<p class="lead">' + esc(I.nota_keperluan) + '\</p>');
-
-  sl('Hasil akhir', 'Dashboard asas yang peserta faham dan boleh kemas kini', tbl(['Serahan individu', 'Sasaran asas'], D.serahan.map(x => [x.serahan, x.sasaran])) + '\<p class="lead">' + esc(I.nota_hasil) + '\</p>');
-
-  sl('Pembahagian pengajaran', 'Lima penceramah dengan hasil kerja yang bersambung', tbl(['Penceramah', 'Fokus asas', 'Hasil peserta'], D.penceramah.map(p => [p.nama, p.fokus, p.hasil])));
-
-  sl('Kesinambungan', 'Setiap hasil menjadi bahan sesi seterusnya', tbl(['Sesi', 'Input', 'Output untuk diteruskan'], D.kesinambungan.map(k => [k.sesi + ' ' + k.oleh, k.input, k.output])));
-
-  dayNames().forEach(d => { const rows = D.jadual.filter(r => r.hari === d); sl(d, rows[0].tajuk_hari, tbl(['Masa', 'Sesi dan penceramah', 'Hasil wajib'], rows.map(r => [r.masa, r.sesi + (r.penceramah ? ' | ' + r.penceramah : ''), r.hasil])).replace(/\<td>/g, '\<td style="padding:8px 18px">')); });
-
-  sl('Contoh latihan', 'Satu jadual laporan digunakan sepanjang bengkel', tbl(['Sekolah', 'Daerah', 'Status laporan'], D.contoh.map(c => [c.sekolah, c.daerah, c.status])) + '\<p class="lead">' + esc(I.nota_contoh) + '\</p>');
-
-  sl('Kaedah bimbingan', 'Sesuaikan bantuan tanpa menambah beban peserta', tbl(['Keperluan', 'Bimbingan yang disediakan', 'Latihan peserta'], D.bimbingan.map(b => [b.keperluan, b.bimbingan, b.latihan])));
-
-  sl('Fasilitasi', 'Lima fasi membimbing hasil individu', tbl(['Kumpulan', 'Fasi rumah', 'Fasi ganti', 'Tugas pengurusan'], D.kumpulan.map(k => [k.kumpulan, k.fasi_rumah, k.fasi_ganti, k.tugas_pengurusan])) + '\<p class="lead">' + esc(I.nota_fasi) + '\</p>');
-
-  sl('Semakan pembelajaran', 'Nilai kefahaman dan kemajuan peserta', tbl(['Semakan', 'Bukti mudah yang ditunjukkan'], D.semakan.map(x => [x.semakan, x.bukti])) + '\<p class="lead">' + esc(I.nota_semakan) + '\</p>');
-
-  sl('Persediaan penceramah', 'Sediakan bahan asas untuk satu projek bersama', tbl(['Bila', 'Pemilik', 'Bahan'], D.persediaan.map(x => [x.bila, x.pemilik, x.item])) + '\<p class="lead">\<b>' + esc(I.susulan) + '\</b>\</p>');
-
-  $('#stage').innerHTML = s.join(''); slides = $$('#stage .slide');
-
-}
-
-function show(i) { cur = Math.max(0, Math.min(slides.length - 1, i)); slides.forEach((el, j) => el.classList.toggle('on', j === cur)); $('#dCount').textContent = (cur + 1) + '/' + slides.length; }
-
-function fit() { $('#stage').style.transform = 'scale(' + Math.min(innerWidth / 1920, innerHeight / 1080) + ')'; }
-
-function openDeck() {
-
-  buildDeck(); $('#deck').classList.add('on'); $('#deckbar').style.display = 'flex'; fit(); show(0); buzz();
-
-  const el = document.documentElement; if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-
-}
-
-function closeDeck() { $('#deck').classList.remove('on'); $('#deckbar').style.display = 'none'; if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
-
-$('#dPrev').onclick = () => show(cur - 1);
-
-$('#dNext').onclick = () => show(cur + 1);
-
-$('#dClose').onclick = closeDeck;
-
-$('#deck').addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
-
-$('#deck').addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; show(cur + (Math.abs(dx) > 40 && dx > 0 ? -1 : 1)); });
-
-$('#deck').addEventListener('click', () => { if (!('ontouchstart' in window)) show(cur + 1); });
-
-addEventListener('resize', fit);
-
-addEventListener('keydown', e => {
-
-  if ($('#sheet').classList.contains('on') && e.key === 'Escape') return closeSheet();
-
-  if (!$('#deck').classList.contains('on')) return;
-
-  if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(cur + 1); }
-
-  if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
-
-  if (e.key === 'Escape') closeDeck();
-
-});
-
-\</script>
-
-\</body>
-
-\</html>
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#020711">
+  <meta name="description" content="Bengkel Asas Gemini dan Dashboard JPN Sabah">
+  <title>Bengkel Asas Gemini dan Dashboard JPN</title>
+
+  <style>
+    @font-face{
+      font-family:"Heroic";
+      src:
+        url("../assets/fonts/Heroic.woff2") format("woff2"),
+        url("../assets/fonts/Heroic.otf") format("opentype");
+      font-display:swap;
+    }
+
+    :root{
+      --bg:#020711;
+      --panel:rgba(4,13,24,.82);
+      --line:rgba(53,231,255,.18);
+      --cyan:#35E7FF;
+      --blue:#4285F4;
+      --green:#34A853;
+      --yellow:#FBBC05;
+      --red:#EA4335;
+      --text:#EAFBFF;
+      --muted:#8BA9B8;
+      --bar-h:48px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+    }
+
+    body{
+      position:relative;
+      background:
+        radial-gradient(circle at 50% -10%,rgba(53,231,255,.15),transparent 32%),
+        radial-gradient(circle at 88% 18%,rgba(66,133,244,.13),transparent 28%),
+        linear-gradient(rgba(53,231,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(53,231,255,.035) 1px,transparent 1px),
+        var(--bg);
+      background-size:auto,auto,32px 32px,32px 32px,auto;
+    }
+
+    #matrix{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      opacity:.28;
+      pointer-events:none;
+    }
+
+    .mountain{
+      position:fixed;
+      left:-4%;
+      right:-4%;
+      bottom:0;
+      height:30vh;
+      min-height:210px;
+      z-index:1;
+      pointer-events:none;
+      background:
+        linear-gradient(180deg,rgba(53,231,255,.11),rgba(2,7,17,.96)),
+        linear-gradient(90deg,#071522,#0A2338);
+      clip-path:polygon(
+        0 100%,0 82%,6% 80%,12% 73%,18% 78%,
+        24% 65%,30% 70%,36% 46%,41% 55%,
+        46% 31%,50% 43%,55% 19%,59% 36%,
+        64% 25%,69% 49%,75% 59%,82% 70%,
+        88% 74%,94% 84%,100% 80%,100% 100%
+      );
+      filter:drop-shadow(0 -14px 28px rgba(53,231,255,.10));
+      opacity:.88;
+    }
+
+    .accent{
+      position:fixed;
+      left:0;
+      right:0;
+      top:0;
+      height:3px;
+      z-index:30;
+      background:linear-gradient(
+        90deg,
+        var(--blue) 0 25%,
+        var(--red) 25% 50%,
+        var(--yellow) 50% 75%,
+        var(--green) 75% 100%
+      );
+    }
+
+    .topbar{
+      position:fixed;
+      top:3px;
+      left:0;
+      right:0;
+      height:var(--bar-h);
+      z-index:25;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:0 14px;
+      background:linear-gradient(180deg,rgba(2,7,17,.96),rgba(2,7,17,.84));
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(18px);
+      box-shadow:0 8px 24px rgba(0,0,0,.24);
+    }
+
+    .brand{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .signal{
+      width:9px;
+      height:9px;
+      flex:none;
+      border-radius:50%;
+      background:var(--cyan);
+      box-shadow:0 0 16px var(--cyan);
+      animation:pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse{
+      0%,100%{opacity:.45;transform:scale(.9)}
+      50%{opacity:1;transform:scale(1.1)}
+    }
+
+    .brand-text{
+      min-width:0;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      font-family:"Heroic","Arial Narrow",Arial,sans-serif;
+      font-size:15px;
+      letter-spacing:.09em;
+      text-transform:uppercase;
+      color:var(--text);
+    }
+
+    .status{
+      flex:none;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:5px 9px;
+      border:1px solid rgba(53,231,255,.18);
+      border-radius:999px;
+      color:var(--cyan);
+      background:rgba(53,231,255,.055);
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .app-shell{
+      position:fixed;
+      inset:calc(var(--bar-h) + 3px) 0 0 0;
+      z-index:10;
+      background:rgba(2,7,17,.40);
+    }
+
+    #appFrame{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+      background:#020711;
+      opacity:0;
+      transition:opacity .55s ease;
+    }
+
+    #appFrame.ready{opacity:1}
+
+    .loader{
+      position:fixed;
+      inset:calc(var(--bar-h) + 3px) 0 0 0;
+      z-index:20;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      transition:opacity .55s ease,visibility .55s ease;
+    }
+
+    .loader.hide{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    .loader-card{
+      position:relative;
+      z-index:3;
+      width:min(92vw,640px);
+      padding:28px 24px 24px;
+      border:1px solid rgba(53,231,255,.22);
+      border-radius:22px;
+      background:linear-gradient(145deg,rgba(10,28,45,.86),rgba(3,12,22,.88));
+      backdrop-filter:blur(18px);
+      box-shadow:
+        0 28px 70px rgba(0,0,0,.40),
+        0 0 46px rgba(53,231,255,.08);
+      text-align:center;
+    }
+
+    .eyebrow{
+      margin-bottom:10px;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--cyan);
+    }
+
+    .loader-card h1{
+      margin:0;
+      font-family:"Heroic","Arial Narrow",Arial,sans-serif;
+      font-size:clamp(34px,8vw,72px);
+      line-height:.92;
+      letter-spacing:.025em;
+      text-transform:uppercase;
+      text-shadow:0 0 28px rgba(53,231,255,.16);
+    }
+
+    .loader-card p{
+      margin:14px auto 0;
+      max-width:480px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .progress{
+      height:5px;
+      margin-top:22px;
+      overflow:hidden;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+    }
+
+    .progress i{
+      display:block;
+      width:45%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--cyan),var(--blue),var(--green));
+      box-shadow:0 0 18px rgba(53,231,255,.42);
+      animation:scan 1.25s ease-in-out infinite;
+    }
+
+    @keyframes scan{
+      0%{transform:translateX(-110%)}
+      100%{transform:translateX(330%)}
+    }
+
+    .bits{
+      margin-top:11px;
+      color:rgba(53,231,255,.35);
+      font-family:Consolas,monospace;
+      font-size:9px;
+      letter-spacing:.18em;
+    }
+
+    .footer-credit{
+      position:fixed;
+      z-index:24;
+      right:12px;
+      bottom:10px;
+      padding:5px 9px;
+      border:1px solid rgba(53,231,255,.13);
+      border-radius:999px;
+      background:rgba(2,7,17,.58);
+      color:#7E9CAB;
+      backdrop-filter:blur(10px);
+      font-size:8px;
+      letter-spacing:.17em;
+      text-transform:uppercase;
+      pointer-events:none;
+    }
+
+    .footer-credit b{
+      color:var(--cyan);
+      font-family:"Heroic","Arial Narrow",Arial,sans-serif;
+      font-size:10px;
+    }
+
+    .fallback{
+      display:none;
+      position:fixed;
+      z-index:40;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      text-decoration:none;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(53,231,255,.22);
+      background:rgba(2,7,17,.88);
+      color:var(--cyan);
+      font-size:11px;
+      font-weight:700;
+    }
+
+    @media(max-width:560px){
+      :root{--bar-h:44px}
+      .brand-text{font-size:12px}
+      .status{font-size:8px;padding:4px 7px}
+      .loader-card{padding:24px 18px 20px}
+      .footer-credit{display:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="accent"></div>
+  <canvas id="matrix"></canvas>
+  <div class="mountain"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="signal"></span>
+      <div class="brand-text">Bengkel Asas Gemini & Dashboard JPN Sabah</div>
+    </div>
+    <div class="status">Live System</div>
+  </header>
+
+  <div class="loader" id="loader">
+    <div class="loader-card">
+      <div class="eyebrow">Kinabalu // Matrix // Digital</div>
+      <h1>Bengkel JPN Sabah</h1>
+      <p>Memuatkan sistem bengkel, data, jadual dan dashboard interaktif.</p>
+      <div class="progress"><i></i></div>
+      <div class="bits">01001011 01001001 01001110 01000001 01000010 01000001 01001100 01010101</div>
+    </div>
+  </div>
+
+  <main class="app-shell">
+    <iframe
+      id="appFrame"
+      src="https://script.google.com/macros/s/AKfycbyBCDTXWmbgC8xWx6jxThEUtLtFqv3SoJDDIBplHiolKgDxsbZJytZ3lYG7AzMSihXPIg/exec"
+      title="Bengkel Asas Gemini dan Dashboard JPN"
+      allow="camera; microphone; clipboard-read; clipboard-write"
+      referrerpolicy="strict-origin-when-cross-origin"
+      loading="eager"
+      allowfullscreen>
+    </iframe>
+  </main>
+
+  <div class="footer-credit">CREATED BY <b>TSJ</b></div>
+
+  <a
+    class="fallback"
+    id="fallback"
+    href="https://script.google.com/macros/s/AKfycbyBCDTXWmbgC8xWx6jxThEUtLtFqv3SoJDDIBplHiolKgDxsbZJytZ3lYG7AzMSihXPIg/exec"
+    target="_blank"
+    rel="noopener">
+    Buka sistem secara terus
+  </a>
+
+  <script>
+    const frame = document.getElementById('appFrame');
+    const loader = document.getElementById('loader');
+    const fallback = document.getElementById('fallback');
+
+    let loaded = false;
+
+    frame.addEventListener('load', () => {
+      loaded = true;
+      frame.classList.add('ready');
+      setTimeout(() => loader.classList.add('hide'), 650);
+    });
+
+    setTimeout(() => {
+      if (!loaded) fallback.style.display = 'inline-flex';
+    }, 8000);
+
+    // Matrix digital background
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    const chars = '01AI<>/{}[]#*+';
+    let drops = [];
+    let fontSize = 14;
+
+    function resizeMatrix(){
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      canvas.width = Math.floor(innerWidth * dpr);
+      canvas.height = Math.floor(innerHeight * dpr);
+      canvas.style.width = innerWidth + 'px';
+      canvas.style.height = innerHeight + 'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      const cols = Math.ceil(innerWidth / fontSize);
+      drops = Array.from({length:cols}, () => Math.random() * -60);
+    }
+
+    function drawMatrix(){
+      ctx.fillStyle = 'rgba(2,7,17,.08)';
+      ctx.fillRect(0,0,innerWidth,innerHeight);
+      ctx.font = fontSize + 'px Consolas, monospace';
+
+      for(let i=0;i<drops.length;i++){
+        const ch = chars[Math.floor(Math.random()*chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        const r = Math.random();
+        ctx.fillStyle = r > .95 ? '#FBBC05' : (r > .82 ? '#4285F4' : '#35E7FF');
+        ctx.fillText(ch,x,y);
+
+        if(y > innerHeight && Math.random() > .975) drops[i] = 0;
+        drops[i] += .52;
+      }
+      requestAnimationFrame(drawMatrix);
+    }
+
+    resizeMatrix();
+    drawMatrix();
+    addEventListener('resize', resizeMatrix);
+  </script>
+</body>
+</html>
