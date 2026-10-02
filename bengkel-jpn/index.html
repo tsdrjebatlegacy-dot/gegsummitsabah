@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Bengkel JPN Sabah</title>
+
+  <meta name="description"
+        content="Bengkel Dashboard Data dan AI JPN Sabah">
+
+  <meta name="theme-color" content="#0f172a">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0f172a;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      background: #0f172a;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    }
+
+    .loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 15px;
+      background: #0f172a;
+      color: white;
+      z-index: 10;
+      transition: opacity .4s ease;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 45px;
+      height: 45px;
+      border: 4px solid rgba(255,255,255,.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .loading p {
+      font-size: 13px;
+      opacity: .7;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <h2>Bengkel JPN Sabah</h2>
+    <p>Memuatkan sistem...</p>
+  </div>
+
+  <iframe
+    id="appFrame"
+    src="https://script.google.com/macros/s/AKfycbyBCDTXWmbgC8xWx6jxThEUtLtFqv3SoJDDIBplHiolKgDxsbZJytZ3lYG7AzMSihXPIg/exec"
+    title="Bengkel JPN Sabah"
+    allow="camera; microphone; clipboard-read; clipboard-write"
+    allowfullscreen>
+  </iframe>
+
+</div>
+
+<script>
+  const frame = document.getElementById('appFrame');
+  const loading = document.getElementById('loading');
+
+  frame.addEventListener('load', function () {
+    setTimeout(function () {
+      loading.classList.add('hidden');
+    }, 500);
+  });
+</script>
+
+</body>
+</html>
