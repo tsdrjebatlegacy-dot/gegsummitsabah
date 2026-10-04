@@ -3,119 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#020806" />
-  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#06110c" />
   <title>GPGD Google SABAH 2026 | Maklum Balas</title>
 
   <style>
     :root{
       --bg:#020806;
+      --panel:rgba(7,18,13,.88);
       --text:#f4fff8;
-      --muted:#9eb5a6;
+      --muted:#a8b9ae;
       --green:#34a853;
       --blue:#4285f4;
       --red:#ea4335;
       --yellow:#fbbc04;
+      --line:rgba(255,255,255,.08);
     }
 
     *{box-sizing:border-box}
 
     html,body{
       margin:0;
-      width:100%;
-      height:100%;
       min-height:100%;
-      background:var(--bg);
-      color:var(--text);
       font-family:Arial,Helvetica,sans-serif;
-      overflow:hidden;
+      background:
+        radial-gradient(circle at 15% 20%,rgba(66,133,244,.18),transparent 28%),
+        radial-gradient(circle at 85% 15%,rgba(52,168,83,.16),transparent 28%),
+        radial-gradient(circle at 70% 85%,rgba(251,188,4,.08),transparent 25%),
+        linear-gradient(145deg,#020806,#07130e 55%,#020806);
+      color:var(--text);
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 18px;
     }
 
     .google-bar{
       position:fixed;
       top:0; left:0; right:0;
-      height:5px;
+      height:6px;
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      z-index:1000;
+      z-index:10;
     }
-
     .google-bar span:nth-child(1){background:var(--blue)}
     .google-bar span:nth-child(2){background:var(--red)}
     .google-bar span:nth-child(3){background:var(--yellow)}
     .google-bar span:nth-child(4){background:var(--green)}
 
-    .shell{
-      position:fixed;
-      inset:5px 0 0 0;
-      background:var(--bg);
+    .card{
+      width:min(720px,100%);
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:34px;
+      box-shadow:0 30px 80px rgba(0,0,0,.42);
+      backdrop-filter:blur(14px);
     }
 
-    .portal-frame{
-      width:100%;
-      height:100%;
-      border:0;
-      display:block;
-      background:#fff;
-    }
-
-    .loading{
-      position:absolute;
-      inset:0;
-      display:flex;
+    .eyebrow{
+      display:inline-flex;
       align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      gap:14px;
-      background:
-        radial-gradient(circle at 20% 20%,rgba(66,133,244,.16),transparent 30%),
-        radial-gradient(circle at 80% 15%,rgba(52,168,83,.14),transparent 30%),
-        linear-gradient(145deg,#020806,#07160f);
-      z-index:10;
-      transition:opacity .3s ease, visibility .3s ease;
-    }
-
-    .loading.hidden{
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-    }
-
-    .spinner{
-      width:42px;
-      height:42px;
-      border-radius:50%;
-      border:4px solid rgba(255,255,255,.12);
-      border-top-color:var(--green);
-      animation:spin .9s linear infinite;
-    }
-
-    .loading-title{
-      font-size:16px;
-      font-weight:800;
-      letter-spacing:.03em;
-    }
-
-    .loading-sub{
+      gap:8px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(52,168,83,.12);
+      border:1px solid rgba(52,168,83,.25);
+      color:#c9f7d4;
       font-size:12px;
-      color:var(--muted);
-      text-align:center;
-      padding:0 18px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
     }
 
-    @keyframes spin{to{transform:rotate(360deg)}}
+    h1{
+      margin:18px 0 10px;
+      font-size:clamp(32px,6vw,58px);
+      line-height:.98;
+      letter-spacing:-.04em;
+    }
 
-    noscript{
-      position:fixed;
-      inset:0;
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.7;
+    }
+
+    .info{
+      margin:26px 0;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.025);
+    }
+
+    .info-title{
+      font-size:12px;
+      color:#d9e7dd;
+      font-weight:800;
+      margin-bottom:7px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .info-text{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .session{
+      margin-top:10px;
+      font-size:13px;
+      font-weight:700;
+      color:#e9fff0;
+    }
+
+    .btn{
       display:flex;
+      width:100%;
       align-items:center;
       justify-content:center;
-      padding:30px;
-      background:#020806;
-      color:#fff;
-      z-index:2000;
+      min-height:56px;
+      padding:14px 18px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:900;
+      letter-spacing:.03em;
+      background:linear-gradient(135deg,#34a853,#1f8f42);
+      color:white;
+      box-shadow:0 16px 36px rgba(52,168,83,.22);
+      transition:transform .18s ease,box-shadow .18s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 20px 42px rgba(52,168,83,.3);
+    }
+
+    .note{
+      margin:14px 2px 0;
       text-align:center;
+      color:#819388;
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .footer{
+      margin-top:28px;
+      padding-top:20px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      color:#718078;
+      font-size:11px;
+    }
+
+    @media(max-width:560px){
+      .card{padding:26px 20px;border-radius:20px}
     }
   </style>
 </head>
@@ -125,34 +176,45 @@
     <span></span><span></span><span></span><span></span>
   </div>
 
-  <div class="shell">
-    <div id="loading" class="loading">
-      <div class="spinner"></div>
-      <div class="loading-title">GPGD Google SABAH 2026</div>
-      <div class="loading-sub">Membuka portal maklum balas…</div>
+  <main class="card">
+    <div class="eyebrow">GPGD Google SABAH 2026</div>
+
+    <h1>Maklum Balas<br>Sesi</h1>
+
+    <p class="subtitle">
+      Terima kasih kerana mengikuti sesi perkongsian GPGD Google SABAH 2026.
+      Maklum balas anda membantu kami menambah baik sesi dan program seterusnya.
+    </p>
+
+    <section class="info">
+      <div class="info-title">Cara meneruskan</div>
+      <div class="info-text">
+        Tekan butang di bawah untuk membuka borang maklum balas rasmi.
+        Borang akan dibuka dalam tab baharu kerana sistem asal tidak membenarkan
+        paparan terus di dalam laman ini.
+      </div>
+      <div id="sessionInfo" class="session"></div>
+    </section>
+
+    <a id="feedbackButton" class="btn" href="#" target="_blank" rel="noopener noreferrer">
+      BUKA BORANG MAKLUM BALAS →
+    </a>
+
+    <div class="note">
+      Selepas selesai, anda boleh menutup tab borang dan kembali ke dashboard GPGD.
     </div>
 
-    <iframe
-      id="portalFrame"
-      class="portal-frame"
-      title="GPGD Google SABAH 2026 Maklum Balas"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allow="clipboard-read; clipboard-write"
-    ></iframe>
-  </div>
-
-  <noscript>
-    JavaScript diperlukan untuk membuka portal maklum balas.
-  </noscript>
+    <div class="footer">
+      <span>Google Educator Groups Sabah</span>
+      <span>GPGD Google SABAH 2026</span>
+    </div>
+  </main>
 
   <script>
     (() => {
       const BACKEND =
         'https://script.google.com/a/macros/jebat.net/s/AKfycbxR9A4V6U5ulpgpEebn6mTXxFZ5J3-5f5WDPMSsT58jdLWLFlPcnOr60WKpVvMN8Gxc/exec';
 
-      // Forward semua query parameter ke Apps Script.
-      // Contoh:
-      // /feedback/?session=1
       const incoming = new URLSearchParams(window.location.search);
       const target = new URL(BACKEND);
 
@@ -160,18 +222,14 @@
         target.searchParams.set(key, value);
       });
 
-      const frame = document.getElementById('portalFrame');
-      const loading = document.getElementById('loading');
+      document.getElementById('feedbackButton').href = target.toString();
 
-      frame.addEventListener('load', () => {
-        loading.classList.add('hidden');
-      });
+      const session = incoming.get('session');
+      const sessionInfo = document.getElementById('sessionInfo');
 
-      frame.src = target.toString();
-
-      setTimeout(() => {
-        loading.classList.add('hidden');
-      }, 8000);
+      if (session) {
+        sessionInfo.textContent = 'Sesi semasa: Session ' + String(session).padStart(2, '0');
+      }
     })();
   </script>
 </body>
