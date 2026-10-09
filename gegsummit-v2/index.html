@@ -73,6 +73,28 @@
 .summit-venue-photo{width:100%;height:100%;display:block;object-fit:cover;object-position:center 48%}
 .summit-venue-caption{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 13px;text-align:center;font:800 15px Outfit,sans-serif;letter-spacing:.07em;color:#fff;background:linear-gradient(0deg,rgba(5,17,42,.96),rgba(5,17,42,.05));text-shadow:0 2px 6px #000}
 @media(max-width:600px){.venue-panel:not(.gala-panel) .venue-scene.summit-photo-card{height:200px;min-height:200px}.summit-venue-caption{font-size:12px}}
+
+/* V2.2 — GEG Summit illustrated banner used as a full-page background.
+   Strong contrast layers preserve legibility over the colorful artwork. */
+body{background:#071120;isolation:isolate}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:linear-gradient(180deg,rgba(3,9,25,.86) 0%,rgba(4,11,27,.89) 42%,rgba(3,9,23,.94) 100%),url("./assets/geg-summit-bg.jpg");
+  background-size:cover;background-position:center center;background-repeat:no-repeat}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle at 7% 12%,rgba(66,133,244,.12),transparent 35%),radial-gradient(circle at 92% 70%,rgba(52,168,83,.08),transparent 32%)}
+.hero{background:linear-gradient(90deg,rgba(4,12,29,.82),rgba(3,12,30,.40))}
+section,section:nth-of-type(even){background:transparent}
+main>section{position:relative}
+main>section:nth-of-type(even){background:rgba(5,15,35,.60)}
+#venue{background:rgba(4,14,32,.62)}
+#registration,#gala-registration{background:rgba(5,12,29,.75)}
+.card{background:rgba(12,28,48,.96)}
+.agenda{background:rgba(12,30,52,.96)}
+.venue-panel{background:linear-gradient(160deg,rgba(20,38,68,.97),rgba(10,23,44,.97))}
+.venue-panel.gala-panel{background:linear-gradient(145deg,rgba(37,32,52,.97),rgba(13,23,43,.97))}
+.footer{background:rgba(3,10,25,.98)}
+section .intro,section .card p{color:#dce8f6}
+@media(max-width:760px){body::before{background-position:center top}main>section:nth-of-type(even){background:rgba(5,15,35,.70)}}
 </style></head><body>
 <div class="nav"><div class="wrap navin"><a href="#home" class="logo">GEG <span>SUMMIT SABAH</span> 2026</a><button id="mobileToggle" class="btn alt small" aria-expanded="false">Menu</button><nav class="menu" id="menu"><a href="#about" data-ms="Mengenai" data-en="About">Mengenai</a><a href="#programme" data-ms="Tentatif" data-en="Programme">Tentatif</a><a href="#passport">GEG Passport</a><a href="#impact">Impact</a><a href="#venue" data-ms="Lokasi" data-en="Venues">Lokasi</a><a href="#gala">Gala</a><a href="#registration" data-ms="Daftar" data-en="Register">Daftar</a><a href="#feedback" data-ms="Maklum balas" data-en="Feedback">Maklum balas</a><button class="btn alt small" id="langBtn">EN</button></nav></div></div>
 <header class="hero" id="home"><div class="wrap"><div class="eyebrow">Digital Kinabalu Signature · Google Educator Groups Sabah</div><h1>GEG SUMMIT<br><span class="colors">SABAH 2026</span></h1><p class="lead" data-ms="Stay curious. Think boldly. Learn together. Build what's next with Google." data-en="Stay curious. Think boldly. Learn together. Build what's next with Google.">Stay curious. Think boldly. Learn together. Build what's next with Google.</p><div class="chips"><span class="chip">📅 7 November · Main Summit</span><span class="chip">📍 IPG Kampus Gaya, Kota Kinabalu</span><span class="chip">✨ 8 November · Gala Night · Suria 7, Hotel Suria Sabah</span></div><div class="heroactions"><a id="registerHero" class="btn" href="#registration">Daftar Summit ↗</a><a class="btn alt" href="#programme">Explore Programme ↓</a></div><p class="smallnote">Organised by GEG Sabah · Main Summit Saturday 08:00–18:00 MYT · Programme subject to confirmation</p><div class="summit-countdown" role="timer" aria-label="Countdown to GEG Summit Sabah 2026">
