@@ -1,289 +1,257 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07172b">
-  <title>Meet Our Speakers | GEG Summit Sabah 2026</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #061225;
-      --ink: #f1f7ff;
-      --muted: #a8bbd0;
-      --blue: #4285f4;
-      --red: #ea4335;
-      --green: #34a853;
-      --yellow: #fbbc05;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-      background:
-        radial-gradient(ellipse at 82% 3%, #18396b 0%, transparent 36%),
-        radial-gradient(ellipse at 6% 32%, #063a46 0%, transparent 33%),
-        var(--bg);
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .18;
-      background-image:
-        linear-gradient(transparent 97%, #5a7da22c 98%),
-        linear-gradient(90deg, transparent 97%, #5a7da22c 98%);
-      background-size: 34px 34px;
-    }
-    .shell { width: min(1260px, calc(100% - 36px)); margin: auto; position: relative; }
-    .nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 24px 0; }
-    .brand { font-size: 15px; font-weight: 900; letter-spacing: .06em; }
-    .brand span:nth-child(1) { color: var(--blue); }
-    .brand span:nth-child(2) { color: var(--red); }
-    .brand span:nth-child(3) { color: var(--yellow); }
-    .brand span:nth-child(4) { color: var(--green); }
-    .navright { display: flex; align-items: center; gap: 14px; }
-    .small-link { color: #d0e4ff; text-decoration: none; font-size: 13px; }
-    .lang { border: 1px solid #ffffff55; color: #fff; background: #172c48; border-radius: 100px; padding: 9px 16px; font-weight: 800; cursor: pointer; }
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 65px 54px 54px;
-      min-height: 345px;
-      border: 1px solid #ffffff25;
-      border-radius: 28px;
-      background: linear-gradient(116deg, #0c2949ee 3%, #07172be8 60%, #061225aa), radial-gradient(ellipse at right bottom, #317bac5d, transparent 58%);
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      bottom: -40px;
-      right: 0;
-      width: 51%;
-      height: 88%;
-      opacity: .2;
-      background: #a5c9da;
-      clip-path: polygon(0 100%, 14% 70%, 26% 83%, 42% 40%, 51% 55%, 60% 21%, 70% 58%, 81% 34%, 100% 100%);
-    }
-    .hero > * { position: relative; z-index: 1; }
-    .eyebrow { font-size: 13px; letter-spacing: .22em; color: #a6d6ff; font-weight: 900; }
-    .hero h1 { font-size: clamp(37px, 5.8vw, 77px); line-height: 1.03; letter-spacing: -.045em; margin: 18px 0 20px; max-width: 780px; }
-    .hero h1 em { font-style: normal; background: linear-gradient(100deg, #79b6ff, #f6cd54, #6cddaa); background-clip: text; -webkit-background-clip: text; color: transparent; }
-    .hero p { color: #d7e6f6; line-height: 1.7; max-width: 740px; margin: 0; font-size: 16px; }
-    .details { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
-    .pill { border: 1px solid #ffffff40; background: #071b3288; border-radius: 100px; padding: 9px 15px; font-size: 12px; color: #e2f2ff; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 36px 0 21px; }
-    .topbar h2 { font-size: 26px; margin: 0; }
-    .count { color: var(--muted); font-size: 13px; margin-top: 6px; }
-    .search { width: min(100%, 370px); padding: 13px 16px; background: #0f2843; border: 1px solid #ffffff40; border-radius: 14px; color: white; font: inherit; outline: none; }
-    .search:focus { border-color: #73b7ff; box-shadow: 0 0 0 3px #4285f43d; }
-    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 25px; }
-    .filter { border: 1px solid #ffffff32; background: #132c47; color: #c9d8ea; border-radius: 100px; font-size: 12px; padding: 10px 15px; cursor: pointer; }
-    .filter.active { background: #d5ecff; color: #072340; border-color: transparent; font-weight: 900; }
-    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-bottom: 56px; }
-    .card {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      overflow: hidden;
-      border: 1px solid #ffffff27;
-      border-radius: 21px;
-      background: linear-gradient(180deg, #173453 0%, #10243d 55%, #0d2037 100%);
-      box-shadow: 0 20px 42px #0000001b;
-      transition: transform .2s, border-color .2s;
-    }
-    .card:hover { transform: translateY(-5px); border-color: #90caff77; }
-    /* Same portrait frame size across all speaker cards. */
-    .photo {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden;
-      background: radial-gradient(circle at 40% 35%, #33628a, #132b48 65%);
-      isolation: isolate;
-    }
-    .photo img {
-      position: absolute;
-      inset: 0;
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      /* Focus all 3:4 studio portraits on the face, without cutting off the chin. */
-      object-position: center 12%;
-      z-index: 1;
-    }
-    .photo::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0;
-      height: 16px;
-      background: linear-gradient(transparent, #10243d88);
-      z-index: 2;
-      pointer-events: none;
-    }
-    .initials { position: absolute; inset: 0; display: grid; place-items: center; font-size: 70px; font-weight: 900; color: #d5eaff88; letter-spacing: -.05em; z-index: 0; }
-    .tag { position: absolute; top: 15px; left: 16px; z-index: 3; background: #09243edc; border: 1px solid #ffffff4d; color: white; padding: 7px 11px; border-radius: 100px; font-size: 11px; font-weight: 800; }
-    .cardbody { display: flex; flex-direction: column; flex: 1; padding: 23px; }
-    .gegm { color: #8ecaff; font-size: 12px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
-    .name { font-size: 21px; line-height: 1.25; margin: 8px 0 7px; min-height: 52px; }
-    .org { font-size: 12px; line-height: 1.55; color: #aec5db; min-height: 37px; }
-    .divider { height: 1px; background: #ffffff28; margin: 20px 0 17px; }
-    .sectionlabel { color: #8db0cd; font-size: 10px; letter-spacing: .15em; font-weight: 900; text-transform: uppercase; }
-    .topic { font-size: 15px; font-weight: 750; line-height: 1.5; margin: 8px 0 18px; min-height: 68px; }
-    .certs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
-    .cert { border-radius: 7px; background: #ffffff12; border: 1px solid #ffffff25; padding: 7px 9px; font-size: 10px; color: #d3eaff; }
-    .empty { display: none; text-align: center; color: #c2d5e7; border: 1px dashed #ffffff55; border-radius: 18px; padding: 46px; margin-bottom: 38px; }
-    .foot { border-top: 1px solid #ffffff27; padding: 24px 0 45px; color: #8fa9c5; font-size: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 9px; }
-    a { color: inherit; }
-    @media (max-width: 980px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hero { padding: 45px 30px; } }
-    @media (max-width: 620px) {
-      .shell { width: min(calc(100% - 24px), 1260px); }
-      .grid { grid-template-columns: 1fr; }
-      .hero { padding: 37px 23px; min-height: 0; }
-      .hero h1 { font-size: 42px; }
-      .navright .small-link { display: none; }
-      .photo { aspect-ratio: 1 / 1; }
-      .name, .topic, .org { min-height: 0; }
-      .topbar { align-items: stretch; }
-      .search { width: 100%; }
-    }
-    @media (prefers-reduced-motion: reduce) { .card { transition: none; } }
-  </style>
-</head>
-<body>
-  <main class="shell">
-    <nav class="nav">
-      <div class="brand"><span>G</span><span>E</span><span>G</span> <span>SABAH</span> · SUMMIT 2026</div>
-      <div class="navright">
-        <a class="small-link" href="https://gegsabah.edu.my/" target="_blank" rel="noopener noreferrer">gegsabah.edu.my ↗</a>
-        <button id="language" class="lang" type="button">BM</button>
-      </div>
-    </nav>
-    <section class="hero">
-      <div class="eyebrow">07 NOVEMBER 2026 · IPGM KAMPUS GAYA</div>
-      <h1 data-en="Meet Our <em>Speakers</em>" data-ms="Kenali <em>Pembentang Kami</em>">Meet Our <em>Speakers</em></h1>
-      <p data-en="Meet the educators and digital innovators sharing practical ideas, Google tools and transformative experiences at GEG Summit Sabah 2026." data-ms="Kenali warga pendidik dan inovator digital yang berkongsi idea praktikal, aplikasi Google serta pengalaman transformasi di GEG Summit Sabah 2026.">Meet the educators and digital innovators sharing practical ideas, Google tools and transformative experiences at GEG Summit Sabah 2026.</p>
-      <div class="details">
-        <span class="pill">📅 7 November 2026</span>
-        <span class="pill">📍 IPGM Kampus Gaya, Kota Kinabalu</span>
-        <span class="pill" id="hero-count">7 Speakers</span>
-      </div>
-    </section>
-    <div class="topbar">
-      <div>
-        <h2 id="heading">Featured Speakers</h2>
-        <div class="count" id="summary"></div>
-      </div>
-      <input class="search" id="search" type="search" placeholder="Search speaker, GEG or topic..." aria-label="Search speakers">
-    </div>
-    <div class="filters" id="filters"></div>
-    <div class="grid" id="cards"></div>
-    <div class="empty" id="empty">No speakers match your search.</div>
-    <footer class="foot">
-      <span>© 2026 GEG Sabah · GEG Summit Sabah</span>
-      <span>Speaker details from organiser's accepted submissions · Updated 10 October 2026</span>
-    </footer>
-  </main>
-  <script>
-    'use strict';
-    // Accepted speaker entries, without private phone numbers or email addresses.
-    const speakers = [
-      {name:'FATMAH WATI BINTI ABD MOES', org:'SK BRUMAS TAWAU', geg:'GEG Tawau', role:'Captain', topic:'SEKOLAH GEG : IMPIAN, TRANSFORMASI DAN REALITI', trainer:false, coach:false, innovator:false, photo:'../images/fatmah.jpg'},
-      {name:'MOHD NUR AKMAL BIN ZAINAL ABIDIN', org:'SK TANJUNG ARU II', geg:'GEG Kota Kinabalu', role:'Co-Leader', topic:'2 Tahun Perjalanan Google bersama Pengurusan HEM SK Tanjung Aru II', trainer:true, coach:false, innovator:false, photo:'../images/akmal.jpg'},
-      {name:'SUSAN CHIN SYUK MAN', org:'INSTITUT AMINUDDIN BAKI CAWANGAN SABAH', geg:'GEG Sabah', role:'Captain', topic:'From Files to Forms to Dashboards: Google Workspace in Action', trainer:true, coach:true, innovator:false, photo:'../images/susan.jpg'},
-      {name:'NURAIDAH BTE MUSTAPAH', org:'SMK TAMPARULI', geg:'GEG Sabah', role:'Captain', topic:'From Learners to Creators: Transformasi PdPC dengan Google', trainer:true, coach:false, innovator:false, photo:'../images/nuraidah.jpg'},
-      {name:'SAADIAH BINTI SAWADDIN SAW', org:'SK KAPA TAMPARULI', geg:'GEG Sabah', role:'Captain', topic:'Amalan Penggunaan Google dalam Pengurusan HEM dan Akses Pembelajaran Murid', trainer:true, coach:false, innovator:false, photo:'../images/saadiah.jpg'},
-      {name:'ALHASSIM BIN ATTIP', org:'SK SINAR JAYA', geg:'GEG Kinabatangan', role:'Leader', topic:'PENGGUNAAN GOOGLE CLASSROOM SEBAGAI PLATFORM PENGURUSAN MESYUARAT', trainer:true, coach:false, innovator:false, photo:'../images/alhassim.jpg'},
-      {name:'AISHAH BINTI MOHD ARIS', org:'PPD BELURAN', geg:'GEG Beluran', role:'Co-Leader', topic:'Perancang Elit dengan Kuasa Gemini sebagai Otak Kedua.', trainer:true, coach:false, innovator:false, photo:'../images/aishah.jpg'}
-    ];
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>GEG Summit Sabah 2026 | V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#071120;--panel:#101d30;--line:#2d4058;--ink:#f5faff;--muted:#b3c4d7;--blue:#4285f4;--red:#ea4335;--yellow:#fbbc05;--green:#34a853}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button,a{touch-action:manipulation}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #fbbc05;outline-offset:3px}.wrap{width:min(1160px,calc(100% - 36px));margin:auto}.nav{position:sticky;top:0;background:#071120ed;border-bottom:1px solid var(--line);z-index:10;backdrop-filter:blur(15px)}.navin{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:76px}.logo{font-family:Outfit,sans-serif;font-weight:900;font-size:22px;letter-spacing:-.5px}.logo span{color:#64b8ff}.menu{display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:700}.menu a:hover{color:#87c6ff}.btn{background:var(--blue);border:0;color:#fff;border-radius:12px;padding:12px 18px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn.alt{background:#182a43;border:1px solid #4a6282}.btn.green{background:#168744}.btn.small{padding:8px 12px;font-size:12px}.hero{position:relative;overflow:hidden;padding:100px 0 65px;background:linear-gradient(95deg,#071120f2 5%,#071120d7 48%,#071120a6),radial-gradient(ellipse at 80% 5%,#187dbe80,transparent 55%),linear-gradient(150deg,#233d64,#090e1c)}.hero:before{content:'';position:absolute;inset:0;opacity:.35;background:linear-gradient(145deg,transparent 52%,#4b96cc44 52.5%,transparent 53%),repeating-linear-gradient(145deg,transparent 0 31px,#37699a30 32px,#37699a30 33px);pointer-events:none}.hero .wrap{position:relative}.eyebrow{display:inline-block;text-transform:uppercase;letter-spacing:2px;color:#7fcbff;font-weight:900;font-size:11px}.hero h1{font-family:Outfit,sans-serif;font-weight:900;line-height:.98;font-size:clamp(48px,7.7vw,99px);letter-spacing:-3px;margin:20px 0}.colors{background:linear-gradient(90deg,#4285f4 5%,#ea4335 34%,#fbbc05 59%,#34a853 84%);color:transparent;background-clip:text}.lead{font-size:clamp(17px,2vw,22px);max-width:730px;color:#d7e7f8}.chips{display:flex;gap:12px;flex-wrap:wrap;margin:27px 0}.chip{padding:11px 16px;border-radius:14px;background:#142842dc;border:1px solid #385370;font-weight:700}.heroactions{display:flex;gap:12px;flex-wrap:wrap}.smallnote{color:var(--muted);font-size:12px}.ribbon{height:7px;background:linear-gradient(90deg,#4285f4 25%,#ea4335 25% 50%,#fbbc05 50% 75%,#34a853 75%)}section{padding:72px 0;scroll-margin-top:84px}section:nth-of-type(even){background:#0b182a}.sectiontitle{font-family:Outfit,sans-serif;font-size:clamp(29px,4vw,45px);line-height:1.12;margin:12px 0}.intro{color:var(--muted);max-width:760px;margin-bottom:26px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:23px}.card h3{font-family:Outfit,sans-serif;margin:8px 0;font-size:21px}.card p{color:var(--muted);font-size:14px}.stat{font:900 45px Outfit;color:#8cc9ff}.pill{font-size:12px;border:1px solid #4a6481;border-radius:99px;padding:6px 12px;display:inline-block;background:#15263d}.controls{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.controls input,.controls select{background:#122239;border:1px solid #435d7b;padding:11px 14px;color:#fff;border-radius:11px;min-width:175px}.schedule{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.agenda{padding:17px 19px;border-radius:16px;border:1px solid #2d465f;background:#0f2033}.agenda b{font-size:15px}.agenda .time{font-weight:900;color:#8ac6ff;font-size:12px}.agenda .track{font-size:11px;color:#ffcf69;text-transform:uppercase;letter-spacing:1px}.agenda p{font-size:12px;color:var(--muted);margin:7px 0 0}.box2{display:grid;grid-template-columns:1fr 1fr;gap:22px}.input{width:100%;background:#081626;border:1px solid #47617b;color:#fff;border-radius:12px;padding:13px 14px;margin:8px 0 16px}textarea.input{min-height:95px;resize:vertical}.output{white-space:pre-wrap;overflow-wrap:anywhere;padding:18px;background:#071323;border:1px solid #31516a;border-radius:13px;color:#ecf6ff;margin-top:16px;min-height:74px}.label{display:block;font-size:13px;font-weight:800;color:#bfdaef}.disclaimer{padding:13px;border-left:3px solid var(--yellow);background:#1c2636;font-size:13px;color:#e1e8f2;margin:18px 0}.footer{background:#050d18;border-top:1px solid var(--line);padding:35px 0;color:#b8c8d8;font-size:13px}.message{font-size:13px;color:#b9e0ff}.progress{background:#1c2a3d;border-radius:99px;overflow:hidden;height:12px}.progress>div{background:linear-gradient(90deg,#4285f4,#34a853);height:100%;width:0;transition:width .2s}.localchip{font-size:12px;border-radius:99px;padding:7px 11px;display:inline-block;margin:3px;background:#152c44;border:1px solid #436381}.localchip.on{background:#14683c}.impact{text-align:center}#mobileToggle{display:none}details{border-bottom:1px solid var(--line);padding:12px 0}summary{cursor:pointer;font-weight:800}@media(max-width:760px){.navin{min-height:66px;flex-wrap:wrap;padding:12px 0}.menu{display:none;width:100%;padding:10px 0}.menu.open{display:flex;flex-direction:column;align-items:flex-start}#mobileToggle{display:inline-block}.hero{padding-top:67px}.hero h1{letter-spacing:-1px}.box2{grid-template-columns:1fr}section{padding:53px 0}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 
-    let language = 'en';
-    let active = 'All';
-    const $ = (id) => document.getElementById(id);
-    const geGs = ['All', ...new Set(speakers.map(s => s.geg))];
-    const t = (en, ms) => language === 'en' ? en : ms;
+/* Countdown · Main Summit — premium flash-sale inspired visual */
+.summit-countdown{width:min(100%,560px);margin-top:28px;padding:29px 26px 25px;border:1px solid #364057;border-radius:22px;background:linear-gradient(145deg,#2b3347 0%,#1d2333 100%);box-shadow:0 22px 50px #0006;text-align:center}
+.summit-countdown .count-title{font:900 clamp(23px,4vw,35px)/1.1 Outfit,sans-serif;color:#ff682c;letter-spacing:.035em;text-transform:uppercase;margin:0}
+.summit-countdown .count-subtitle{color:#c4c9d4;font-size:13px;margin:9px 0 21px}
+.count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;align-items:start}
+.count-unit{min-width:0;position:relative}
+.count-unit:not(:last-child):after{content:':';position:absolute;top:20px;right:-11px;color:#ff642c;font:900 24px Outfit,sans-serif}
+.count-digits{background:#fff;color:#181e2c;border-radius:12px;border:1px solid #d7dce8;min-height:94px;display:flex;align-items:center;justify-content:center;font:900 clamp(32px,5vw,51px)/1 Outfit,sans-serif;font-variant-numeric:tabular-nums;box-shadow:0 5px 13px #0002}
+.count-label{display:block;font-size:10px;color:#cdd2db;font-weight:800;letter-spacing:.1em;margin-top:8px}
+.count-button{display:inline-flex;margin-top:25px;min-width:220px;min-height:49px;align-items:center;justify-content:center;background:#fc6227;color:#fff;border-radius:50px;font-size:14px;font-weight:800;box-shadow:0 4px 19px #ff5f3260;transition:filter .2s,transform .2s}
+.count-button:hover{filter:brightness(1.1);transform:translateY(-2px)}
+.count-message{min-height:22px;margin:13px 0 0;color:#e5ebf5;font-size:12px}
+@media(max-width:480px){.summit-countdown{padding:22px 14px}.count-grid{gap:9px}.count-digits{min-height:68px;border-radius:9px;font-size:clamp(25px,8vw,38px)}.count-unit:not(:last-child):after{top:12px;right:-8px;font-size:19px}.count-label{font-size:8px;letter-spacing:.03em}.count-button{min-width:195px}}
 
-    function elem(tag, cssClass, content) {
-      const el = document.createElement(tag);
-      if (cssClass) el.className = cssClass;
-      if (content !== undefined) el.textContent = content;
-      return el;
-    }
+/* Premium Venues: editable text and native responsive cards */
+#venue{position:relative;background:radial-gradient(ellipse at 82% 0%,#153564 0%,#071120 56%,#050d1c 100%);overflow:hidden}
+#venue:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.3;background:repeating-linear-gradient(145deg,transparent 0 44px,#2a5d9533 45px,transparent 46px)}
+#venue .wrap{position:relative}
+.venue-head{text-align:center;margin:0 auto 35px;max-width:880px}
+.venue-head .intro{margin:14px auto 0;max-width:780px}
+.venue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.venue-panel{position:relative;overflow:hidden;min-width:0;background:linear-gradient(160deg,#142644,#0a172c 70%);border:1px solid #246ed1;border-radius:24px;padding:30px;box-shadow:0 18px 45px #0004}
+.venue-panel.gala-panel{border-color:#a36d25;background:linear-gradient(145deg,#252034,#0d172b 75%)}
+.venue-panel:before{content:"";position:absolute;width:320px;height:320px;right:-130px;top:-170px;border-radius:50%;background:radial-gradient(circle,#4285f43d,transparent 68%);pointer-events:none}
+.venue-panel.gala-panel:before{background:radial-gradient(circle,#fbbc053a,transparent 68%)}
+.venue-panel>*{position:relative}
+.venue-tag{display:inline-block;padding:7px 12px;border-radius:99px;background:#082d59;border:1px solid #2578bd;color:#94d7ff;font-size:12px;font-weight:800}
+.venue-panel.gala-panel .venue-tag{background:#453316;border-color:#996e20;color:#ffcd67}
+.venue-panel h3{font:900 clamp(23px,2.35vw,31px)/1.2 Outfit,sans-serif;margin:20px 0 8px}
+.venue-address{color:#d5e5fa;font-size:14px;min-height:52px;margin:0 0 16px}
+.venue-scene{height:125px;border-radius:14px;margin:20px 0 23px;overflow:hidden;position:relative;border:1px solid #537ba147;background:linear-gradient(165deg,#70a7d3 0%,#b9cde2 35%,#315c78 36%,#162d4b 100%)}
+.venue-scene:after{content:"IPG KAMPUS GAYA";position:absolute;bottom:0;left:0;right:0;color:#f1f7ff;font:800 16px Outfit;text-align:center;padding:12px 0;background:linear-gradient(transparent,#06152ccf)}
+.gala-panel .venue-scene{background:radial-gradient(circle at 80% 18%,#fbbf67aa,transparent 26%),linear-gradient(155deg,#302c5c,#7a4c46 52%,#23182d)}
+.gala-panel .venue-scene:after{content:"SURIA 7 · HOTEL SURIA SABAH"}
+.venue-facts{display:grid;gap:16px;margin:18px 0 25px}
+.venue-fact{display:flex;align-items:flex-start;gap:14px;color:#bed0e6;font-size:13px;line-height:1.55}
+.venue-fact strong{display:block;color:#f3f8ff;font-size:14px}
+.venue-symbol{display:grid;place-items:center;min-width:45px;height:45px;border:1px solid #2c7dcc;border-radius:13px;background:#0e335b;font-size:20px}
+.gala-panel .venue-symbol{background:#372a27;border-color:#aa782b}
+.venue-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.venue-note{color:#f7d57b;border-top:1px solid #6c657748;margin-top:22px;padding-top:18px;font-size:12px;font-weight:700}
+@media(max-width:850px){.venue-grid{grid-template-columns:1fr}.venue-panel{padding:23px}}
 
-    function render() {
-      const query = $('search').value.trim().toLocaleLowerCase();
-      $('heading').textContent = t('Featured Speakers', 'Pembentang Pilihan');
-      $('search').placeholder = t('Search speaker, GEG or topic...', 'Cari pembentang, GEG atau tajuk...');
-      $('search').setAttribute('aria-label', $('search').placeholder);
-      $('hero-count').textContent = speakers.length + ' ' + t('Speakers', 'Pembentang');
-      document.querySelectorAll('[data-en]').forEach(el => { el.innerHTML = el.dataset[language]; });
-      $('language').textContent = language === 'en' ? 'BM' : 'EN';
+/* Embedded registration wrapper */
+#gala-registration{background:linear-gradient(155deg,#100f20,#27213c 60%,#100e1c)}
+.gala-registration-shell{border-color:#ac7e32}
+.gala-registration-shell .registration-top{background:linear-gradient(110deg,#32233d,#262333)}
+#registration{background:linear-gradient(155deg,#060d1c,#102545 60%,#090f22)}
+.registration-shell{overflow:hidden;background:#101b30;border:1px solid #387dc0;border-radius:23px;box-shadow:0 20px 60px #0006}
+.registration-top{padding:25px 28px;border-bottom:1px solid #2c4364;background:linear-gradient(110deg,#122a4b,#152039)}
+.registration-top h3{margin:0 0 8px;font-size:23px;color:#fff}
+.registration-top p{color:#d5e1f3;margin:0;line-height:1.6}
+.registration-frame{width:100%;height:1050px;display:block;border:0;background:#f9fafb}
+.registration-bottom{padding:18px 26px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#101b30}
+.registration-bottom p{font-size:13px;color:#b9c8dc;margin:0;flex:1 1 260px}
+@media(max-width:650px){.registration-frame{height:1200px}.registration-top{padding:20px}.registration-bottom{padding:18px}}
 
-      $('filters').replaceChildren();
-      geGs.forEach(g => {
-        const button = elem('button', 'filter' + (g === active ? ' active' : ''), g === 'All' ? t('All Speakers','Semua Pembentang') : g);
-        button.type = 'button';
-        button.setAttribute('aria-pressed', String(g === active));
-        button.onclick = () => { active = g; render(); };
-        $('filters').append(button);
-      });
+/* Authentic Suria Sabah venue image — responsive and editable */
+.gala-panel .venue-scene.gala-photo-card{height:245px;min-height:245px;background:#1c263c;border:1px solid rgba(251,188,5,.45);box-shadow:0 12px 28px rgba(0,0,0,.25)}
+.gala-panel .gala-photo-card::after{content:none!important}
+.gala-venue-photo{width:100%;height:100%;display:block;object-fit:cover;object-position:center 58%}
+.gala-venue-caption{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 13px;text-align:center;font:800 15px Outfit,sans-serif;letter-spacing:.07em;color:white;background:linear-gradient(0deg,rgba(7,13,27,.94),rgba(7,13,27,.05));text-shadow:0 2px 6px #000}
+@media(max-width:600px){.gala-panel .venue-scene.gala-photo-card{height:200px;min-height:200px}.gala-venue-caption{font-size:12px}}
 
-      const shown = speakers.filter(s =>
-        (active === 'All' || s.geg === active) &&
-        [s.name, s.org, s.geg, s.role, s.topic].join(' ').toLocaleLowerCase().includes(query)
-      );
-      $('summary').textContent = shown.length + ' ' + t('of','daripada') + ' ' + speakers.length + ' ' + t('accepted speaker profiles', 'profil pembentang yang diterima');
-      $('cards').replaceChildren();
+/* Main Summit venue photograph — matched to Gala photograph */
+.venue-panel:not(.gala-panel) .venue-scene.summit-photo-card{height:245px;min-height:245px;background:#10253e;border:1px solid rgba(66,133,244,.55);box-shadow:0 12px 28px rgba(0,0,0,.25)}
+.venue-panel .summit-photo-card::after{content:none!important}
+.summit-venue-photo{width:100%;height:100%;display:block;object-fit:cover;object-position:center 48%}
+.summit-venue-caption{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 13px;text-align:center;font:800 15px Outfit,sans-serif;letter-spacing:.07em;color:#fff;background:linear-gradient(0deg,rgba(5,17,42,.96),rgba(5,17,42,.05));text-shadow:0 2px 6px #000}
+@media(max-width:600px){.venue-panel:not(.gala-panel) .venue-scene.summit-photo-card{height:200px;min-height:200px}.summit-venue-caption{font-size:12px}}
 
-      shown.forEach(s => {
-        const card = elem('article', 'card');
-        const photo = elem('div', 'photo');
-        const initials = s.name.split(' ').filter(word => !['BIN','BINTI','BTE'].includes(word)).slice(0, 2).map(word => word[0]).join('');
-        photo.append(elem('div', 'initials', initials));
+/* V2.2 — GEG Summit illustrated banner used as a full-page background.
+   Strong contrast layers preserve legibility over the colorful artwork. */
+body{background:#071120;isolation:isolate}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:linear-gradient(180deg,rgba(3,9,25,.86) 0%,rgba(4,11,27,.89) 42%,rgba(3,9,23,.94) 100%),url("./assets/geg-summit-bg.jpg");
+  background-size:cover;background-position:center center;background-repeat:no-repeat}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle at 7% 12%,rgba(66,133,244,.12),transparent 35%),radial-gradient(circle at 92% 70%,rgba(52,168,83,.08),transparent 32%)}
+.hero{background:linear-gradient(90deg,rgba(4,12,29,.82),rgba(3,12,30,.40))}
+section,section:nth-of-type(even){background:transparent}
+main>section{position:relative}
+main>section:nth-of-type(even){background:rgba(5,15,35,.60)}
+#venue{background:rgba(4,14,32,.62)}
+#registration,#gala-registration{background:rgba(5,12,29,.75)}
+.card{background:rgba(12,28,48,.96)}
+.agenda{background:rgba(12,30,52,.96)}
+.venue-panel{background:linear-gradient(160deg,rgba(20,38,68,.97),rgba(10,23,44,.97))}
+.venue-panel.gala-panel{background:linear-gradient(145deg,rgba(37,32,52,.97),rgba(13,23,43,.97))}
+.footer{background:rgba(3,10,25,.98)}
+section .intro,section .card p{color:#dce8f6}
+@media(max-width:760px){body::before{background-position:center top}main>section:nth-of-type(even){background:rgba(5,15,35,.70)}}
+/* Summit purpose: typography remains legible on photographic background */
+.summit-purpose{background:rgba(6,18,37,.91);border:1px solid rgba(106,172,238,.35);box-shadow:0 22px 55px rgba(0,0,0,.35)}
+.summit-purpose p{color:#e4efff;font-size:clamp(15px,1.7vw,17px);line-height:1.85;margin:0 0 19px}
+.purpose-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.purpose-tags span{display:inline-block;border-radius:99px;background:rgba(66,133,244,.15);border:1px solid rgba(115,177,244,.32);color:#f1f7ff;padding:9px 13px;font-size:12px;font-weight:800}
+/* Section 09: mission panel fills the available content width */
+#feedback .wrap{width:min(1160px,calc(100% - 36px))}
+#feedback .summit-purpose{width:100%;max-width:none;margin:24px 0 0;padding:clamp(25px,4vw,50px);border-radius:24px}
+#feedback .summit-purpose p{max-width:none;width:100%;line-height:1.9}
+#feedback .purpose-tags{width:100%}
+@media(max-width:650px){#feedback .summit-purpose{padding:22px 18px;border-radius:18px}}
+/* Countdown aligned horizontally to the exact center of its hero container. */
+.hero .summit-countdown {
+  margin: 28px auto 0;
+  width: min(100%, 560px);
+  max-width: 100%;
+}
+@media (max-width: 600px) {
+  .hero .summit-countdown { margin-inline: auto; }
+}
 
-        const img = document.createElement('img');
-        img.alt = t('Portrait of ', 'Foto ') + s.name;
-        img.loading = 'lazy';
-        img.decoding = 'async';
-        img.referrerPolicy = 'no-referrer';
-        img.src = s.photo;
-        img.onerror = () => img.remove();
-        photo.append(img, elem('span', 'tag', s.role));
+/* Official GEG Sabah channels */
+#connect .social-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:26px}
+#connect .social-card{min-width:0;display:flex;flex-direction:column;gap:14px;padding:28px;border:1px solid rgba(116,174,239,.38);border-radius:22px;background:rgba(8,22,44,.94);box-shadow:0 16px 40px rgba(0,0,0,.24);transition:transform .2s ease,border-color .2s ease;text-decoration:none;color:#f5f8ff}
+#connect .social-card:hover,#connect .social-card:focus-visible{transform:translateY(-4px);border-color:#83c7ff;outline-offset:3px}
+#connect .social-logo{display:grid;place-items:center;width:62px;height:62px;border-radius:16px;font-size:28px;font-weight:900;color:white;background:#1877f2}
+#connect .instagram .social-logo{background:linear-gradient(35deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
+#connect .website .social-logo{background:#167b59}
+#connect .social-card h3{font:800 24px/1.15 Outfit,sans-serif;margin:0}
+#connect .social-card p{color:#d7e5f6;font-size:14px;line-height:1.65;margin:0;flex:1}
+#connect .social-action{color:#9edaff;font-size:14px;font-weight:800}
+@media(max-width:800px){#connect .social-grid{grid-template-columns:1fr}#connect .social-card{padding:23px}}
+</style></head><body>
+<div class="nav"><div class="wrap navin"><a class="logo" href="#home">GEG <span>SUMMIT SABAH</span> 2026</a><button aria-expanded="false" class="btn alt small" id="mobileToggle">Menu</button><nav class="menu" id="menu"><a data-en="About" data-ms="Mengenai" href="#about">About</a><a data-en="Programme" data-ms="Tentatif" href="#programme">Programme</a><a data-en="GEG Passport" data-ms="Pasport GEG" href="#passport">GEG Passport</a><a data-en="Impact" data-ms="Impak" href="#impact">Impact</a><a data-en="Venues" data-ms="Lokasi" href="#venue">Venues</a><a href="#gala">Gala</a><a data-en="Register" data-ms="Daftar" href="#registration">Register</a><a data-en="Summit Mission" data-ms="Misi Summit" href="#feedback">Summit Mission</a><button aria-label="Switch to Bahasa Melayu" class="btn alt small" id="langBtn" title="Tukar ke Bahasa Melayu">BM</button></nav></div></div>
+<header class="hero" id="home"><div class="wrap"><div class="eyebrow">Digital Kinabalu Signature · Google Educator Groups Sabah</div><h1>GEG SUMMIT<br/><span class="colors">SABAH 2026</span></h1><p class="lead" data-en="Stay curious. Think boldly. Learn together. Build what's next with Google." data-ms="Stay curious. Think boldly. Learn together. Build what's next with Google.">Stay curious. Think boldly. Learn together. Build what's next with Google.</p><div class="chips"><span class="chip" data-en="📅 7 November · Main Summit" data-ms="📅 7 November · Persidangan Utama">📅 7 November · Main Summit</span><span class="chip">📍 IPG Kampus Gaya, Kota Kinabalu</span><span class="chip" data-en="✨ 8 November · Gala Night · Suria 7, Hotel Suria Sabah" data-ms="✨ 8 November · Malam Gala · Suria 7, Hotel Suria Sabah">✨ 8 November · Gala Night · Suria 7, Hotel Suria Sabah</span></div><div class="heroactions"><a class="btn" data-en="Register for Summit ↗" data-ms="Daftar Summit ↗" href="#registration" id="registerHero">Register for Summit ↗</a><a class="btn alt" data-en="Explore Programme ↓" data-ms="Terokai Atur Cara ↓" href="#programme">Explore Programme ↓</a></div><p class="smallnote" data-en="Organised by GEG Sabah · Main Summit Saturday 08:00–18:00 MYT · Programme subject to confirmation" data-ms="Anjuran GEG Sabah · Persidangan utama Sabtu 08:00–18:00 MYT · Atur cara tertakluk kepada pengesahan">Organised by GEG Sabah · Main Summit Saturday 08:00–18:00 MYT · Programme subject to confirmation</p><div aria-label="Countdown to GEG Summit Sabah 2026" class="summit-countdown" role="timer">
+<h2 class="count-title" data-en="Countdown · Main Summit" data-ms="Kiraan Detik · Persidangan Utama">Countdown · Main Summit</h2><p class="count-subtitle">7 November 2026 · 8:00 AM (MYT)</p>
+<div aria-live="off" class="count-grid" id="countdown">
+<div class="count-unit"><div class="count-digits" id="cdDays">00</div><span class="count-label" data-en="DAYS" data-ms="HARI">DAYS</span></div>
+<div class="count-unit"><div class="count-digits" id="cdHours">00</div><span class="count-label" data-en="HOURS" data-ms="JAM">HOURS</span></div>
+<div class="count-unit"><div class="count-digits" id="cdMinutes">00</div><span class="count-label" data-en="MINUTES" data-ms="MINIT">MINUTES</span></div>
+<div class="count-unit"><div class="count-digits" id="cdSeconds">00</div><span class="count-label" data-en="SECONDS" data-ms="SAAT">SECONDS</span></div>
+</div><a class="count-button" data-en="Explore the Programme ↗" data-ms="Terokai Atur Cara ↗" href="#programme">Explore the Programme ↗</a><p aria-live="polite" class="count-message" id="countStatus"></p></div></div></header><div class="ribbon"></div>
+<main><section id="about"><div class="wrap"><div class="eyebrow" data-en="01 / Overview" data-ms="01 / Pengenalan">01 / Overview</div><h2 class="sectiontitle" data-en="One Sabah. One GEG. A wider impact." data-ms="Satu Sabah. Satu GEG. Impak yang lebih luas.">One Sabah. One GEG. A wider impact.</h2><p class="intro" data-en="Connecting teachers, school leaders, education officers and innovators to share Google-enabled teaching and digital leadership practices." data-ms="Menghubungkan guru, pemimpin sekolah, pegawai pendidikan dan inovator untuk berkongsi amalan PdP serta kepimpinan digital menggunakan ekosistem Google.">Connecting teachers, school leaders, education officers and innovators to share Google-enabled teaching and digital leadership practices.</p><div class="grid"><div class="card"><div class="stat">10</div><h3 data-en="District GEGs" data-ms="GEG Daerah">District GEGs</h3><p>Kota Kinabalu, Tawau, Penampang, Tuaran, Beluran, Kinabatangan, Lahad Datu, Beaufort, Ranau &amp; Keningau</p></div><div class="card"><div class="stat">11</div><h3 data-en="GEG Booths" data-ms="Reruai GEG">GEG Booths</h3><p data-en="Discovery Walk, local innovations and QR-inspired learning challenges" data-ms="Discovery Walk, inovasi tempatan dan cabaran pembelajaran menggunakan QR">Discovery Walk, local innovations and QR-inspired learning challenges</p></div><div class="card"><div class="stat">300</div><h3 data-en="Planning Target" data-ms="Sasaran Perancangan">Planning Target</h3><p data-en="Target participants for the summit; not a live registration count" data-ms="Sasaran peserta summit; bukan jumlah pendaftaran langsung">Target participants for the summit; not a live registration count</p></div><div class="card"><div class="stat">90</div><h3 data-en="Post-Summit Days" data-ms="Hari Pasca-Summit">Post-Summit Days</h3><p data-en="Proposed follow-up programme for classroom pilots and reflective reports" data-ms="Cadangan program susulan untuk projek percubaan bilik darjah dan laporan refleksi">Proposed follow-up programme for classroom pilots and reflective reports</p></div></div></div></section>
+<section id="programme"><div class="wrap"><div class="eyebrow" data-en="02 / Programme" data-ms="02 / Atur Cara">02 / Programme</div><h2 class="sectiontitle" data-en="Interactive Summit Schedule" data-ms="Jadual Interaktif Summit">Interactive Summit Schedule</h2><p class="intro" data-en="7 November 2026 · 08:00–18:00 MYT · IPG Kampus Gaya, Kota Kinabalu. Tentative programme; session names and presenters may change." data-ms="7 November 2026 · 08:00–18:00 MYT · IPG Kampus Gaya, Kota Kinabalu. Atur cara tentatif; tajuk sesi dan pembentang mungkin berubah.">7 November 2026 · 08:00–18:00 MYT · IPG Kampus Gaya, Kota Kinabalu. Tentative programme; session names and presenters may change.</p><div class="controls"><input aria-label="Search sessions" data-en-aria-label="Search sessions" data-en-placeholder="Search sessions" data-ms-aria-label="Cari sesi" data-ms-placeholder="Cari sesi" id="search" placeholder="Search sessions"/><select aria-label="Filter track" data-en-aria-label="Filter track" data-ms-aria-label="Tapis trek" id="track"><option data-en="All tracks" data-ms="Semua trek" value="all">All tracks</option><option data-en="Main Stage" data-ms="Pentas Utama" value="Main Stage">Main Stage</option><option data-en="Showcase" data-ms="Pameran" value="Showcase">Showcase</option><option data-en="Explore" data-ms="Jelajah" value="Explore">Explore</option><option data-en="Break" data-ms="Rehat" value="Break">Break</option></select><button class="btn alt small" data-en="Reset" data-ms="Set Semula" id="clear">Reset</button></div><div class="schedule" id="agenda"></div></div></section>
+<section id="passport"><div class="wrap"><div class="eyebrow" data-en="03 / GEG Discovery Walk" data-ms="03 / Jelajah GEG">03 / GEG Discovery Walk</div><h2 class="sectiontitle" data-en="What is the GEG Summit e-Passport?" data-ms="Apakah e-Passport GEG Summit?">What is the GEG Summit e-Passport?</h2><p class="intro" data-en="The GEG Summit e-Passport is a digital passport concept for the GEG Discovery Walk. Participants explore 11 GEG booths, discover education innovations, try activities and connect with educator communities across Sabah." data-ms="e-Passport GEG Summit ialah konsep pasport digital untuk aktiviti GEG Discovery Walk. Peserta meneroka 11 reruai GEG, mengenali inovasi pendidikan, mencuba aktiviti dan berhubung dengan komuniti pendidik dari seluruh Sabah.">The GEG Summit e-Passport is a digital passport concept for the GEG Discovery Walk. Participants explore 11 GEG booths, discover education innovations, try activities and connect with educator communities across Sabah.</p><div class="grid"><div class="card"><h3 data-en="Explore the Booths" data-ms="Terokai Reruai">Explore the Booths</h3><p data-en="Visit 11 GEG booths to discover teaching ideas, innovations and community best practices." data-ms="Lawati 11 reruai GEG dan temui idea PdP, inovasi serta amalan terbaik komuniti.">Visit 11 GEG booths to discover teaching ideas, innovations and community best practices.</p></div><div class="card"><h3 data-en="Learn and Connect" data-ms="Belajar dan Berhubung">Learn and Connect</h3><p data-en="Take part in demonstrations, learning challenges and networking with educators." data-ms="Sertai demonstrasi, cabaran pembelajaran dan sesi jaringan bersama pendidik.">Take part in demonstrations, learning challenges and networking with educators.</p></div><div class="card"><h3 data-en="Digital Check-in Concept" data-ms="Konsep Pengesahan Digital">Digital Check-in Concept</h3><p data-en="The passport is planned to use booth QR codes or PINs to record participation. The official verification method will be announced by the organisers." data-ms="Pasport dirancang menggunakan QR atau PIN di reruai untuk merekod penyertaan. Kaedah pengesahan rasmi akan diumumkan oleh urus setia.">The passport is planned to use booth QR codes or PINs to record participation. The official verification method will be announced by the organisers.</p></div></div><p class="smallnote" data-en="This explains the e-Passport concept; it is not a live scanning or official attendance system." data-ms="Ini ialah penerangan konsep e-Passport, bukan sistem pengimbasan atau rekod kehadiran rasmi." style="margin-top:20px">This explains the e-Passport concept; it is not a live scanning or official attendance system.</p></div></section>
+<section id="impact"><div class="wrap"><div class="eyebrow" data-en="04 / Strategic Collaboration" data-ms="04 / Kerjasama Strategik">04 / Strategic Collaboration</div><h2 class="sectiontitle" data-en="From a Summit to Measurable Impact" data-ms="Daripada Summit kepada Impak yang Boleh Diukur">From a Summit to Measurable Impact</h2><p class="intro" data-en="This section outlines proposed measures rather than achieved results. Results can be populated after the event from consented attendance and feedback data." data-ms="Bahagian ini menerangkan indikator yang dicadangkan, bukan hasil yang telah dicapai. Data boleh dikemas kini selepas acara berdasarkan kehadiran dan maklum balas yang dibenarkan.">This section outlines proposed measures rather than achieved results. Results can be populated after the event from consented attendance and feedback data.</p><div class="grid"><div class="card impact"><h3 data-en="Participation" data-ms="Penyertaan">Participation</h3><p data-en="Registrations, verified attendance and district participation" data-ms="Pendaftaran, kehadiran disahkan dan penyertaan daerah">Registrations, verified attendance and district participation</p></div><div class="card impact"><h3 data-en="Engagement" data-ms="Penglibatan">Engagement</h3><p data-en="Workshop interactions, booth engagement and post-event feedback" data-ms="Interaksi bengkel, penglibatan reruai dan maklum balas selepas acara">Workshop interactions, booth engagement and post-event feedback</p></div><div class="card impact"><h3 data-en="Classroom Adoption" data-ms="Pelaksanaan di Bilik Darjah">Classroom Adoption</h3><p data-en="Voluntary teacher projects and 30/60/90-day updates" data-ms="Projek sukarela guru dan kemas kini 30/60/90 hari">Voluntary teacher projects and 30/60/90-day updates</p></div><div class="card impact"><h3 data-en="Collaboration" data-ms="Kerjasama">Collaboration</h3><p data-en="Proposed partnerships with educational institutions and Google for Education" data-ms="Cadangan kerjasama dengan institusi pendidikan dan Google for Education">Proposed partnerships with educational institutions and Google for Education</p></div></div><div class="disclaimer" data-en="Partner logos and claims of Google sponsorship will be published only after official permission or confirmation." data-ms="Logo rakan kerjasama dan dakwaan penajaan Google hanya akan dipaparkan selepas memperoleh kebenaran atau pengesahan rasmi.">Partner logos and claims of Google sponsorship will be published only after official permission or confirmation.</div></div></section>
+<section aria-labelledby="venueTitle" id="venue"><div class="wrap">
+<div class="venue-head"><div class="eyebrow" data-en="VENUES &amp; FACILITIES" data-ms="LOKASI &amp; KEMUDAHAN">VENUES &amp; FACILITIES</div>
+<h2 class="sectiontitle" data-en="GEG Summit Sabah Event Venues" data-ms="Lokasi Utama Acara GEG Summit Sabah" id="venueTitle">GEG Summit Sabah Event Venues</h2>
+<p class="intro" data-en="The main summit takes place on 7 November at IPG Kampus Gaya, followed by the Gala Dinner on the evening of 8 November at Suria 7, Hotel Suria Sabah." data-ms="Persidangan utama berlangsung pada 7 November di IPG Kampus Gaya, diikuti Majlis Makan Malam Gala pada malam 8 November di Suria 7, Hotel Suria Sabah.">The main summit takes place on 7 November at IPG Kampus Gaya, followed by the Gala Dinner on the evening of 8 November at Suria 7, Hotel Suria Sabah.</p></div>
+<div class="venue-grid">
+<article class="venue-panel"><span class="venue-tag" data-en="🏛️ Main Summit · 7 Nov 2026 · Daytime" data-ms="🏛️ Persidangan Utama · 7 Nov 2026 · Siang">🏛️ Main Summit · 7 Nov 2026 · Daytime</span>
+<h3>IPG Kampus Gaya, Kota Kinabalu</h3><p class="venue-address" data-en="P.O. Box 10491, 88805 Kota Kinabalu, Sabah, Malaysia." data-ms="Peti Surat 10491, 88805 Kota Kinabalu, Sabah, Malaysia.">P.O. Box 10491, 88805 Kota Kinabalu, Sabah, Malaysia.</p>
+<div class="venue-scene summit-photo-card"><img alt="Bangunan IPG Kampus Gaya, Kota Kinabalu" class="summit-venue-photo" loading="lazy" src="./assets/ipg-kampus-gaya.jpg"/><div class="summit-venue-caption">IPG KAMPUS GAYA · KOTA KINABALU</div></div>
+<div class="venue-facts"><div class="venue-fact"><span class="venue-symbol">🅿️</span><div><strong data-en="Parking" data-ms="Tempat Letak Kereta">Parking</strong><span data-en="Parking arrangements are subject to campus instructions." data-ms="Kemudahan tempat letak kenderaan tertakluk kepada arahan pihak kampus.">Parking arrangements are subject to campus instructions.</span></div></div>
+<div class="venue-fact"><span class="venue-symbol">📶</span><div><strong data-en="Facilities" data-ms="Ruang &amp; Kemudahan">Facilities</strong><span data-en="Main hall and session facilities; Wi-Fi and workshop room details will be confirmed." data-ms="Dewan utama dan kemudahan sesi; maklumat Wi-Fi dan ruang bengkel akan dimuktamadkan.">Main hall and session facilities; Wi-Fi and workshop room details will be confirmed.</span></div></div>
+<div class="venue-fact"><span class="venue-symbol">🍽️</span><div><strong data-en="Refreshments" data-ms="Jamuan Peserta">Refreshments</strong><span data-en="Refreshment details will be confirmed by the organising committee." data-ms="Maklumat jamuan akan disahkan oleh urus setia program.">Refreshment details will be confirmed by the organising committee.</span></div></div></div>
+<div class="venue-actions"><a class="btn" data-en="📍 Open Google Maps ↗" data-ms="📍 Buka di Google Maps ↗" href="https://www.google.com/maps/search/?api=1&amp;query=IPG%20Kampus%20Gaya%20Kota%20Kinabalu" rel="noopener" target="_blank">📍 Open Google Maps ↗</a><a class="btn alt" data-en="📅 View Programme" data-ms="📅 Lihat Jadual Program" href="#programme">📅 View Programme</a><a class="btn green" data-en="📝 Register for Main Summit · 7 Nov 2026 ↗" data-ms="📝 Daftar Persidangan 7 Nov 2026 ↗" href="#registration">📝 Register for Main Summit · 7 Nov 2026 ↗</a></div></article>
+<article class="venue-panel gala-panel"><span class="venue-tag" data-en="🏆 Gala Dinner · 8 Nov 2026 · Evening" data-ms="🏆 Majlis Makan Malam &amp; Gala · 8 Nov 2026 · Malam">🏆 Gala Dinner · 8 Nov 2026 · Evening</span>
+<h3>GEG Sabah Summit Gala</h3><p class="venue-address"><strong>Suria 7, Hotel Suria Sabah</strong><br/>Kota Kinabalu, Sabah · 7:00 PM onwards</p>
+<div class="venue-scene gala-photo-card"><img alt="Bangunan Suria Sabah, Kota Kinabalu" class="gala-venue-photo" loading="lazy" src="./assets/suria-sabah.jpg"/><div class="gala-venue-caption">SURIA 7 · HOTEL SURIA SABAH</div></div>
+<div class="venue-facts"><div class="venue-fact"><span class="venue-symbol">👔</span><div><strong data-en="Dress Code" data-ms="Kod Pakaian">Dress Code</strong><span data-en="Casual — choose one colour combination: Red + Black, Yellow + Black, Green + Black, or Blue + Black." data-ms="Kasual — pilih satu kombinasi: Merah + Hitam, Kuning + Hitam, Hijau + Hitam, atau Biru + Hitam.">Casual — choose one colour combination: Red + Black, Yellow + Black, Green + Black, or Blue + Black.</span></div></div>
+<div class="venue-fact"><span class="venue-symbol">🎟️</span><div><strong data-en="Gala Admission" data-ms="Penyertaan Gala">Gala Admission</strong><span data-en="Limited to 170 participants. Open to anyone interested; Gala reservations are separate from the main Summit." data-ms="Penyertaan terhad kepada 170 orang. Terbuka kepada sesiapa yang berminat; tempahan Gala dibuat secara berasingan.">Limited to 170 participants. Open to anyone interested; Gala reservations are separate from the main Summit.</span></div></div>
+<div class="venue-fact"><span class="venue-symbol">📸</span><div><strong data-en="Arrival of Invited Guests" data-ms="Kehadiran Para Tetamu Jemputan">Arrival of Invited Guests</strong><span data-en="Arrival and welcome of invited guests begins at 7:00 PM." data-ms="Ketibaan dan sambutan para tetamu jemputan bermula jam 7:00 malam.">Arrival and welcome of invited guests begins at 7:00 PM.</span></div></div></div>
+<div class="venue-actions"><a class="btn" data-en="📍 Open Google Maps ↗" data-ms="📍 Buka di Google Maps ↗" href="https://www.google.com/maps/search/?api=1&amp;query=Hotel%20Suria%20Sabah%20Kota%20Kinabalu" rel="noopener" target="_blank">📍 Open Google Maps ↗</a><a class="btn alt" data-en="🏆 Gala Information" data-ms="🏆 Maklumat Gala" href="#gala">🏆 Gala Information</a><a class="btn green" data-en="🎟️ Register for Gala Dinner ↓" data-ms="🎟️ Daftar Majlis Makan Malam ↓" href="#gala-registration">🎟️ Register for Gala Dinner ↓</a></div>
+<div class="venue-note" data-en="★ All attendance arrangements are subject to organiser confirmation." data-ms="★ Semua urusan penyertaan tertakluk kepada pengesahan urus setia.">★ All attendance arrangements are subject to organiser confirmation.</div></article>
+</div></div></section>
+<section id="gala"><div class="wrap"><div class="eyebrow">06 / 8 November 2026</div><h2 class="sectiontitle">GEG Sabah Summit Gala</h2><div class="box2"><div class="card"><h3 data-en="Gala Dinner &amp; Appreciation" data-ms="Makan Malam Gala &amp; Penghargaan">Gala Dinner &amp; Appreciation</h3><p>Sunday, 8 November 2026 · From 7:00 PM · <strong>Venue: Suria 7, Hotel Suria Sabah, Kota Kinabalu.</strong></p><p data-en="Arrival of invited guests, appreciation and Sabah cultural celebration. Gala registration is separate from Main Summit registration." data-ms="Kehadiran tetamu jemputan, penghargaan dan sambutan budaya Sabah. Pendaftaran Gala berasingan daripada persidangan utama.">Arrival of invited guests, appreciation and Sabah cultural celebration. Gala registration is separate from Main Summit registration.</p><div id="galaLink" style="margin-top:16px"><a class="btn green" data-en="🎟️ Register for Gala Dinner ↓" data-ms="🎟️ Daftar Majlis Makan Malam ↓" href="#gala-registration">🎟️ Register for Gala Dinner ↓</a></div></div><div class="card"><h3 data-en="Important Notes" data-ms="Maklumat Penting">Important Notes</h3><p>Limited to 170 participants and open to anyone interested. Dress code: Casual — choose Red + Black, Yellow + Black, Green + Black, or Blue + Black. Gala fee and payment instructions are provided through the designated Gala registration channel.</p><p data-en="Do not use the main summit form as a paid gala reservation unless the committee has explicitly configured it for this purpose." data-ms="Jangan gunakan borang summit utama untuk tempahan Gala berbayar kecuali telah ditetapkan secara jelas oleh urus setia.">Do not use the main summit form as a paid gala reservation unless the committee has explicitly configured it for this purpose.</p></div></div></div></section>
+<section aria-labelledby="registrationTitle" id="registration"><div class="wrap">
+<div class="eyebrow" data-en="07 / OFFICIAL REGISTRATION" data-ms="07 / PENDAFTARAN RASMI">07 / OFFICIAL REGISTRATION</div>
+<h2 class="sectiontitle" data-en="Main Summit Registration · 7 November 2026" data-ms="Pendaftaran Persidangan Utama · 7 November 2026" id="registrationTitle">Main Summit Registration · 7 November 2026</h2>
+<p class="intro" data-en="Register for the main summit at IPG Kampus Gaya, Kota Kinabalu. The official form is embedded below for your convenience." data-ms="Daftar untuk persidangan utama di IPG Kampus Gaya, Kota Kinabalu. Borang rasmi dipaparkan di bawah tanpa perlu meninggalkan portal.">Register for the main summit at IPG Kampus Gaya, Kota Kinabalu. The official form is embedded below for your convenience.</p>
+<div class="registration-shell">
+<div class="registration-top"><h3 data-en="GEG Summit Sabah 2026 Registration Form" data-ms="Borang Pendaftaran GEG Summit Sabah 2026">GEG Summit Sabah 2026 Registration Form</h3><p>7 November 2026 · 8:00 AM – 6:00 PM · IPG Kampus Gaya, Kota Kinabalu</p></div>
+<iframe class="registration-frame" data-en-title="GEG Summit Sabah main summit registration form" data-ms-title="Borang pendaftaran persidangan GEG Summit Sabah" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://script.google.com/macros/s/AKfycbwXnnzdbpvv5uxlpvvTZPoo8KNlhosQTGweXOm3X7vu0t4CTXW2MKE_7aqKGq_K0H4ygg/exec" title="Borang rasmi pendaftaran GEG Summit Sabah 7 November 2026">Your browser does not support embedded registration forms.</iframe>
+<div class="registration-bottom"><p data-en="If the form is blank, blocked by your browser or difficult to scroll on mobile, open the official registration link." data-ms="Jika borang tidak muncul, disekat oleh pelayar atau tidak boleh ditatal pada telefon, buka pautan pendaftaran rasmi.">If the form is blank, blocked by your browser or difficult to scroll on mobile, open the official registration link.</p><a class="btn green" data-en="📝 Open Registration Form ↗" data-ms="📝 Buka Borang Pendaftaran ↗" href="https://script.google.com/macros/s/AKfycbwXnnzdbpvv5uxlpvvTZPoo8KNlhosQTGweXOm3X7vu0t4CTXW2MKE_7aqKGq_K0H4ygg/exec" rel="noopener noreferrer" target="_blank">📝 Open Registration Form ↗</a></div>
+</div>
+</div></section>
+<section id="gala-registration"><div class="wrap">
+<div class="eyebrow" data-en="08 / GALA DINNER REGISTRATION" data-ms="08 / PENDAFTARAN MAJLIS MAKAN MALAM">08 / GALA DINNER REGISTRATION</div>
+<h2 class="sectiontitle" data-en="GEG Sabah Summit Gala Reservations · 8 November 2026" data-ms="Tempahan GEG Sabah Summit Gala · 8 November 2026">GEG Sabah Summit Gala Reservations · 8 November 2026</h2>
+<p class="intro" data-en="Reserve a place at the Gala Dinner at Suria 7, Hotel Suria Sabah, Kota Kinabalu. The official form is embedded below. Gala registration is separate from the Main Summit." data-ms="Daftar untuk majlis makan malam di Suria 7, Hotel Suria Sabah, Kota Kinabalu. Borang tempahan rasmi dipaparkan di bawah. Pendaftaran Gala adalah berasingan daripada persidangan utama.">Reserve a place at the Gala Dinner at Suria 7, Hotel Suria Sabah, Kota Kinabalu. The official form is embedded below. Gala registration is separate from the Main Summit.</p>
+<div class="registration-shell gala-registration-shell">
+<div class="registration-top"><h3 data-en="Gala Dinner Reservation Form" data-ms="Borang Tempahan Majlis Makan Malam">Gala Dinner Reservation Form</h3><p>8 November 2026 · 7:00 PM · Suria 7, Hotel Suria Sabah · <span data-en="170 seats only" data-ms="170 tempat sahaja">170 seats only</span></p></div>
+<iframe class="registration-frame" data-en-title="GEG Sabah Summit Gala reservation form" data-ms-title="Borang tempahan GEG Sabah Summit Gala" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://script.google.com/macros/s/AKfycbz4JVjx4LOd0nS8Yg3cDuV-NzWg1ao3_AVGW3rI61rySyEH_Thmc-TEtGHrRVClwcs/exec" title="Borang tempahan GEG Sabah Summit Gala 8 November 2026">Embedded registration form unavailable.</iframe>
+<div class="registration-bottom"><p data-en="If the embedded form does not appear or cannot be used here, please open the official form in a new tab." data-ms="Jika borang tidak muncul atau tidak boleh digunakan dalam paparan ini, sila buka borang rasmi di tab baharu.">If the embedded form does not appear or cannot be used here, please open the official form in a new tab.</p><a class="btn green" data-en="🎟️ Open Gala Reservation Form ↗" data-ms="🎟️ Buka Borang Tempahan Gala ↗" href="https://script.google.com/macros/s/AKfycbz4JVjx4LOd0nS8Yg3cDuV-NzWg1ao3_AVGW3rI61rySyEH_Thmc-TEtGHrRVClwcs/exec" rel="noopener noreferrer" target="_blank">🎟️ Open Gala Reservation Form ↗</a></div>
+</div>
+</div></section>
+<section id="feedback"><div class="wrap">
+<div class="eyebrow" data-en="09 / OUR SUMMIT MISSION" data-ms="09 / MISI GEG SUMMIT SABAH">09 / OUR SUMMIT MISSION</div>
+<h2 class="sectiontitle" data-en="Why GEG Summit Sabah?" data-ms="Mengapa GEG Summit Sabah?">Why GEG Summit Sabah?</h2>
+<div class="card summit-purpose"><p data-en="GEG Summit Sabah aims to inspire and equip education communities across Sabah with practical ideas on how Google applications can accelerate digital transformation in schools and organisations." data-ms="GEG Summit Sabah bertujuan memberikan pendedahan, inspirasi dan idea praktikal kepada seluruh komuniti pendidikan di Sabah tentang bagaimana aplikasi Google dapat membantu memacu transformasi digital dalam sekolah dan organisasi.">GEG Summit Sabah aims to inspire and equip education communities across Sabah with practical ideas on how Google applications can accelerate digital transformation in schools and organisations.</p><p data-en="The summit also explores artificial intelligence (AI) as a personal assistant that can simplify previously time-consuming and demanding tasks, enabling educators to focus more on learning, creativity and leadership." data-ms="Program ini turut meneroka peranan kecerdasan buatan (AI) sebagai pembantu peribadi untuk memudahkan tugasan yang sebelum ini mengambil masa dan tenaga yang banyak, sekali gus membolehkan warga pendidik memberi lebih tumpuan kepada pembelajaran, kreativiti dan kepimpinan.">The summit also explores artificial intelligence (AI) as a personal assistant that can simplify previously time-consuming and demanding tasks, enabling educators to focus more on learning, creativity and leadership.</p><p data-en="Sabah is also home to GEG school communities and educators involved in Google Certified Trainer, Google Certified Coach and Google Certified Innovator programmes. The summit provides a platform to share experiences, build connections and advance innovation together." data-ms="Sabah juga mempunyai komuniti Sekolah GEG serta pendidik yang terlibat dalam Google Certified Trainer, Google Certified Coach dan Google Certified Innovator. Summit ini menjadi ruang untuk mereka berkongsi pengalaman, membina jaringan dan menggerakkan inovasi bersama.">Sabah is also home to GEG school communities and educators involved in Google Certified Trainer, Google Certified Coach and Google Certified Innovator programmes. The summit provides a platform to share experiences, build connections and advance innovation together.</p><div class="purpose-tags"><span data-en="GEG Schools" data-ms="Sekolah GEG">GEG Schools</span><span>Google Certified Trainer</span><span>Google Certified Coach</span><span>Google Certified Innovator</span></div></div>
+</div></section>
+<section id="connect"><div class="wrap">
+  <div class="eyebrow" data-en="10 / STAY CONNECTED" data-ms="10 / KEKAL BERHUBUNG">10 / STAY CONNECTED</div>
+  <h2 class="sectiontitle" data-en="Connect with GEG Sabah" data-ms="Ikuti GEG Sabah">Connect with GEG Sabah</h2>
+  <p class="intro" data-en="Follow our community for summit announcements, educator stories, activities and digital learning resources." data-ms="Ikuti komuniti kami untuk pengumuman summit, kisah pendidik, aktiviti serta sumber pembelajaran digital.">Follow our community for summit announcements, educator stories, activities and digital learning resources.</p>
+  <div class="social-grid">
+    <a class="social-card facebook" href="https://www.facebook.com/gegsabah" target="_blank" rel="noopener noreferrer" aria-label="GEG Sabah Facebook (opens in new tab)">
+      <span class="social-logo" aria-hidden="true">f</span><h3>Facebook</h3>
+      <p data-en="Get the latest community news, event updates and educator highlights." data-ms="Dapatkan berita komuniti, perkembangan acara dan sorotan warga pendidik.">Get the latest community news, event updates and educator highlights.</p>
+      <span class="social-action" data-en="Visit Facebook ↗" data-ms="Lawati Facebook ↗">Visit Facebook ↗</span>
+    </a>
+    <a class="social-card instagram" href="https://www.instagram.com/gegsabah/" target="_blank" rel="noopener noreferrer" aria-label="GEG Sabah Instagram (opens in new tab)">
+      <span class="social-logo" aria-hidden="true">◎</span><h3>Instagram</h3>
+      <p data-en="Explore event visuals, community moments and stories from GEG Sabah." data-ms="Terokai visual acara, detik komuniti dan kisah daripada GEG Sabah.">Explore event visuals, community moments and stories from GEG Sabah.</p>
+      <span class="social-action" data-en="Visit Instagram ↗" data-ms="Lawati Instagram ↗">Visit Instagram ↗</span>
+    </a>
+    <a class="social-card website" href="https://gegsabah.edu.my/" target="_blank" rel="noopener noreferrer" aria-label="GEG Sabah official website (opens in new tab)">
+      <span class="social-logo" aria-hidden="true">✦</span><h3 data-en="Official Website" data-ms="Laman Web Rasmi">Official Website</h3>
+      <p data-en="Discover more about GEG Sabah, its educator community and initiatives." data-ms="Kenali GEG Sabah, komuniti pendidik dan inisiatif yang dijalankan.">Discover more about GEG Sabah, its educator community and initiatives.</p>
+      <span class="social-action" data-en="Visit Website ↗" data-ms="Lawati Laman Web ↗">Visit Website ↗</span>
+    </a>
+  </div>
+</div></section>
+</main>
+<footer class="footer"><div class="wrap"><b>GEG SUMMIT SABAH 2026</b><p data-en="Organised by GEG Sabah · Built by Ts.Jebat · Community initiative" data-ms="Anjuran GEG Sabah · Dibangunkan oleh Ts.Jebat · Inisiatif komuniti">Organised by GEG Sabah · Built by Ts.Jebat · Community initiative</p><a data-en="Event site ↗" data-ms="Laman acara ↗" href="https://sites.google.com/view/gegsummitsabah/home" rel="noopener" target="_blank">Event site ↗</a> · <a href="https://gegsabah.edu.my/" rel="noopener" target="_blank">GEG Sabah ↗</a><p class="smallnote" data-en="Google-related names and trademarks belong to their respective owners. This site does not imply official Google endorsement." data-ms="Nama dan tanda dagangan Google adalah hak pemilik masing-masing. Laman ini tidak menunjukkan sokongan rasmi Google.">Google-related names and trademarks belong to their respective owners. This site does not imply official Google endorsement.</p></div></footer>
+<script>
+'use strict';
+const AGENDA = [{"start": "08:00", "end": "08:45", "title": "Registration & GEG Discovery Walk", "track": "Explore", "description": "Registration, breakfast and 11 GEG booths"}, {"start": "08:45", "end": "09:00", "title": "Countdown to GEG Summit", "track": "Main Stage", "description": "Opening montage and interactive welcome"}, {"start": "09:00", "end": "09:15", "title": "Welcome to GEG Summit Sabah", "track": "Main Stage", "description": "Welcome and summit orientation"}, {"start": "09:15", "end": "09:35", "title": "Opening Ceremony", "track": "Main Stage", "description": "Official launch"}, {"start": "09:35", "end": "09:55", "title": "This is Googleyness", "track": "Main Stage", "description": "Innovation and collaboration inspiration"}, {"start": "09:55", "end": "10:15", "title": "GEG Spotlight: Students", "track": "Showcase", "description": "Student perspectives on learning"}, {"start": "10:15", "end": "10:45", "title": "GEG Explore 1", "track": "Explore", "description": "Booth demonstrations and networking"}, {"start": "10:45", "end": "11:30", "title": "Googleyness Showcase: Teachers", "track": "Showcase", "description": "Classroom practice sharing"}, {"start": "11:30", "end": "12:10", "title": "Googleyness Showcase: PPD & JPN", "track": "Showcase", "description": "Administration, data and collaboration"}, {"start": "12:10", "end": "12:30", "title": "One Idea, Big Impact", "track": "Main Stage", "description": "Lightning talks"}, {"start": "12:30", "end": "14:00", "title": "Lunch / Prayer / Open Booths", "track": "Break", "description": "Lunch break"}, {"start": "14:00", "end": "14:15", "title": "Googleyness Challenge", "track": "Main Stage", "description": "Interactive audience activity"}, {"start": "14:15", "end": "15:00", "title": "Leadership Showcase", "track": "Showcase", "description": "Headteachers and principals"}, {"start": "15:00", "end": "15:30", "title": "GEG Explore 2", "track": "Explore", "description": "GEG Passport challenge"}, {"start": "15:30", "end": "16:15", "title": "The Big GEG Conversation", "track": "Main Stage", "description": "Panel: students, teachers and leaders"}, {"start": "16:15", "end": "16:40", "title": "Best of Sabah", "track": "Showcase", "description": "Selected community demonstrations"}, {"start": "16:40", "end": "17:10", "title": "GEG Explore Finale", "track": "Explore", "description": "Final booth interactions"}, {"start": "17:10", "end": "17:30", "title": "GEG Summit Recognition", "track": "Main Stage", "description": "Community appreciation"}, {"start": "17:30", "end": "17:45", "title": "GEG Summit Grand Finale", "track": "Main Stage", "description": "Recap and passport challenge"}, {"start": "17:45", "end": "18:00", "title": "One Sabah, One GEG", "track": "Main Stage", "description": "Closing moment and group photo"}];
+const AGENDA_MS = [{"title": "Pendaftaran & Jelajah Reruai GEG", "description": "Pendaftaran, sarapan dan 11 reruai GEG"}, {"title": "Kiraan Detik ke GEG Summit", "description": "Montaj pembukaan dan alu-aluan interaktif"}, {"title": "Selamat Datang ke GEG Summit Sabah", "description": "Ucapan alu-aluan dan orientasi summit"}, {"title": "Majlis Perasmian", "description": "Pelancaran rasmi"}, {"title": "Inilah Googleyness", "description": "Inspirasi inovasi dan kerjasama"}, {"title": "Sorotan GEG: Murid dan Pelajar", "description": "Pandangan murid dan pelajar tentang pembelajaran"}, {"title": "Jelajah GEG 1", "description": "Demonstrasi reruai dan jaringan komuniti"}, {"title": "Googleyness Showcase: Guru", "description": "Perkongsian amalan bilik darjah"}, {"title": "Googleyness Showcase: PPD & JPN", "description": "Pentadbiran, data dan kerjasama"}, {"title": "Satu Idea, Impak Besar", "description": "Perkongsian pantas"}, {"title": "Makan Tengah Hari / Solat / Reruai Terbuka", "description": "Rehat tengah hari"}, {"title": "Cabaran Googleyness", "description": "Aktiviti interaktif bersama peserta"}, {"title": "Perkongsian Kepimpinan", "description": "Guru besar dan pengetua"}, {"title": "Jelajah GEG 2", "description": "Cabaran e-Passport GEG"}, {"title": "Perbualan Besar GEG", "description": "Panel: murid, guru dan pemimpin"}, {"title": "Terbaik dari Sabah", "description": "Demonstrasi komuniti terpilih"}, {"title": "Jelajah GEG Akhir", "description": "Interaksi akhir di reruai"}, {"title": "Penghargaan GEG Summit", "description": "Penghargaan komuniti"}, {"title": "Kemuncak GEG Summit", "description": "Rumusan dan cabaran pasport"}, {"title": "Satu Sabah, Satu GEG", "description": "Penutup dan foto berkumpulan"}];
+const TRACK_MS = { 'Main Stage':'Pentas Utama', 'Showcase':'Perkongsian', 'Explore':'Jelajah', 'Break':'Rehat' };
+const CFG = {conferenceStart:'2026-11-07T08:00:00+08:00',conferenceEnd:'2026-11-07T18:00:00+08:00'};
+let language='en';
+const byId=id=>document.getElementById(id);
+function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function setLanguage(lang){
+ language=lang;document.documentElement.lang=lang;
+ document.querySelectorAll('[data-ms][data-en]').forEach(el=>{el.textContent=el.getAttribute('data-'+lang)});
+ document.querySelectorAll('[data-ms-placeholder][data-en-placeholder]').forEach(el=>el.placeholder=el.getAttribute('data-'+lang+'-placeholder'));
+ document.querySelectorAll('[data-ms-aria-label][data-en-aria-label]').forEach(el=>el.setAttribute('aria-label',el.getAttribute('data-'+lang+'-aria-label')));
+ document.querySelectorAll('[data-ms-title][data-en-title]').forEach(el=>el.title=el.getAttribute('data-'+lang+'-title'));
+ byId('langBtn').textContent=lang==='en'?'BM':'EN';
+ byId('langBtn').setAttribute('aria-label',lang==='en'?'Tukar ke Bahasa Melayu':'Switch to English');
+ byId('langBtn').title=lang==='en'?'Tukar ke Bahasa Melayu':'Switch to English';
+ byId('registerHero').textContent=lang==='en'?'Register for Summit ↗':'Daftar Summit ↗';
+ renderAgenda();tick();
+}
+function renderAgenda(){
+ const q=byId('search').value.trim().toLowerCase(),tr=byId('track').value;
+ const filtered=AGENDA.map((a,i)=>({...a,index:i})).filter(a=>{
+   const localized=language==='ms'?AGENDA_MS[a.index]:a;
+   return (tr==='all'||tr===a.track)&&(`${a.title} ${a.description} ${localized.title} ${localized.description} ${a.start}`).toLowerCase().includes(q);
+ });
+ byId('agenda').innerHTML=filtered.map(a=>{
+   const local=language==='ms'?AGENDA_MS[a.index]:a;
+   const track=language==='ms'?TRACK_MS[a.track]:a.track;
+   return `<article class="agenda"><div class="time">${esc(a.start)}–${esc(a.end)} MYT</div><div class="track">${esc(track)}</div><b>${esc(local.title)}</b><p>${esc(local.description)}</p></article>`;
+ }).join('')||`<p>${language==='ms'?'Tiada sesi sepadan.':'No matching sessions.'}</p>`;
+}
+function tick(){const now=Date.now(),start=Date.parse(CFG.conferenceStart),end=Date.parse(CFG.conferenceEnd);let s=Math.max(0,Math.floor((start-now)/1000));const days=Math.floor(s/86400),hours=Math.floor((s%86400)/3600),minutes=Math.floor((s%3600)/60),secs=s%60;for(const [id,n] of [['cdDays',days],['cdHours',hours],['cdMinutes',minutes],['cdSeconds',secs]])byId(id).textContent=String(n).padStart(2,'0');byId('countStatus').textContent=now>end?(language==='ms'?'Summit telah tamat · Terima kasih!':'Summit concluded · Thank you!'):now>=start?(language==='ms'?'Summit sedang berlangsung!':'The Summit is underway!'):'';}
+byId('search').addEventListener('input',renderAgenda);
+byId('track').addEventListener('change',renderAgenda);
+byId('clear').addEventListener('click',()=>{byId('search').value='';byId('track').value='all';renderAgenda()});
+byId('langBtn').addEventListener('click',()=>setLanguage(language==='ms'?'en':'ms'));
+byId('mobileToggle').addEventListener('click',()=>{const m=byId('menu');m.classList.toggle('open');byId('mobileToggle').setAttribute('aria-expanded',String(m.classList.contains('open')))});
 
-        const body = elem('div', 'cardbody');
-        body.append(
-          elem('div', 'gegm', s.geg),
-          elem('h3', 'name', s.name),
-          elem('div', 'org', s.org),
-          elem('div', 'divider'),
-          elem('div', 'sectionlabel', t('Sharing Topic','Tajuk Perkongsian')),
-          elem('p', 'topic', s.topic)
-        );
-        const certs = elem('div', 'certs');
-        if (s.trainer) certs.append(elem('span', 'cert', 'Google Certified Trainer'));
-        if (s.coach) certs.append(elem('span', 'cert', 'Google Certified Coach'));
-        if (s.innovator) certs.append(elem('span', 'cert', 'Google Certified Innovator'));
-        if (certs.childElementCount) body.append(certs);
-        card.append(photo, body);
-        $('cards').append(card);
-      });
-
-      $('empty').style.display = shown.length ? 'none' : 'block';
-      $('empty').textContent = t('No speakers match your search.', 'Tiada pembentang yang sepadan dengan carian.');
-    }
-
-    $('language').onclick = () => {
-      language = language === 'en' ? 'ms' : 'en';
-      document.documentElement.lang = language;
-      render();
-    };
-    $('search').addEventListener('input', render);
-    render();
-  </script>
-</body>
-</html>
+setLanguage('en');setInterval(tick,1000);
+</script></body></html>
