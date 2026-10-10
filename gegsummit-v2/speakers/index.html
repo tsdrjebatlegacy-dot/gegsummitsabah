@@ -98,7 +98,8 @@
     .card:hover { transform: translateY(-5px); border-color: #90caff77; }
     /* Same portrait frame size across all speaker cards. */
     .photo {
-      height: 285px;
+      width: 100%;
+      aspect-ratio: 1 / 1;
       flex-shrink: 0;
       position: relative;
       overflow: hidden;
@@ -112,17 +113,9 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 50% var(--portrait-y, 24%);
-      transform: scale(var(--portrait-zoom, 1));
-      transform-origin: center center;
+      /* Focus all 3:4 studio portraits on the face, without cutting off the chin. */
+      object-position: center 12%;
       z-index: 1;
-    }
-    /* Saadiah: display full original portrait rather than cropping out the mouth/chin. */
-    .photo.full-face { background: #1d4ba8; }
-    .photo.full-face img {
-      object-fit: contain;
-      object-position: center center;
-      transform: none;
     }
     .photo::after {
       content: "";
@@ -146,7 +139,6 @@
     .cert { border-radius: 7px; background: #ffffff12; border: 1px solid #ffffff25; padding: 7px 9px; font-size: 10px; color: #d3eaff; }
     .empty { display: none; text-align: center; color: #c2d5e7; border: 1px dashed #ffffff55; border-radius: 18px; padding: 46px; margin-bottom: 38px; }
     .foot { border-top: 1px solid #ffffff27; padding: 24px 0 45px; color: #8fa9c5; font-size: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 9px; }
-    .note { font-size: 12px; color: #92a9c0; margin-top: -37px; margin-bottom: 40px; }
     a { color: inherit; }
     @media (max-width: 980px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hero { padding: 45px 30px; } }
     @media (max-width: 620px) {
@@ -155,7 +147,7 @@
       .hero { padding: 37px 23px; min-height: 0; }
       .hero h1 { font-size: 42px; }
       .navright .small-link { display: none; }
-      .photo { height: 300px; }
+      .photo { aspect-ratio: 1 / 1; }
       .name, .topic, .org { min-height: 0; }
       .topbar { align-items: stretch; }
       .search { width: 100%; }
@@ -192,7 +184,6 @@
     <div class="filters" id="filters"></div>
     <div class="grid" id="cards"></div>
     <div class="empty" id="empty">No speakers match your search.</div>
-    <p class="note" id="photo-note"></p>
     <footer class="foot">
       <span>© 2026 GEG Sabah · GEG Summit Sabah</span>
       <span>Speaker details from organiser's accepted submissions · Updated 10 October 2026</span>
@@ -202,26 +193,14 @@
     'use strict';
     // Accepted speaker entries, without private phone numbers or email addresses.
     const speakers = [
-      {name:'FATMAH WATI BINTI ABD MOES', org:'SK BRUMAS TAWAU', geg:'GEG Tawau', role:'Captain', topic:'SEKOLAH GEG : IMPIAN, TRANSFORMASI DAN REALITI', trainer:false, coach:false, innovator:false, photo:'1EQIIaNSMJqORSOxrkJxdgaj6ZHyViXpz'},
-      {name:'MOHD NUR AKMAL BIN ZAINAL ABIDIN', org:'SK TANJUNG ARU II', geg:'GEG Kota Kinabalu', role:'Co-Leader', topic:'2 Tahun Perjalanan Google bersama Pengurusan HEM SK Tanjung Aru II', trainer:true, coach:false, innovator:false, photo:'1EGAD27PRmb2rV62fwi2Zi1JjcWBW09BX'},
-      {name:'SUSAN CHIN SYUK MAN', org:'INSTITUT AMINUDDIN BAKI CAWANGAN SABAH', geg:'GEG Sabah', role:'Captain', topic:'From Files to Forms to Dashboards: Google Workspace in Action', trainer:true, coach:true, innovator:false, photo:'1gMgQ7YrtM4k9X38v9KDxnGZPp563AlbT'},
-      {name:'NURAIDAH BTE MUSTAPAH', org:'SMK TAMPARULI', geg:'GEG Sabah', role:'Captain', topic:'From Learners to Creators: Transformasi PdPC dengan Google', trainer:true, coach:false, innovator:false, photo:'1UKgMuL84fIyQmZqY8V8Xsm_8p2j6hVlX'},
-      {name:'SAADIAH BINTI SAWADDIN SAW', org:'SK KAPA TAMPARULI', geg:'GEG Sabah', role:'Captain', topic:'Amalan Penggunaan Google dalam Pengurusan HEM dan Akses Pembelajaran Murid', trainer:true, coach:false, innovator:false, photo:'1giAxCqUfKl6SqdJFhFlnAsLc_tzIZqC7'},
-      {name:'ALHASSIM BIN ATTIP', org:'SK SINAR JAYA', geg:'GEG Kinabatangan', role:'Leader', topic:'PENGGUNAAN GOOGLE CLASSROOM SEBAGAI PLATFORM PENGURUSAN MESYUARAT', trainer:true, coach:false, innovator:false, photo:'1kzTlHpab3ZQA2Pjw0S2loZuqupY4ROQo'},
-      {name:'AISHAH BINTI MOHD ARIS', org:'PPD BELURAN', geg:'GEG Beluran', role:'Co-Leader', topic:'Perancang Elit dengan Kuasa Gemini sebagai Otak Kedua.', trainer:true, coach:false, innovator:false, photo:'11CMS9R4ucEkP_6xQj0pkWRRyKeMIZ6Jv'}
+      {name:'FATMAH WATI BINTI ABD MOES', org:'SK BRUMAS TAWAU', geg:'GEG Tawau', role:'Captain', topic:'SEKOLAH GEG : IMPIAN, TRANSFORMASI DAN REALITI', trainer:false, coach:false, innovator:false, photo:'../images/fatmah.jpg'},
+      {name:'MOHD NUR AKMAL BIN ZAINAL ABIDIN', org:'SK TANJUNG ARU II', geg:'GEG Kota Kinabalu', role:'Co-Leader', topic:'2 Tahun Perjalanan Google bersama Pengurusan HEM SK Tanjung Aru II', trainer:true, coach:false, innovator:false, photo:'../images/akmal.jpg'},
+      {name:'SUSAN CHIN SYUK MAN', org:'INSTITUT AMINUDDIN BAKI CAWANGAN SABAH', geg:'GEG Sabah', role:'Captain', topic:'From Files to Forms to Dashboards: Google Workspace in Action', trainer:true, coach:true, innovator:false, photo:'../images/susan.jpg'},
+      {name:'NURAIDAH BTE MUSTAPAH', org:'SMK TAMPARULI', geg:'GEG Sabah', role:'Captain', topic:'From Learners to Creators: Transformasi PdPC dengan Google', trainer:true, coach:false, innovator:false, photo:'../images/nuraidah.jpg'},
+      {name:'SAADIAH BINTI SAWADDIN SAW', org:'SK KAPA TAMPARULI', geg:'GEG Sabah', role:'Captain', topic:'Amalan Penggunaan Google dalam Pengurusan HEM dan Akses Pembelajaran Murid', trainer:true, coach:false, innovator:false, photo:'../images/saadiah.jpg'},
+      {name:'ALHASSIM BIN ATTIP', org:'SK SINAR JAYA', geg:'GEG Kinabatangan', role:'Leader', topic:'PENGGUNAAN GOOGLE CLASSROOM SEBAGAI PLATFORM PENGURUSAN MESYUARAT', trainer:true, coach:false, innovator:false, photo:'../images/alhassim.jpg'},
+      {name:'AISHAH BINTI MOHD ARIS', org:'PPD BELURAN', geg:'GEG Beluran', role:'Co-Leader', topic:'Perancang Elit dengan Kuasa Gemini sebagai Otak Kedua.', trainer:true, coach:false, innovator:false, photo:'../images/aishah.jpg'}
     ];
-
-    // Face framing: customize individual photos here if needed.
-    // 'fit: contain' keeps the entire original photo visible (Saadiah).
-    const portraitSettings = {
-      'FATMAH WATI BINTI ABD MOES': { zoom:1.02, y:'23%' },
-      'MOHD NUR AKMAL BIN ZAINAL ABIDIN': { zoom:1.45, y:'15%' },
-      'SUSAN CHIN SYUK MAN': { zoom:1.04, y:'20%' },
-      'NURAIDAH BTE MUSTAPAH': { zoom:1.08, y:'20%' },
-      'SAADIAH BINTI SAWADDIN SAW': { fit:'contain', zoom:1, y:'50%' },
-      'ALHASSIM BIN ATTIP': { zoom:1.08, y:'20%' },
-      'AISHAH BINTI MOHD ARIS': { zoom:1.08, y:'20%' }
-    };
 
     let language = 'en';
     let active = 'All';
@@ -243,10 +222,6 @@
       $('search').setAttribute('aria-label', $('search').placeholder);
       $('hero-count').textContent = speakers.length + ' ' + t('Speakers', 'Pembentang');
       document.querySelectorAll('[data-en]').forEach(el => { el.innerHTML = el.dataset[language]; });
-      $('photo-note').textContent = t(
-        'Photos appear when the respective Google Drive files permit public viewing.',
-        'Foto dipaparkan apabila fail Google Drive berkenaan dibenarkan untuk akses awam.'
-      );
       $('language').textContent = language === 'en' ? 'BM' : 'EN';
 
       $('filters').replaceChildren();
@@ -267,18 +242,16 @@
 
       shown.forEach(s => {
         const card = elem('article', 'card');
-        const settings = portraitSettings[s.name] || { zoom:1, y:'22%' };
-        const photo = elem('div', 'photo' + (settings.fit === 'contain' ? ' full-face' : ''));
+        const photo = elem('div', 'photo');
         const initials = s.name.split(' ').filter(word => !['BIN','BINTI','BTE'].includes(word)).slice(0, 2).map(word => word[0]).join('');
         photo.append(elem('div', 'initials', initials));
 
         const img = document.createElement('img');
         img.alt = t('Portrait of ', 'Foto ') + s.name;
         img.loading = 'lazy';
+        img.decoding = 'async';
         img.referrerPolicy = 'no-referrer';
-        img.style.setProperty('--portrait-zoom', settings.zoom || 1);
-        img.style.setProperty('--portrait-y', settings.y || '22%');
-        img.src = 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(s.photo) + '&sz=w1000';
+        img.src = s.photo;
         img.onerror = () => img.remove();
         photo.append(img, elem('span', 'tag', s.role));
 
