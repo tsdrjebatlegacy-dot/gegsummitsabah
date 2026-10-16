@@ -1,496 +1,241 @@
 <!DOCTYPE html>
 <html lang="ms">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-
-  <meta
-    name="theme-color"
-    content="#06172b"
-  >
-
-  <meta
-    name="description"
-    content="Sistem Tempahan Jersey Rasmi GEG Summit Sabah 2026"
-  >
-
-  <title>
-    GEG Summit Sabah 2026 | Official Jersey
-  </title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06172b">
+  <meta name="description" content="Portal tempahan jersey rasmi GEG Summit Sabah 2026.">
+  <title>GEG Summit Sabah 2026 | Tempahan Jersey Rasmi</title>
 
   <style>
-
     :root {
-
       --blue: #4285f4;
       --red: #ea4335;
       --yellow: #fbbc04;
       --green: #34a853;
-
-      --dark: #03101e;
-      --dark2: #092844;
-
+      --navy: #06172b;
+      --ink: #f7f9ff;
+      --bar-height: 58px;
     }
 
+    * { box-sizing: border-box; }
 
-    * {
-
-      box-sizing: border-box;
-
-    }
-
-
-    html,
-    body {
-
-      margin: 0;
-      padding: 0;
-
+    html, body {
       width: 100%;
       height: 100%;
-
+      margin: 0;
       overflow: hidden;
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+      font-family: Arial, Helvetica, sans-serif;
       background: #03101e;
-
     }
-
-
-    /******************************************************
-     * GOOGLE COLOUR LINE
-     ******************************************************/
 
     .google-line {
-
       position: fixed;
-
-      top: 0;
-      left: 0;
-
-      width: 100%;
+      z-index: 20;
+      inset: 0 0 auto;
       height: 5px;
-
-      z-index: 9999;
-
-      background:
-        linear-gradient(
-          90deg,
-
-          var(--blue) 0 25%,
-
-          var(--red) 25% 50%,
-
-          var(--yellow) 50% 75%,
-
-          var(--green) 75% 100%
-        );
-
+      background: linear-gradient(90deg,
+        var(--blue) 0 25%, var(--red) 25% 50%,
+        var(--yellow) 50% 75%, var(--green) 75% 100%);
     }
 
-
-    /******************************************************
-     * LOADING SCREEN
-     ******************************************************/
-
-    #loading {
-
+    .toolbar {
       position: fixed;
-
-      inset: 0;
-
-      z-index: 9998;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      text-align: center;
-
-      color: white;
-
-      background:
-
-        radial-gradient(
-          circle at 15% 15%,
-          rgba(66, 133, 244, .28),
-          transparent 32%
-        ),
-
-        radial-gradient(
-          circle at 85% 80%,
-          rgba(52, 168, 83, .18),
-          transparent 30%
-        ),
-
-        linear-gradient(
-          135deg,
-          #03101e,
-          #092844
-        );
-
-      transition:
-        opacity .45s ease,
-        visibility .45s ease;
-
-    }
-
-
-    #loading.hide {
-
-      opacity: 0;
-
-      visibility: hidden;
-
-      pointer-events: none;
-
-    }
-
-
-    .loader-card {
-
-      width:
-        min(
-          440px,
-          calc(100% - 40px)
-        );
-
-      padding: 35px;
-
-    }
-
-
-    .spinner {
-
-      width: 68px;
-      height: 68px;
-
-      margin:
-        0 auto 22px;
-
-      border-radius: 50%;
-
-      position: relative;
-
-      background:
-        conic-gradient(
-          var(--blue),
-          var(--red),
-          var(--yellow),
-          var(--green),
-          var(--blue)
-        );
-
-      animation:
-        rotate 1.1s linear infinite;
-
-    }
-
-
-    .spinner::after {
-
-      content: "";
-
-      position: absolute;
-
-      inset: 7px;
-
-      border-radius: 50%;
-
-      background: #07192e;
-
-    }
-
-
-    @keyframes rotate {
-
-      to {
-
-        transform: rotate(360deg);
-
-      }
-
-    }
-
-
-    .loading-label {
-
-      font-size: 11px;
-
-      font-weight: 800;
-
-      letter-spacing: .15em;
-
-      color: #8ab4f8;
-
-      margin-bottom: 9px;
-
-    }
-
-
-    .loading-title {
-
-      font-size:
-        clamp(
-          25px,
-          6vw,
-          38px
-        );
-
-      font-weight: 900;
-
-      line-height: 1.05;
-
-      margin-bottom: 11px;
-
-    }
-
-
-    .loading-text {
-
-      font-size: 13px;
-
-      line-height: 1.6;
-
-      color:
-        rgba(
-          255,
-          255,
-          255,
-          .60
-        );
-
-    }
-
-
-    /******************************************************
-     * APPS SCRIPT FRAME
-     ******************************************************/
-
-    #appFrame {
-
-      position: fixed;
-
+      z-index: 15;
       top: 5px;
       left: 0;
+      right: 0;
+      height: calc(var(--bar-height) - 5px);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+      color: var(--ink);
+      background: linear-gradient(120deg, #06172b, #0b3151);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+    }
 
-      width: 100%;
-
-      height:
-        calc(
-          100dvh - 5px
-        );
-
-      margin: 0;
-      padding: 0;
-
-      border: 0;
-
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-mark { display: grid; grid-template-columns: repeat(2, 9px); gap: 3px; flex-shrink: 0; }
+    .brand-mark i { width: 9px; height: 9px; border-radius: 3px; display: block; }
+    .brand-mark i:nth-child(1) { background: var(--blue); }
+    .brand-mark i:nth-child(2) { background: var(--red); }
+    .brand-mark i:nth-child(3) { background: var(--yellow); }
+    .brand-mark i:nth-child(4) { background: var(--green); }
+    .brand-copy { min-width: 0; }
+    .brand-copy strong {
       display: block;
-
-      background: white;
-
+      font-size: 12px;
+      letter-spacing: .05em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand-copy span {
+      display: block;
+      padding-top: 4px;
+      font-size: 11px;
+      color: #a9c0dc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-
-    /******************************************************
-     * MOBILE
-     ******************************************************/
-
-    @media(max-width:600px) {
-
-      .loader-card {
-
-        padding: 24px;
-
-      }
-
-
-      .spinner {
-
-        width: 58px;
-        height: 58px;
-
-      }
-
-
-      .loading-label {
-
-        font-size: 9px;
-
-      }
-
-
-      .loading-text {
-
-        font-size: 12px;
-
-      }
-
+    .direct-link, .fallback-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      padding: 9px 13px;
+      color: #fff;
+      background: rgba(255,255,255,.08);
+      font-size: 12px;
+      font-weight: bold;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .2s ease;
+    }
+    .direct-link:hover, .fallback-link:hover { background: rgba(255,255,255,.18); }
+    .direct-link:focus-visible, .fallback-link:focus-visible {
+      outline: 3px solid #8ab4f8;
+      outline-offset: 2px;
     }
 
+    .app-container {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: var(--bar-height);
+      bottom: 0;
+      height: calc(100vh - var(--bar-height));
+      height: calc(100dvh - var(--bar-height));
+      overflow: hidden;
+      background: #fff;
+    }
+    #appFrame { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+
+    #loading {
+      position: absolute;
+      z-index: 10;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      color: white;
+      text-align: center;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(66,133,244,.29), transparent 37%),
+        radial-gradient(circle at 85% 85%, rgba(52,168,83,.19), transparent 32%),
+        linear-gradient(145deg, #03101e, #092844);
+      transition: opacity .4s ease, visibility .4s ease;
+    }
+    #loading.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-card { max-width: 420px; width: 100%; }
+    .spinner {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue), var(--red), var(--yellow), var(--green), var(--blue));
+      animation: spin 1.1s linear infinite;
+    }
+    .spinner::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 50%;
+      background: #07192e;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .eyebrow { margin: 0 0 12px; font-size: 11px; font-weight: 800; letter-spacing: .13em; color: #8ab4f8; }
+    h1 { margin: 0; font-size: clamp(26px, 5vw, 38px); line-height: 1.12; }
+    .description { color: #bed0e6; line-height: 1.65; font-size: 13px; margin: 16px 0 20px; }
+    .fallback-link { background: rgba(255,255,255,.1); }
+    .loading-hint { margin-top: 18px; font-size: 12px; color: #b7c6db; line-height: 1.5; }
+
+    @media (max-width: 600px) {
+      :root { --bar-height: 62px; }
+      .toolbar { gap: 8px; }
+      .brand-copy strong { font-size: 10px; letter-spacing: .02em; }
+      .brand-copy span { font-size: 10px; }
+      .direct-link { padding: 9px 10px; font-size: 11px; }
+      .spinner { width: 56px; height: 56px; }
+      .eyebrow { font-size: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation: none; }
+      #loading, .direct-link, .fallback-link { transition: none; }
+    }
   </style>
-
 </head>
-
-
 <body>
+  <div class="google-line" aria-hidden="true"></div>
 
-
-  <!-- GOOGLE COLOUR LINE -->
-
-  <div class="google-line"></div>
-
-
-
-  <!-- LOADING SCREEN -->
-
-  <div id="loading">
-
-    <div class="loader-card">
-
-
-      <div class="spinner"></div>
-
-
-      <div class="loading-label">
-
-        GOOGLE EDUCATOR GROUPS SABAH
-
+  <header class="toolbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="brand-copy">
+        <strong>GEG SUMMIT SABAH 2026</strong>
+        <span>Official Jersey · Tempahan Rasmi</span>
       </div>
-
-
-      <div class="loading-title">
-
-        GEG Summit Sabah
-
-        <br>
-
-        Official Jersey
-
-      </div>
-
-
-      <div class="loading-text">
-
-        Memuatkan sistem tempahan rasmi
-
-        <br>
-
-        GEG Summit Sabah 2026...
-
-      </div>
-
-
     </div>
+    <a class="direct-link"
+       href="https://script.google.com/macros/s/AKfycbxeHgM__Fee7YhygcE6qtFuCV8iAu0c0RPkYLI8QB75PKpue-ZWTXgRAe6acjmCXht5Lg/exec"
+       target="_blank" rel="noopener noreferrer" aria-label="Buka sistem tempahan dalam tab baharu">
+      Buka Borang <span aria-hidden="true">↗</span>
+    </a>
+  </header>
 
-  </div>
+  <main class="app-container">
+    <iframe
+      id="appFrame"
+      src="https://script.google.com/macros/s/AKfycbxeHgM__Fee7YhygcE6qtFuCV8iAu0c0RPkYLI8QB75PKpue-ZWTXgRAe6acjmCXht5Lg/exec"
+      title="Sistem Tempahan Jersey GEG Summit Sabah 2026"
+      loading="eager"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="clipboard-read; clipboard-write"
+      onload="appLoaded()">
+    </iframe>
 
-
-
-  <!--
-  ==========================================================
-  GOOGLE APPS SCRIPT WEB APP
-  ==========================================================
-  -->
-
-  <iframe
-
-    id="appFrame"
-
-    src="https://script.google.com/macros/s/AKfycbxeHgM__Fee7YhygcE6qtFuCV8iAu0c0RPkYLI8QB75PKpue-ZWTXgRAe6acjmCXht5Lg/exec"
-
-    title="Tempahan Jersey GEG Summit Sabah 2026"
-
-    loading="eager"
-
-    referrerpolicy="strict-origin-when-cross-origin"
-
-    allow="clipboard-read; clipboard-write"
-
-    onload="appLoaded()"
-
-  ></iframe>
-
-
+    <section id="loading" role="status" aria-live="polite">
+      <div class="loader-card">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="eyebrow">GOOGLE EDUCATOR GROUPS SABAH</p>
+        <h1>GEG Summit Sabah<br>Official Jersey</h1>
+        <p class="description">Memuatkan sistem tempahan jersey rasmi GEG Summit Sabah 2026...</p>
+        <a class="fallback-link"
+           href="https://script.google.com/macros/s/AKfycbxeHgM__Fee7YhygcE6qtFuCV8iAu0c0RPkYLI8QB75PKpue-ZWTXgRAe6acjmCXht5Lg/exec"
+           target="_blank" rel="noopener noreferrer">
+          Buka Borang Secara Terus ↗
+        </a>
+        <p id="loadingHint" class="loading-hint">Jika borang tidak dipaparkan, gunakan pautan di atas.</p>
+      </div>
+    </section>
+  </main>
 
   <script>
-
-    /******************************************************
-     * APP LOADED
-     ******************************************************/
+    let frameLoaded = false;
 
     function appLoaded() {
-
-      setTimeout(
-        function() {
-
-          const loading =
-            document.getElementById(
-              'loading'
-            );
-
-
-          if (loading) {
-
-            loading.classList.add(
-              'hide'
-            );
-
-          }
-
-        },
-        650
-      );
-
+      frameLoaded = true;
+      window.setTimeout(function () {
+        const loading = document.getElementById('loading');
+        if (loading) loading.classList.add('hide');
+      }, 650);
     }
 
-
-
-    /******************************************************
-     * SAFETY TIMEOUT
-     *
-     * Loader akan ditutup selepas 12 saat jika browser
-     * mengambil masa lama untuk trigger iframe onload.
-     ******************************************************/
-
-    setTimeout(
-      function() {
-
-        const loading =
-          document.getElementById(
-            'loading'
-          );
-
-
-        if (loading) {
-
-          loading.classList.add(
-            'hide'
-          );
-
-        }
-
-      },
-      12000
-    );
-
+    window.setTimeout(function () {
+      if (!frameLoaded) {
+        const hint = document.getElementById('loadingHint');
+        if (hint) hint.textContent =
+          'Sambungan mengambil masa lebih lama. Tekan "Buka Borang Secara Terus" untuk meneruskan tempahan.';
+      }
+    }, 12000);
   </script>
-
-
 </body>
-
 </html>
