@@ -1,510 +1,341 @@
-/**
- * GEG SUMMIT SABAH 2026 — AGENT MAKLUMAT
- * Backend Apps Script (Web App)
- *
- * PRINSIP KESELAMATAN:
- * Fail ini TIDAK PERNAH menghantar nama, email, telefon, rujukan bayaran
- * atau pautan resit ke model AI. Hanya angka agregat dan pemetaan meja.
- *
- * PASANG:
- * 1. Script Properties → tambah GEMINI_API_KEY (dan HERMES_API_KEY jika guna)
- * 2. Deploy → New deployment → Web app
- *    Execute as: Me | Who has access: Anyone
- * 3. Salin URL deployment ke dalam widget.html
- */
-
-// ─────────────────────────────────────────────────────────────
-// KONFIGURASI
-// ─────────────────────────────────────────────────────────────
-
-const CFG = {
-  // ID Google Sheet
-  SHEET_GALA:   '1X9o7pLhz1F882UsSu2vA28Pl2yHA3Pq_FMSWnHYIxyk',
-  SHEET_DAFTAR: '1MSBRALrVBi2tACebtEJJbOlZxC-aUWS_IYbiR1HPqBA',
-  SHEET_ACARA:  '',   // ← ID Sheet atur cara (tab SESI + PENCERAMAH). Kosong = belum sedia.
-
-  // Nama tab
-  TAB_PESERTA_GALA: 'PESERTA_GALA',
-  TAB_KONFIG_GEG:   'KONFIG_GEG',
-  TAB_DAFTAR:       'Form Responses 1',
-  TAB_SESI:         'SESI',
-  TAB_PENCERAMAH:   'PENCERAMAH',
-  TAB_LOG:          'LOG_SOALAN',
-
-  // Model: 'GEMINI' atau 'HERMES' — tukar di sini jika penyedia bermasalah
-  PROVIDER: 'GEMINI',
-  GEMINI_MODEL: 'gemini-2.0-flash',
-  GEMINI_URL: 'https://generativelanguage.googleapis.com/v1beta/models/',
-  HERMES_URL: 'https://inference-api.nousresearch.com/v1/chat/completions',
-  HERMES_MODEL: 'Hermes-4-70B',
-
-  // Cache (saat)
-  CACHE_STATIK: 600,   // atur cara, pemetaan meja — jarang berubah
-  CACHE_TEMPAT: 30,    // kekosongan kerusi — data hidup
-
-  // Had kadar
-  HAD_SOALAN_SESI: 20,
-  TEMPOH_HAD: 3600,
-
-  ZON: 'Asia/Kuching'
-};
-
-// ─────────────────────────────────────────────────────────────
-// TITIK MASUK
-// ─────────────────────────────────────────────────────────────
-
-function doGet() {
-  return json_({ ok: true, masa: masaSekarang_() });
-}
-
-function doPost(e) {
-  try {
-    // Widget hantar sebagai text/plain untuk elak preflight CORS
-    const req = JSON.parse(e.postData.contents);
-    const soalan = String(req.soalan || '').trim().slice(0, 500);
-    const sid = String(req.sid || 'tanpa-sid').slice(0, 64);
-    const bahasa = req.bahasa === 'en' ? 'en' : 'ms';
-
-    if (!soalan) return json_({ ok: false, jawapan: teksKosong_(bahasa) });
-
-    if (!lulusHadKadar_(sid)) {
-      return json_({ ok: false, jawapan: teksHad_(bahasa) });
-    }
-
-    // Laluan pantas: soalan lazim dijawab terus tanpa panggil model
-    const pantas = jawapanPantas_(soalan, bahasa);
-    if (pantas) {
-      log_(soalan, 'PANTAS', bahasa);
-      return json_({ ok: true, jawapan: pantas, sumber: 'pantas' });
-    }
-
-    const kb = binaKB_(bahasa);
-    const jawapan = tanyaModel_(binaPrompt_(kb, soalan, bahasa));
-
-    log_(soalan, jawapan ? 'MODEL' : 'GAGAL', bahasa);
-    return json_({
-      ok: !!jawapan,
-      jawapan: jawapan || teksGagal_(bahasa),
-      sumber: 'model'
-    });
-
-  } catch (err) {
-    log_('(ralat) ' + err, 'RALAT', 'ms');
-    return json_({ ok: false, jawapan: teksGagal_('ms') });
+</script>
+</head><body>
+<div class="nav"><div class="wrap navin"><a class="logo" href="#home">GEG <span>SUMMIT SABAH</span> 2026</a><button aria-expanded="false" class="btn alt small" id="mobileToggle">Menu</button><nav class="menu" id="menu"><a data-en="About" data-ms="Mengenai" href="#about">About</a><a data-en="Programme" data-ms="Tentatif" href="#programme">Programme</a><a data-en="GEG Passport" data-ms="Pasport GEG" href="#passport">GEG Passport</a><a data-en="Speakers" data-ms="Pembentang" href="#speakers">Speakers</a><a data-en="Impact" data-ms="Impak" href="#impact">Impact</a><a data-en="Venues" data-ms="Lokasi" href="#venue">Venues</a><a href="#gala">Gala</a><a data-en="Register" data-ms="Daftar" href="#registration">Register</a><a data-en="Summit Mission" data-ms="Misi Summit" href="#feedback">Summit Mission</a><button aria-label="Switch to Bahasa Melayu" class="btn alt small" id="langBtn" title="Tukar ke Bahasa Melayu">BM</button></nav></div></div>
+<header class="hero" id="home"><div class="wrap"><div class="eyebrow">Digital Kinabalu Signature · Google Educator Groups Sabah</div><h1>GEG SUMMIT<br/><span class="colors">SABAH 2026</span></h1><p class="lead" data-en="Stay curious. Think boldly. Learn together. Build what's next with Google." data-ms="Stay curious. Think boldly. Learn together. Build what's next with Google.">Stay curious. Think boldly. Learn together. Build what's next with Google.</p><div class="chips"><span class="chip" data-en="📅 7 November · Main Summit" data-ms="📅 7 November · Persidangan Utama">📅 7 November · Main Summit</span><span class="chip">📍 IPG Kampus Gaya, Kota Kinabalu</span><span class="chip" data-en="✨ 8 November · Gala Night · Suria 7, Hotel Suria Sabah" data-ms="✨ 8 November · Malam Gala · Suria 7, Hotel Suria Sabah">✨ 8 November · Gala Night · Suria 7, Hotel Suria Sabah</span></div><div class="heroactions"><a class="btn" data-en="Register for Summit ↗" data-ms="Daftar Summit ↗" href="#registration" id="registerHero">Register for Summit ↗</a><a class="btn alt" data-en="Explore Programme ↓" data-ms="Terokai Atur Cara ↓" href="#programme">Explore Programme ↓</a></div><p class="smallnote" data-en="Organised by GEG Sabah · Main Summit Saturday 08:00–18:00 MYT · Programme subject to confirmation" data-ms="Anjuran GEG Sabah · Persidangan utama Sabtu 08:00–18:00 MYT · Atur cara tertakluk kepada pengesahan">Organised by GEG Sabah · Main Summit Saturday 08:00–18:00 MYT · Programme subject to confirmation</p><div aria-label="Countdown to GEG Summit Sabah 2026" class="summit-countdown" role="timer">
+<h2 class="count-title" data-en="Countdown · Main Summit" data-ms="Kiraan Detik · Persidangan Utama">Countdown · Main Summit</h2><p class="count-subtitle">7 November 2026 · 8:00 AM (MYT)</p>
+<header class="hero" id="home"><div class="wrap"><div class="eyebrow">Digital Kinabalu Signature · Google Educator Groups Sabah</div><h1>GEG SUMMIT<br/><span class="colors">SABAH 2026</span></h1><p class="lead" data-en="Stay curious. Think boldly. Learn together. Build what's next with Google." data-ms="Stay curious. Think boldly. Learn together. Build what's next with Google.">Stay curious. Think boldly. Learn together. Build what's next with Google.</p><div class="chips"><span class="chip" data-en="📅 7 November · Main Summit" data-ms="📅 7 November · Persidangan Utama">📅 7 November · Main Summit</span><span class="chip">📍 IPG Kampus Gaya, Kota Kinabalu</span><span class="chip" data-en="✨ 8 November · Gala Night · Suria 7, Hotel Suria Sabah" data-ms="✨ 8 November · Malam Gala · Suria 7, Hotel Suria Sabah">✨ 8 November · Gala Night · Suria 7, Hotel Suria Sabah</span></div><div class="heroactions"><a class="btn" data-en="Register for Summit ↗" data-ms="Daftar Summit ↗" href="#registration" id="registerHero">Register for Summit ↗</a><a class="btn alt" data-en="Explore Programme ↓" data-ms="Terokai Atur Cara ↓" href="#programme">Explore Programme ↓</a></div><p class="smallnote" data-en="Organised by GEG Sabah · Main Summit Saturday 07:30–17:30 MYT · Programme subject to confirmation" data-ms="Anjuran GEG Sabah · Persidangan utama Sabtu 07:30–17:30 MYT · Atur cara tertakluk kepada pengesahan">Organised by GEG Sabah · Main Summit Saturday 07:30–17:30 MYT · Programme subject to confirmation</p><div aria-label="Countdown to GEG Summit Sabah 2026" class="summit-countdown" role="timer">
+<h2 class="count-title" data-en="Countdown · Main Summit" data-ms="Kiraan Detik · Persidangan Utama">Countdown · Main Summit</h2><p class="count-subtitle">7 November 2026 · 7:30 AM (MYT)</p>
+<div aria-live="off" class="count-grid" id="countdown">
+<div class="count-unit"><div class="count-digits" id="cdDays">00</div><span class="count-label" data-en="DAYS" data-ms="HARI">DAYS</span></div>
+<div class="count-unit"><div class="count-digits" id="cdHours">00</div><span class="count-label" data-en="HOURS" data-ms="JAM">HOURS</span></div>
+<div class="count-unit"><div class="count-digits" id="cdMinutes">00</div><span class="count-label" data-en="MINUTES" data-ms="MINIT">MINUTES</span></div>
+<div class="count-unit"><div class="count-digits" id="cdSeconds">00</div><span class="count-label" data-en="SECONDS" data-ms="SAAT">SECONDS</span></div>
+</div><a class="count-button" data-en="Explore the Programme ↗" data-ms="Terokai Atur Cara ↗" href="#programme">Explore the Programme ↗</a><p aria-live="polite" class="count-message" id="countStatus"></p></div></div></header><div class="ribbon"></div>
+<main><section id="about"><div class="wrap"><div class="eyebrow" data-en="01 / Overview" data-ms="01 / Pengenalan">01 / Overview</div><h2 class="sectiontitle" data-en="One Sabah. One GEG. A wider impact." data-ms="Satu Sabah. Satu GEG. Impak yang lebih luas.">One Sabah. One GEG. A wider impact.</h2><p class="intro" data-en="Connecting teachers, school leaders, education officers and innovators to share Google-enabled teaching and digital leadership practices." data-ms="Menghubungkan guru, pemimpin sekolah, pegawai pendidikan dan inovator untuk berkongsi amalan PdP serta kepimpinan digital menggunakan ekosistem Google.">Connecting teachers, school leaders, education officers and innovators to share Google-enabled teaching and digital leadership practices.</p><div class="grid"><div class="card"><div class="stat">10</div><h3 data-en="District GEGs" data-ms="GEG Daerah">District GEGs</h3><p>Kota Kinabalu, Tawau, Penampang, Tuaran, Beluran, Kinabatangan, Lahad Datu, Beaufort, Ranau &amp; Keningau</p></div><div class="card"><div class="stat">11</div><h3 data-en="GEG Booths" data-ms="Reruai GEG">GEG Booths</h3><p data-en="Discovery Walk, local innovations and QR-inspired learning challenges" data-ms="Discovery Walk, inovasi tempatan dan cabaran pembelajaran menggunakan QR">Discovery Walk, local innovations and QR-inspired learning challenges</p></div><div class="card"><div class="stat">300</div><h3 data-en="Planning Target" data-ms="Sasaran Perancangan">Planning Target</h3><p data-en="Target participants for the summit; not a live registration count" data-ms="Sasaran peserta summit; bukan jumlah pendaftaran langsung">Target participants for the summit; not a live registration count</p></div><div class="card"><div class="stat">90</div><h3 data-en="Post-Summit Days" data-ms="Hari Pasca-Summit">Post-Summit Days</h3><p data-en="Proposed follow-up programme for classroom pilots and reflective reports" data-ms="Cadangan program susulan untuk projek percubaan bilik darjah dan laporan refleksi">Proposed follow-up programme for classroom pilots and reflective reports</p></div></div></div></section>
+<section id="programme"><div class="wrap"><div class="eyebrow" data-en="02 / Programme" data-ms="02 / Atur Cara">02 / Programme</div><h2 class="sectiontitle" data-en="Interactive Summit Schedule" data-ms="Jadual Interaktif Summit">Interactive Summit Schedule</h2><p class="intro" data-en="7 November 2026 · 08:00–18:00 MYT · IPG Kampus Gaya, Kota Kinabalu. Tentative programme; session names and presenters may change." data-ms="7 November 2026 · 08:00–18:00 MYT · IPG Kampus Gaya, Kota Kinabalu. Atur cara tentatif; tajuk sesi dan pembentang mungkin berubah.">7 November 2026 · 08:00–18:00 MYT · IPG Kampus Gaya, Kota Kinabalu. Tentative programme; session names and presenters may change.</p><div class="controls"><input aria-label="Search sessions" data-en-aria-label="Search sessions" data-en-placeholder="Search sessions" data-ms-aria-label="Cari sesi" data-ms-placeholder="Cari sesi" id="search" placeholder="Search sessions"/><select aria-label="Filter track" data-en-aria-label="Filter track" data-ms-aria-label="Tapis trek" id="track"><option data-en="All tracks" data-ms="Semua trek" value="all">All tracks</option><option data-en="Main Stage" data-ms="Pentas Utama" value="Main Stage">Main Stage</option><option data-en="Showcase" data-ms="Pameran" value="Showcase">Showcase</option><option data-en="Explore" data-ms="Jelajah" value="Explore">Explore</option><option data-en="Break" data-ms="Rehat" value="Break">Break</option></select><button class="btn alt small" data-en="Reset" data-ms="Set Semula" id="clear">Reset</button></div><div class="schedule" id="agenda"></div></div></section>
+<section id="programme"><div class="wrap"><div class="eyebrow" data-en="02 / Programme" data-ms="02 / Atur Cara">02 / Programme</div><h2 class="sectiontitle" data-en="Interactive Summit Schedule" data-ms="Jadual Interaktif Summit">Interactive Summit Schedule</h2><p class="intro" data-en="7 November 2026 · 07:30–17:30 MYT · IPG Kampus Gaya, Kota Kinabalu. Tentative programme; session names and presenters may change." data-ms="7 November 2026 · 07:30–17:30 MYT · IPG Kampus Gaya, Kota Kinabalu. Atur cara tentatif; tajuk sesi dan pembentang mungkin berubah.">7 November 2026 · 07:30–17:30 MYT · IPG Kampus Gaya, Kota Kinabalu. Tentative programme; session names and presenters may change.</p><div class="controls"><input aria-label="Search sessions" data-en-aria-label="Search sessions" data-en-placeholder="Search sessions" data-ms-aria-label="Cari sesi" data-ms-placeholder="Cari sesi" id="search" placeholder="Search sessions"/><select aria-label="Filter track" data-en-aria-label="Filter track" data-ms-aria-label="Tapis trek" id="track"><option data-en="All tracks" data-ms="Semua trek" value="all">All tracks</option><option data-en="Main Stage" data-ms="Pentas Utama" value="Main Stage">Main Stage</option><option data-en="Showcase" data-ms="Pameran" value="Showcase">Showcase</option><option data-en="Explore" data-ms="Jelajah" value="Explore">Explore</option><option data-en="Break" data-ms="Rehat" value="Break">Break</option></select><button class="btn alt small" data-en="Reset" data-ms="Set Semula" id="clear">Reset</button></div><div class="schedule" id="agenda"></div></div></section>
+<section id="passport"><div class="wrap"><div class="eyebrow" data-en="03 / GEG Discovery Walk" data-ms="03 / Jelajah GEG">03 / GEG Discovery Walk</div><h2 class="sectiontitle" data-en="What is the GEG Summit e-Passport?" data-ms="Apakah e-Passport GEG Summit?">What is the GEG Summit e-Passport?</h2><p class="intro" data-en="The GEG Summit e-Passport is a digital passport concept for the GEG Discovery Walk. Participants explore 11 GEG booths, discover education innovations, try activities and connect with educator communities across Sabah." data-ms="e-Passport GEG Summit ialah konsep pasport digital untuk aktiviti GEG Discovery Walk. Peserta meneroka 11 reruai GEG, mengenali inovasi pendidikan, mencuba aktiviti dan berhubung dengan komuniti pendidik dari seluruh Sabah.">The GEG Summit e-Passport is a digital passport concept for the GEG Discovery Walk. Participants explore 11 GEG booths, discover education innovations, try activities and connect with educator communities across Sabah.</p><div class="grid"><div class="card"><h3 data-en="Explore the Booths" data-ms="Terokai Reruai">Explore the Booths</h3><p data-en="Visit 11 GEG booths to discover teaching ideas, innovations and community best practices." data-ms="Lawati 11 reruai GEG dan temui idea PdP, inovasi serta amalan terbaik komuniti.">Visit 11 GEG booths to discover teaching ideas, innovations and community best practices.</p></div><div class="card"><h3 data-en="Learn and Connect" data-ms="Belajar dan Berhubung">Learn and Connect</h3><p data-en="Take part in demonstrations, learning challenges and networking with educators." data-ms="Sertai demonstrasi, cabaran pembelajaran dan sesi jaringan bersama pendidik.">Take part in demonstrations, learning challenges and networking with educators.</p></div><div class="card"><h3 data-en="Digital Check-in Concept" data-ms="Konsep Pengesahan Digital">Digital Check-in Concept</h3><p data-en="The passport is planned to use booth QR codes or PINs to record participation. The official verification method will be announced by the organisers." data-ms="Pasport dirancang menggunakan QR atau PIN di reruai untuk merekod penyertaan. Kaedah pengesahan rasmi akan diumumkan oleh urus setia.">The passport is planned to use booth QR codes or PINs to record participation. The official verification method will be announced by the organisers.</p></div></div><p class="smallnote" data-en="This explains the e-Passport concept; it is not a live scanning or official attendance system." data-ms="Ini ialah penerangan konsep e-Passport, bukan sistem pengimbasan atau rekod kehadiran rasmi." style="margin-top:20px">This explains the e-Passport concept; it is not a live scanning or official attendance system.</p></div></section>
+<section id="speakers"><div class="wrap"><div class="eyebrow" data-en="05 / Meet Our Speakers" data-ms="05 / Kenali Pembentang">05 / Meet Our Speakers</div><h2 class="sectiontitle" data-en="Meet the Voices Behind GEG Summit Sabah 2026" data-ms="Kenali Pembentang GEG Summit Sabah 2026">Meet the Voices Behind GEG Summit Sabah 2026</h2><div class="card speaker-feature"><div class="speaker-feature-icon" aria-hidden="true">🎤</div><p data-en="Discover inspiring educators, school leaders and digital innovators sharing practical experiences in Google technologies, artificial intelligence and educational transformation." data-ms="Kenali para pendidik, pemimpin sekolah dan inovator digital yang berkongsi pengalaman praktikal tentang teknologi Google, kecerdasan buatan dan transformasi pendidikan.">Discover inspiring educators, school leaders and digital innovators sharing practical experiences in Google technologies, artificial intelligence and educational transformation.</p><a class="speaker-link" href="https://tsdrjebatlegacy-dot.github.io/gegsummitsabah/gegsummit-v2/speakers/" target="_blank" rel="noopener noreferrer"><span data-en="Explore Our Speakers" data-ms="Kenali Pembentang Kami">Explore Our Speakers</span><span aria-hidden="true"> ↗</span></a></div></div></section>
+<section id="impact"><div class="wrap"><div class="eyebrow" data-en="05 / Strategic Collaboration" data-ms="05 / Kerjasama Strategik">05 / Strategic Collaboration</div><h2 class="sectiontitle" data-en="From a Summit to Measurable Impact" data-ms="Daripada Summit kepada Impak yang Boleh Diukur">From a Summit to Measurable Impact</h2><p class="intro" data-en="This section outlines proposed measures rather than achieved results. Results can be populated after the event from consented attendance and feedback data." data-ms="Bahagian ini menerangkan indikator yang dicadangkan, bukan hasil yang telah dicapai. Data boleh dikemas kini selepas acara berdasarkan kehadiran dan maklum balas yang dibenarkan.">This section outlines proposed measures rather than achieved results. Results can be populated after the event from consented attendance and feedback data.</p><div class="grid"><div class="card impact"><h3 data-en="Participation" data-ms="Penyertaan">Participation</h3><p data-en="Registrations, verified attendance and district participation" data-ms="Pendaftaran, kehadiran disahkan dan penyertaan daerah">Registrations, verified attendance and district participation</p></div><div class="card impact"><h3 data-en="Engagement" data-ms="Penglibatan">Engagement</h3><p data-en="Workshop interactions, booth engagement and post-event feedback" data-ms="Interaksi bengkel, penglibatan reruai dan maklum balas selepas acara">Workshop interactions, booth engagement and post-event feedback</p></div><div class="card impact"><h3 data-en="Classroom Adoption" data-ms="Pelaksanaan di Bilik Darjah">Classroom Adoption</h3><p data-en="Voluntary teacher projects and 30/60/90-day updates" data-ms="Projek sukarela guru dan kemas kini 30/60/90 hari">Voluntary teacher projects and 30/60/90-day updates</p></div><div class="card impact"><h3 data-en="Collaboration" data-ms="Kerjasama">Collaboration</h3><p data-en="Proposed partnerships with educational institutions and Google for Education" data-ms="Cadangan kerjasama dengan institusi pendidikan dan Google for Education">Proposed partnerships with educational institutions and Google for Education</p></div></div><div class="disclaimer" data-en="Partner logos and claims of Google sponsorship will be published only after official permission or confirmation." data-ms="Logo rakan kerjasama dan dakwaan penajaan Google hanya akan dipaparkan selepas memperoleh kebenaran atau pengesahan rasmi.">Partner logos and claims of Google sponsorship will be published only after official permission or confirmation.</div></div></section>
+@@ -192,7 +192,7 @@ <h3>GEG Sabah Summit Gala</h3><p class="venue-address"><strong>Suria 7, Hotel Su
+<h2 class="sectiontitle" data-en="Main Summit Registration · 7 November 2026" data-ms="Pendaftaran Persidangan Utama · 7 November 2026" id="registrationTitle">Main Summit Registration · 7 November 2026</h2>
+<p class="intro" data-en="Register for the main summit at IPG Kampus Gaya, Kota Kinabalu. The official form is embedded below for your convenience." data-ms="Daftar untuk persidangan utama di IPG Kampus Gaya, Kota Kinabalu. Borang rasmi dipaparkan di bawah tanpa perlu meninggalkan portal.">Register for the main summit at IPG Kampus Gaya, Kota Kinabalu. The official form is embedded below for your convenience.</p>
+<div class="registration-shell">
+<div class="registration-top"><h3 data-en="GEG Summit Sabah 2026 Registration Form" data-ms="Borang Pendaftaran GEG Summit Sabah 2026">GEG Summit Sabah 2026 Registration Form</h3><p>7 November 2026 · 8:00 AM – 6:00 PM · IPG Kampus Gaya, Kota Kinabalu</p></div>
+<div class="registration-top"><h3 data-en="GEG Summit Sabah 2026 Registration Form" data-ms="Borang Pendaftaran GEG Summit Sabah 2026">GEG Summit Sabah 2026 Registration Form</h3><p>7 November 2026 · 7:30 AM – 5:30 PM · IPG Kampus Gaya, Kota Kinabalu</p></div>
+<iframe class="registration-frame" data-en-title="GEG Summit Sabah main summit registration form" data-ms-title="Borang pendaftaran persidangan GEG Summit Sabah" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://script.google.com/macros/s/AKfycbwXnnzdbpvv5uxlpvvTZPoo8KNlhosQTGweXOm3X7vu0t4CTXW2MKE_7aqKGq_K0H4ygg/exec" title="Borang rasmi pendaftaran GEG Summit Sabah 7 November 2026">Your browser does not support embedded registration forms.</iframe>
+<div class="registration-bottom"><p data-en="If the form is blank, blocked by your browser or difficult to scroll on mobile, open the official registration link." data-ms="Jika borang tidak muncul, disekat oleh pelayar atau tidak boleh ditatal pada telefon, buka pautan pendaftaran rasmi.">If the form is blank, blocked by your browser or difficult to scroll on mobile, open the official registration link.</p><a class="btn green" data-en="📝 Open Registration Form ↗" data-ms="📝 Buka Borang Pendaftaran ↗" href="https://script.google.com/macros/s/AKfycbwXnnzdbpvv5uxlpvvTZPoo8KNlhosQTGweXOm3X7vu0t4CTXW2MKE_7aqKGq_K0H4ygg/exec" rel="noopener noreferrer" target="_blank">📝 Open Registration Form ↗</a></div>
+</div>
+@@ -238,10 +238,309 @@ <h2 class="sectiontitle" data-en="Connect with GEG Sabah" data-ms="Ikuti GEG Sab
+<footer class="footer"><div class="wrap"><b>GEG SUMMIT SABAH 2026</b><p data-en="Organised by GEG Sabah · Built by Ts.Jebat · Community initiative" data-ms="Anjuran GEG Sabah · Dibangunkan oleh Ts.Jebat · Inisiatif komuniti">Organised by GEG Sabah · Built by Ts.Jebat · Community initiative</p><a data-en="Event site ↗" data-ms="Laman acara ↗" href="https://sites.google.com/view/gegsummitsabah/home" rel="noopener" target="_blank">Event site ↗</a> · <a href="https://gegsabah.edu.my/" rel="noopener" target="_blank">GEG Sabah ↗</a><p class="smallnote" data-en="Google-related names and trademarks belong to their respective owners. This site does not imply official Google endorsement." data-ms="Nama dan tanda dagangan Google adalah hak pemilik masing-masing. Laman ini tidak menunjukkan sokongan rasmi Google.">Google-related names and trademarks belong to their respective owners. This site does not imply official Google endorsement.</p></div></footer>
+<script>
+'use strict';
+const AGENDA = [{"start": "08:00", "end": "08:45", "title": "Registration & GEG Discovery Walk", "track": "Explore", "description": "Registration, breakfast and 11 GEG booths"}, {"start": "08:45", "end": "09:00", "title": "Countdown to GEG Summit", "track": "Main Stage", "description": "Opening montage and interactive welcome"}, {"start": "09:00", "end": "09:15", "title": "Welcome to GEG Summit Sabah", "track": "Main Stage", "description": "Welcome and summit orientation"}, {"start": "09:15", "end": "09:35", "title": "Opening Ceremony", "track": "Main Stage", "description": "Official launch"}, {"start": "09:35", "end": "09:55", "title": "This is Googleyness", "track": "Main Stage", "description": "Innovation and collaboration inspiration"}, {"start": "09:55", "end": "10:15", "title": "GEG Spotlight: Students", "track": "Showcase", "description": "Student perspectives on learning"}, {"start": "10:15", "end": "10:45", "title": "GEG Explore 1", "track": "Explore", "description": "Booth demonstrations and networking"}, {"start": "10:45", "end": "11:30", "title": "Googleyness Showcase: Teachers", "track": "Showcase", "description": "Classroom practice sharing"}, {"start": "11:30", "end": "12:10", "title": "Googleyness Showcase: PPD & JPN", "track": "Showcase", "description": "Administration, data and collaboration"}, {"start": "12:10", "end": "12:30", "title": "One Idea, Big Impact", "track": "Main Stage", "description": "Lightning talks"}, {"start": "12:30", "end": "14:00", "title": "Lunch / Prayer / Open Booths", "track": "Break", "description": "Lunch break"}, {"start": "14:00", "end": "14:15", "title": "Googleyness Challenge", "track": "Main Stage", "description": "Interactive audience activity"}, {"start": "14:15", "end": "15:00", "title": "Leadership Showcase", "track": "Showcase", "description": "Headteachers and principals"}, {"start": "15:00", "end": "15:30", "title": "GEG Explore 2", "track": "Explore", "description": "GEG Passport challenge"}, {"start": "15:30", "end": "16:15", "title": "The Big GEG Conversation", "track": "Main Stage", "description": "Panel: students, teachers and leaders"}, {"start": "16:15", "end": "16:40", "title": "Best of Sabah", "track": "Showcase", "description": "Selected community demonstrations"}, {"start": "16:40", "end": "17:10", "title": "GEG Explore Finale", "track": "Explore", "description": "Final booth interactions"}, {"start": "17:10", "end": "17:30", "title": "GEG Summit Recognition", "track": "Main Stage", "description": "Community appreciation"}, {"start": "17:30", "end": "17:45", "title": "GEG Summit Grand Finale", "track": "Main Stage", "description": "Recap and passport challenge"}, {"start": "17:45", "end": "18:00", "title": "One Sabah, One GEG", "track": "Main Stage", "description": "Closing moment and group photo"}];
+const AGENDA_MS = [{"title": "Pendaftaran & Jelajah Reruai GEG", "description": "Pendaftaran, sarapan dan 11 reruai GEG"}, {"title": "Kiraan Detik ke GEG Summit", "description": "Montaj pembukaan dan alu-aluan interaktif"}, {"title": "Selamat Datang ke GEG Summit Sabah", "description": "Ucapan alu-aluan dan orientasi summit"}, {"title": "Majlis Perasmian", "description": "Pelancaran rasmi"}, {"title": "Inilah Googleyness", "description": "Inspirasi inovasi dan kerjasama"}, {"title": "Sorotan GEG: Murid dan Pelajar", "description": "Pandangan murid dan pelajar tentang pembelajaran"}, {"title": "Jelajah GEG 1", "description": "Demonstrasi reruai dan jaringan komuniti"}, {"title": "Googleyness Showcase: Guru", "description": "Perkongsian amalan bilik darjah"}, {"title": "Googleyness Showcase: PPD & JPN", "description": "Pentadbiran, data dan kerjasama"}, {"title": "Satu Idea, Impak Besar", "description": "Perkongsian pantas"}, {"title": "Makan Tengah Hari / Solat / Reruai Terbuka", "description": "Rehat tengah hari"}, {"title": "Cabaran Googleyness", "description": "Aktiviti interaktif bersama peserta"}, {"title": "Perkongsian Kepimpinan", "description": "Guru besar dan pengetua"}, {"title": "Jelajah GEG 2", "description": "Cabaran e-Passport GEG"}, {"title": "Perbualan Besar GEG", "description": "Panel: murid, guru dan pemimpin"}, {"title": "Terbaik dari Sabah", "description": "Demonstrasi komuniti terpilih"}, {"title": "Jelajah GEG Akhir", "description": "Interaksi akhir di reruai"}, {"title": "Penghargaan GEG Summit", "description": "Penghargaan komuniti"}, {"title": "Kemuncak GEG Summit", "description": "Rumusan dan cabaran pasport"}, {"title": "Satu Sabah, Satu GEG", "description": "Penutup dan foto berkumpulan"}];
+const AGENDA = [
+  {
+    "start": "07:30",
+    "end": "08:15",
+    "title": "Participant Registration & Check-in",
+    "track": "Explore",
+    "description": "Participant registration and verification."
+  },
+  {
+    "start": "08:15",
+    "end": "08:45",
+    "title": "Breakfast & GEG Discovery Walk",
+    "track": "Explore",
+    "description": "Breakfast and early exploration of 11 Google Ecosystem Discovery booths."
+  },
+  {
+    "start": "08:45",
+    "end": "09:00",
+    "title": "Opening Montage & GEG Sabah Highlights",
+    "track": "Main Stage",
+    "description": "Opening montage and highlights of GEG Negeri Sabah activities."
+  },
+  {
+    "start": "09:00",
+    "end": "09:15",
+    "title": "Welcome to GEG Summit Sabah",
+    "track": "Main Stage",
+    "description": "Welcome remarks and participant orientation."
+  },
+  {
+    "start": "09:15",
+    "end": "09:35",
+    "title": "VIP Inspirational Address",
+    "track": "Main Stage",
+    "description": "VIP inspirational remarks; guest name and protocol are subject to confirmation."
+  },
+  {
+    "start": "09:35",
+    "end": "09:55",
+    "title": "Googleyness: Innovation & Collaboration",
+    "track": "Main Stage",
+    "description": "Inspiration in innovation and collaboration; session presenter to be confirmed."
+  },
+  {
+    "start": "09:55",
+    "end": "10:15",
+    "title": "GEG Spotlight",
+    "track": "Main Stage",
+    "description": "Community highlights and introduction to all 11 GEG booths."
+  },
+  {
+    "start": "10:15",
+    "end": "10:45",
+    "title": "GEG Explore 1",
+    "track": "Explore",
+    "description": "Booth demonstrations, interactive activities and networking."
+  },
+  {
+    "start": "10:45",
+    "end": "11:05",
+    "title": "Leadership Showcase: Headteacher",
+    "track": "Showcase",
+    "description": "Presentation by Alhassim Bin Attip."
+  },
+  {
+    "start": "11:05",
+    "end": "11:25",
+    "title": "Googleyness Showcase: Teachers",
+    "track": "Showcase",
+    "description": "Presentation by Saadiah Binti Sawaddin Saw."
+  },
+  {
+    "start": "11:25",
+    "end": "11:30",
+    "title": "Speaker Changeover & Stage Coordination",
+    "track": "Main Stage",
+    "description": "Five-minute transition between speakers."
+  },
+  {
+    "start": "11:30",
+    "end": "11:50",
+    "title": "Googleyness Showcase: Administration",
+    "track": "Showcase",
+    "description": "Presentation by Mohd Nur Akmal Bin Zainal Abidin."
+  },
+  {
+    "start": "11:50",
+    "end": "12:10",
+    "title": "Googleyness Showcase: Administration",
+    "track": "Showcase",
+    "description": "Presentation by Aishah Binti Mohd Aris."
+  },
+  {
+    "start": "12:10",
+    "end": "12:30",
+    "title": "GOOGLE WORKSPACE IN ACTION",
+    "track": "Showcase",
+    "description": "Sharing session by Susan Chin Syuk Man."
+  },
+  {
+    "start": "12:30",
+    "end": "14:00",
+    "title": "Lunch / Prayer / Open Booths",
+    "track": "Break",
+    "description": "Lunch break, prayer and open booths with rotating booth teams."
+  },
+  {
+    "start": "14:00",
+    "end": "14:15",
+    "title": "Googleyness Challenge",
+    "track": "Main Stage",
+    "description": "Interactive activity with summit participants."
+  },
+  {
+    "start": "14:15",
+    "end": "14:35",
+    "title": "Leadership Showcase: Headteacher",
+    "track": "Showcase",
+    "description": "Presentation by Fatmah Wati Binti Abd Moes."
+  },
+  {
+    "start": "14:35",
+    "end": "14:55",
+    "title": "Googleyness Showcase: Teachers",
+    "track": "Showcase",
+    "description": "Presentation by Nuraidah Bte Mustapah."
+  },
+  {
+    "start": "14:55",
+    "end": "15:00",
+    "title": "Session Changeover & Stage Coordination",
+    "track": "Main Stage",
+    "description": "Five-minute transition to the next session."
+  },
+  {
+    "start": "15:00",
+    "end": "15:30",
+    "title": "GEG Explore 2",
+    "track": "Explore",
+    "description": "Google Ecosystem Discovery and GEG Passport challenge."
+  },
+  {
+    "start": "15:30",
+    "end": "16:10",
+    "title": "The Big GEG Conversation",
+    "track": "Main Stage",
+    "description": "Panel forum lasting 40 minutes."
+  },
+  {
+    "start": "16:10",
+    "end": "16:15",
+    "title": "Forum Wrap-up & Stage Transition",
+    "track": "Main Stage",
+    "description": "Summary and five-minute stage transition."
+  },
+  {
+    "start": "16:15",
+    "end": "16:35",
+    "title": "Best of Sabah",
+    "track": "Showcase",
+    "description": "Selected community innovation demonstrations."
+  },
+  {
+    "start": "16:35",
+    "end": "16:55",
+    "title": "GEG Explore Finale",
+    "track": "Explore",
+    "description": "Final booth visits and completion of the GEG Passport."
+  },
+  {
+    "start": "16:55",
+    "end": "17:10",
+    "title": "GEG Summit Recognition",
+    "track": "Main Stage",
+    "description": "Community recognition and appreciation presentation."
+  },
+  {
+    "start": "17:10",
+    "end": "17:20",
+    "title": "GEG Summit Grand Finale",
+    "track": "Main Stage",
+    "description": "Summit highlights and Passport Challenge."
+  },
+  {
+    "start": "17:20",
+    "end": "17:30",
+    "title": "One Sabah, One GEG",
+    "track": "Main Stage",
+    "description": "Closing ceremony and group photography."
   }
-}
-
-function json_(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-// ─────────────────────────────────────────────────────────────
-// PANGKALAN PENGETAHUAN
-// Hanya agregat. Tiada nama, email, telefon, bayaran.
-// ─────────────────────────────────────────────────────────────
-
-function binaKB_(bahasa) {
-  const statik = cache_('kb_statik_' + bahasa, CFG.CACHE_STATIK, function () {
-    return [asasAcara_(bahasa), aturCara_(bahasa), pemetaanMeja_(), statistikDaftar_()].join('\n\n');
-  });
-  // Kekosongan kerusi dibaca hampir segar — jangan guna cache panjang
-  const hidup = cache_('kb_tempat', CFG.CACHE_TEMPAT, statusTempat_);
-  return statik + '\n\n' + hidup;
-}
-
-function asasAcara_() {
-  return [
-    '## MAKLUMAT ASAS',
-    'Acara: GEG Summit Sabah 2026. Anjuran GEG Sabah.',
-    '',
-    'HARI 1 — Sabtu, 7 November 2026',
-    'Persidangan Utama GEG, 07:30–17:30 (waktu Malaysia).',
-    'Lokasi: IPG Kampus Gaya, Peti Surat 10491, 88805 Kota Kinabalu, Sabah.',
-    'Terbuka kepada peserta berdaftar: guru, pentadbir sekolah, pegawai PPD/JPN,',
-    'pensyarah, siswa pendidik dan penggiat EdTech.',
-    'Termasuk GEG Discovery Walk dengan 11 reruai GEG dan cabaran e-Passport.',
-    '',
-    'HARI 2 — Ahad, 8 November 2026',
-    'Majlis Makan Malam & Anugerah (GEG Sabah Summit Gala), bermula 7:00 malam.',
-    'Lokasi: Suria 7, Hotel Suria Sabah, Kota Kinabalu.',
-    'Terhad kepada 170 orang. Terbuka kepada sesiapa yang berminat.',
-    'Kod pakaian: kasual — pilih SATU kombinasi warna: Merah+Hitam, Kuning+Hitam,',
-    'Hijau+Hitam, atau Biru+Hitam.',
-    '',
-    'PENTING: Pendaftaran Hari 1 dan Gala adalah DUA borang berasingan.',
-    'Seseorang boleh hadir Hari 1 sahaja, Gala sahaja, atau kedua-duanya.',
-    'Yuran Gala dan arahan bayaran melalui saluran pendaftaran Gala.',
-    '',
-    'Waktu sekarang: ' + masaSekarang_()
-  ].join('\n');
-}
-
-/**
- * Atur cara Hari 1, diselaraskan dengan array AGENDA pada laman web.
- * Jika atur cara di laman berubah, kemas kini di SINI juga.
- */
-const ATUR_CARA_7NOV = [
-  ['07:30-08:15', 'Pendaftaran Peserta', 'Jelajah', 'Pendaftaran dan semakan kehadiran.'],
-  ['08:15-08:45', 'Sarapan & GEG Discovery Walk', 'Jelajah', 'Sarapan dan penerokaan awal 11 reruai.'],
-  ['08:45-09:00', 'Montaj Pembukaan & Sorotan GEG Sabah', 'Pentas Utama', ''],
-  ['09:00-09:15', 'Welcome to GEG Summit Sabah', 'Pentas Utama', 'Ucapan alu-aluan dan orientasi peserta.'],
-  ['09:15-09:35', 'Kata-kata Inspirasi oleh VIP', 'Pentas Utama', 'Nama VIP belum disahkan.'],
-  ['09:35-09:55', 'Googleyness: Inspirasi Inovasi & Kolaborasi', 'Pentas Utama', 'Pengendali belum disahkan.'],
-  ['09:55-10:15', 'GEG Spotlight', 'Pentas Utama', 'Pengenalan kesemua 11 reruai GEG.'],
-  ['10:15-10:45', 'GEG Explore 1', 'Jelajah', 'Demonstrasi reruai dan jaringan komuniti.'],
-  ['10:45-11:05', 'Leadership Showcase: Guru Besar', 'Perkongsian', 'Pembentang: Alhassim Bin Attip.'],
-  ['11:05-11:25', 'Googleyness Showcase: Teachers', 'Perkongsian', 'Pembentang: Saadiah Binti Sawaddin Saw.'],
-  ['11:25-11:30', 'Pertukaran Pembentang', 'Pentas Utama', 'Peralihan pentas 5 minit.'],
-  ['11:30-11:50', 'Googleyness Showcase: Pentadbiran', 'Perkongsian', 'Pembentang: Mohd Nur Akmal Bin Zainal Abidin.'],
-  ['11:50-12:10', 'Googleyness Showcase: Pentadbiran', 'Perkongsian', 'Pembentang: Aishah Binti Mohd Aris.'],
-  ['12:10-12:30', 'Google Workspace in Action', 'Perkongsian', 'Pembentang: Susan Chin Syuk Man.'],
-  ['12:30-14:00', 'Rehat / Makan Tengah Hari / Solat', 'Rehat', 'Reruai dibuka; petugas bergilir.'],
-  ['14:00-14:15', 'Googleyness Challenge', 'Pentas Utama', 'Aktiviti interaktif bersama peserta.'],
-  ['14:15-14:35', 'Leadership Showcase: Guru Besar', 'Perkongsian', 'Pembentang: Fatmah Wati Binti Abd Moes.'],
-  ['14:35-14:55', 'Googleyness Showcase: Teachers', 'Perkongsian', 'Pembentang: Nuraidah Bte Mustapah.'],
-  ['14:55-15:00', 'Pertukaran Sesi', 'Pentas Utama', 'Peralihan pentas 5 minit.'],
-  ['15:00-15:30', 'GEG Explore 2', 'Jelajah', 'Cabaran Google Ecosystem Discovery dan GEG Passport.'],
-  ['15:30-16:10', 'The Big GEG Conversation', 'Pentas Utama', 'Forum panel 40 minit.'],
-  ['16:10-16:15', 'Rumusan Forum', 'Pentas Utama', 'Peralihan pentas 5 minit.'],
-  ['16:15-16:35', 'Best of Sabah', 'Perkongsian', 'Demonstrasi inovasi komuniti terpilih.'],
-  ['16:35-16:55', 'GEG Explore Finale', 'Jelajah', 'Penerokaan akhir reruai, lengkapkan GEG Passport.'],
-  ['16:55-17:10', 'GEG Summit Recognition', 'Pentas Utama', 'Penghargaan komuniti.'],
-  ['17:10-17:20', 'GEG Summit Grand Finale', 'Pentas Utama', 'Sorotan utama dan Passport Challenge.'],
-  ['17:20-17:30', 'One Sabah, One GEG', 'Pentas Utama', 'Penutupan dan sesi fotografi berkumpulan.']
 ];
-
-function aturCara_(bahasa) {
-  if (!CFG.SHEET_ACARA) {
-    const baris = ATUR_CARA_7NOV.map(function (s) {
-      return s[0] + ' MYT | ' + s[1] + ' | Trek: ' + s[2] + (s[3] ? ' | ' + s[3] : '');
-    });
-    return ['## ATUR CARA HARI 1 (7 Nov 2026, IPG Kampus Gaya)']
-      .concat(baris)
-      .concat([
-        '',
-        'Atur cara ini TENTATIF. Tajuk sesi dan pembentang mungkin berubah.',
-        'Ingatkan pengguna untuk sahkan dengan urus setia untuk sesi penting.',
-        '',
-        '## ATUR CARA HARI 2 (8 Nov 2026)',
-        '7:00 malam: ketibaan dan sambutan tetamu jemputan.',
-        'Majlis makan malam, penghargaan dan sambutan budaya Sabah.',
-        'Atur cara terperinci malam Gala belum diumumkan.'
-      ]).join('\n');
+const AGENDA_MS = [
+  {
+    "title": "Pendaftaran Peserta",
+    "description": "Pendaftaran para peserta dan semakan pendaftaran."
+  },
+  {
+    "title": "Sarapan & GEG Discovery Walk",
+    "description": "Sarapan pagi serta penerokaan awal 11 reruai Google Ecosystem Discovery."
+  },
+  {
+    "title": "Montaj Pembukaan & Sorotan GEG Sabah",
+    "description": "Tayangan montaj pembukaan dan sorotan aktiviti GEG Negeri Sabah."
+  },
+  {
+    "title": "Welcome to GEG Summit Sabah",
+    "description": "Ucapan alu-aluan dan orientasi para peserta."
+  },
+  {
+    "title": "Kata-kata Inspirasi oleh VIP",
+    "description": "Nama VIP dan protokol tertakluk kepada pengesahan."
+  },
+  {
+    "title": "Googleyness: Inspirasi Inovasi & Kolaborasi",
+    "description": "Pengendali sesi akan disahkan kemudian."
+  },
+  {
+    "title": "GEG Spotlight",
+    "description": "Sorotan komuniti dan pengenalan 11 reruai GEG."
+  },
+  {
+    "title": "GEG Explore 1",
+    "description": "Demonstrasi reruai, aktiviti interaktif dan jaringan komuniti."
+  },
+  {
+    "title": "Leadership Showcase: Guru Besar",
+    "description": "Pembentangan oleh Alhassim Bin Attip."
+  },
+  {
+    "title": "Googleyness Showcase: Teachers",
+    "description": "Pembentangan oleh Saadiah Binti Sawaddin Saw."
+  },
+  {
+    "title": "Pertukaran Pembentang & Penyelarasan Pentas",
+    "description": "Sesi pertukaran pembentang dan penyelarasan pentas (5 minit)."
+  },
+  {
+    "title": "Googleyness Showcase: Pentadbiran",
+    "description": "Pembentangan oleh Mohd Nur Akmal Bin Zainal Abidin."
+  },
+  {
+    "title": "Googleyness Showcase: Pentadbiran",
+    "description": "Pembentangan oleh Aishah Binti Mohd Aris."
+  },
+  {
+    "title": "GOOGLE WORKSPACE IN ACTION",
+    "description": "Perkongsian oleh Susan Chin Syuk Man."
+  },
+  {
+    "title": "Rehat / Makan Tengah Hari / Solat / Open Booths",
+    "description": "Waktu rehat, makan tengah hari dan solat; petugas reruai bergilir-gilir."
+  },
+  {
+    "title": "Googleyness Challenge",
+    "description": "Aktiviti interaktif bersama para peserta."
+  },
+  {
+    "title": "Leadership Showcase: Guru Besar",
+    "description": "Pembentangan oleh Fatmah Wati Binti Abd Moes."
+  },
+  {
+    "title": "Googleyness Showcase: Teachers",
+    "description": "Pembentangan oleh Nuraidah Bte Mustapah."
+  },
+  {
+    "title": "Pertukaran Sesi & Penyelarasan Pentas",
+    "description": "Pertukaran sesi dan penyelarasan pentas (5 minit)."
+  },
+  {
+    "title": "GEG Explore 2",
+    "description": "Cabaran Google Ecosystem Discovery dan GEG Passport."
+  },
+  {
+    "title": "The Big GEG Conversation",
+    "description": "Sesi forum panel (40 minit)."
+  },
+  {
+    "title": "Rumusan Forum & Peralihan Pentas",
+    "description": "Sesi rumusan dan peralihan pentas (5 minit)."
+  },
+  {
+    "title": "Best of Sabah",
+    "description": "Demonstrasi inovasi komuniti terpilih."
+  },
+  {
+    "title": "GEG Explore Finale",
+    "description": "Penerokaan akhir reruai dan melengkapkan GEG Passport."
+  },
+  {
+    "title": "GEG Summit Recognition",
+    "description": "Penyampaian penghargaan komuniti."
+  },
+  {
+    "title": "GEG Summit Grand Finale",
+    "description": "Sorotan utama dan cabaran Passport Challenge."
+  },
+  {
+    "title": "One Sabah, One GEG",
+    "description": "Acara penutupan dan sesi fotografi berkumpulan."
   }
-  const out = ['## ATUR CARA'];
-  try {
-    const ss = SpreadsheetApp.openById(CFG.SHEET_ACARA);
-
-    const sesi = baris_(ss, CFG.TAB_SESI);
-    if (sesi.length < 2) {
-      out.push('Tiada sesi direkodkan lagi.');
-    } else {
-      const h = sesi[0].map(String);
-      const iStatus = h.indexOf('status');
-      sesi.slice(1).forEach(function (r) {
-        if (!r[0]) return;
-        if (iStatus > -1 && String(r[iStatus]).toUpperCase() === 'BATAL') {
-          out.push('[DIBATALKAN] ' + gabung_(h, r));
-        } else {
-          out.push(gabung_(h, r));
-        }
-      });
-    }
-
-    const pc = baris_(ss, CFG.TAB_PENCERAMAH);
-    if (pc.length > 1) {
-      out.push('', '## PENCERAMAH');
-      const h2 = pc[0].map(String);
-      pc.slice(1).forEach(function (r) { if (r[0]) out.push(gabung_(h2, r)); });
-    }
-  } catch (err) {
-    out.push('Atur cara tidak dapat dibaca buat masa ini.');
-  }
-  return out.join('\n');
-}
-
-function pemetaanMeja_() {
-  const out = [
-    '## MEJA GALA NIGHT (8 Nov)',
-    'Setiap meja 10 tempat duduk. Jumlah 17 meja = 170 kapasiti.'
-  ];
-  try {
-    const sh = SpreadsheetApp.openById(CFG.SHEET_GALA).getSheetByName(CFG.TAB_KONFIG_GEG);
-    sh.getDataRange().getValues().slice(1).forEach(function (r) {
-      if (r[1]) out.push('Meja ' + r[2] + ': ' + r[1] + ' (kapasiti ' + r[3] + ')');
-    });
-  } catch (err) {
-    out.push('Senarai meja tidak dapat dibaca.');
-  }
-  out.push(
-    '',
-    'NOTA PENTING tentang meja:',
-    '- Meja 06 DIKONGSI: 5 tempat GEG Penampang + 5 tempat GEG Tawau.',
-    '- GEG Tawau ada TIGA peruntukan: Meja 02, 5 tempat di Meja 06, dan Meja 16.',
-    '  Jika ditanya "meja GEG Tawau", sebut kesemuanya, jangan pilih satu sahaja.',
-    '- Meja 14 dikhaskan untuk SJKC St Peter Telipok.',
-    '- GEG yang tiada dalam senarai di atas belum ada meja khusus; rujuk urus setia.'
-  );
-  return out.join('\n');
-}
-
-function statistikDaftar_() {
-  const out = ['## PENDAFTARAN HARI 1 (7 Nov)'];
-  try {
-    const data = SpreadsheetApp.openById(CFG.SHEET_DAFTAR)
-      .getSheetByName(CFG.TAB_DAFTAR).getDataRange().getValues();
-
-    // Indeks mengikut KEDUDUKAN, bukan nama lajur.
-    // Pengepala borang kekurangan 2 lajur (Negeri, GEG) — jangan padan ikut nama.
-    const I = { email: 2, telefon: 3, kategori: 4, daerah: 7, sesi: 9 };
-
-    const nampak = {}, daerah = {}, kategori = {};
-    let unik = 0;
-
-    data.slice(1).forEach(function (r) {
-      if (String(r[I.sesi]).indexOf('7 Nov') === -1) return;   // Hari 1 sahaja
-      const kunci = String(r[I.email]).toLowerCase().trim() + '|' + String(r[I.telefon]).trim();
-      if (nampak[kunci]) return;                                // buang pendua
-      nampak[kunci] = true;
-      unik++;
-      const d = String(r[I.daerah]).trim() || 'Luar Sabah';
-      const k = String(r[I.kategori]).trim() || 'Tidak dinyatakan';
-      daerah[d] = (daerah[d] || 0) + 1;
-      kategori[k] = (kategori[k] || 0) + 1;
-    });
-
-    out.push('Jumlah peserta unik berdaftar: ' + unik);
-    out.push('', 'Ikut daerah:');
-    Object.keys(daerah).sort().forEach(function (d) { out.push('  ' + d + ': ' + daerah[d]); });
-    out.push('', 'Ikut kategori:');
-    Object.keys(kategori).sort().forEach(function (k) { out.push('  ' + k + ': ' + kategori[k]); });
-  } catch (err) {
-    out.push('Statistik pendaftaran tidak dapat dibaca.');
-  }
-  return out.join('\n');
-}
-
-function statusTempat_() {
-  const out = ['## KEKOSONGAN TEMPAT GALA (dikemas kini setiap 30 saat)'];
-  try {
-    const data = SpreadsheetApp.openById(CFG.SHEET_GALA)
-      .getSheetByName(CFG.TAB_PESERTA_GALA).getDataRange().getValues();
-
-    // Baca TIGA lajur sahaja: GEG(4), Meja(5), Status(13).
-    // Nama, telefon, email, bayaran, pautan resit tidak disentuh langsung.
-    const kira = {};
-    let jumlah = 0;
-    data.slice(1).forEach(function (r) {
-      if (String(r[13]).toUpperCase() !== 'DISAHKAN') return;
-      const meja = String(r[5]).trim();
-      if (!meja) return;
-      kira[meja] = (kira[meja] || 0) + 1;
-      jumlah++;
-    });
-
-    out.push('Jumlah tempat disahkan: ' + jumlah + ' daripada 170.');
-    out.push('Baki kosong keseluruhan: ' + (170 - jumlah));
-    out.push('', 'Ikut meja:');
-    Object.keys(kira).sort(function (a, b) { return Number(a) - Number(b); }).forEach(function (m) {
-      const kosong = 10 - kira[m];
-      out.push('  Meja ' + m + ': ' + kira[m] + '/10 terisi, ' +
-               (kosong > 0 ? kosong + ' kosong' : 'PENUH'));
-    });
-  } catch (err) {
-    out.push('Status tempat tidak dapat dibaca buat masa ini.');
-  }
-  return out.join('\n');
-}
-
-// ─────────────────────────────────────────────────────────────
-// PROMPT
-// ─────────────────────────────────────────────────────────────
-
-function binaPrompt_(kb, soalan, bahasa) {
-  const arahan = [
-    'Anda pembantu maklumat rasmi GEG Summit Sabah 2026.',
-    'Jawab HANYA berdasarkan maklumat di bawah. Jangan reka apa-apa.',
-    '',
-    'PERATURAN:',
-    '1. Jika maklumat tiada di bawah, katakan anda tidak pasti dan minta mereka ' +
-       'hubungi urus setia atau kaunter pendaftaran. Jangan teka.',
-    '2. Jangan sesekali berikan nama peserta, email, nombor telefon, maklumat ' +
-       'bayaran atau sebarang butiran peribadi. Anda tidak memilikinya. Jika diminta, ' +
-       'terangkan dengan sopan bahawa maklumat peserta adalah persendirian.',
-    '3. Jika beberapa sesi berlangsung serentak, senaraikan KESEMUANYA.',
-    '4. Jika sesuatu GEG ada lebih satu meja, sebut kesemua mejanya.',
-    '5. Jangan andaikan waktu semasa. Gunakan waktu yang diberikan.',
-    '6. Angka kekosongan berubah-ubah; ingatkan pengguna untuk sahkan dengan urus setia ' +
-       'sebelum membuat keputusan penting.',
-    bahasa === 'en'
-      ? '7. Reply in English. Keep it short — 2 to 4 sentences unless a list is needed.'
-      : '7. Jawab dalam Bahasa Melayu. Ringkas — 2 hingga 4 ayat kecuali perlu senarai.',
-    '',
-    '=== MAKLUMAT RASMI ===',
-    kb,
-    '=== TAMAT MAKLUMAT ===',
-    '',
-    'Soalan pengguna: ' + soalan
-  ];
-  return arahan.join('\n');
-}
-
-// ─────────────────────────────────────────────────────────────
-// MODEL
-// ─────────────────────────────────────────────────────────────
-
-function tanyaModel_(prompt) {
-  try {
-    return CFG.PROVIDER === 'HERMES' ? panggilHermes_(prompt) : panggilGemini_(prompt);
-  } catch (err) {
-    // Sandaran automatik ke penyedia satu lagi
-    try {
-      return CFG.PROVIDER === 'HERMES' ? panggilGemini_(prompt) : panggilHermes_(prompt);
-    } catch (err2) {
-      return null;
-    }
-  }
-}
-
-function panggilGemini_(prompt) {
-  const key = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
-  if (!key) throw new Error('GEMINI_API_KEY tiada');
-
-  const res = UrlFetchApp.fetch(
-    CFG.GEMINI_URL + CFG.GEMINI_MODEL + ':generateContent?key=' + key, {
-      method: 'post',
-      contentType: 'application/json',
-      muteHttpExceptions: true,
-      payload: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 500 }
-      })
-    });
-
-  if (res.getResponseCode() !== 200) throw new Error('Gemini ' + res.getResponseCode());
-  const d = JSON.parse(res.getContentText());
-  return d.candidates[0].content.parts[0].text.trim();
-}
-
-function panggilHermes_(prompt) {
-  const key = PropertiesService.getScriptProperties().getProperty('HERMES_API_KEY');
-  if (!key) throw new Error('HERMES_API_KEY tiada');
-
-  const res = UrlFetchApp.fetch(CFG.HERMES_URL, {
-    method: 'post',
-    contentType: 'application/json',
-    headers: { Authorization: 'Bearer ' + key },
-    muteHttpExceptions: true,
-    payload: JSON.stringify({
-      model: CFG.HERMES_MODEL,
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.2,
-      max_tokens: 500
-    })
-  });
-
-  if (res.getResponseCode() !== 200) throw new Error('Hermes ' + res.getResponseCode());
-  return JSON.parse(res.getContentText()).choices[0].message.content.trim();
-}
-
-// ─────────────────────────────────────────────────────────────
-// LALUAN PANTAS — tanpa kos, tanpa risiko salah
-// ─────────────────────────────────────────────────────────────
-
-function jawapanPantas_(soalan, bahasa) {
-  const s = soalan.toLowerCase();
-  const en = bahasa === 'en';
-
-  if (/(bila|tarikh|when|date)/.test(s) && !/meja|table|sesi|session/.test(s)) {
-    return en
-      ? 'GEG Summit Sabah 2026 runs 7–8 November 2026. Day 1 (7 Nov) is the main conference at IPGM Kampus Gaya, Kota Kinabalu. Day 2 (8 Nov) is the Gala Night dinner and awards.'
-      : 'GEG Summit Sabah 2026 berlangsung pada 7–8 November 2026. Hari 1 (7 Nov) ialah Persidangan Utama di IPGM Kampus Gaya, Kota Kinabalu. Hari 2 (8 Nov) ialah Majlis Makan Malam & Anugerah.';
-  }
-
-  if (/(di ?mana|lokasi|tempat|venue|where|alamat)/.test(s) &&
-      !/meja|table|kosong|seat|kerusi|duduk|baki|parking|letak|kereta/.test(s)) {
-    return en
-      ? 'Day 1 (7 Nov, 07:30–17:30) is at IPG Kampus Gaya, Kota Kinabalu. The Gala Dinner on 8 November starts at 7:00 PM at Suria 7, Hotel Suria Sabah.'
-      : 'Hari 1 (7 Nov, 07:30–17:30) di IPG Kampus Gaya, Kota Kinabalu. Majlis Makan Malam pada 8 November bermula 7:00 malam di Suria 7, Hotel Suria Sabah.';
-  }
-
-  if (/(pakaian|dress|baju|attire)/.test(s)) {
-    return en
-      ? 'The Gala Night dress code is casual — pick one colour pairing: red and black, yellow and black, green and black, or blue and black.'
-      : 'Kod pakaian Malam Gala ialah kasual — pilih satu kombinasi: Merah+Hitam, Kuning+Hitam, Hijau+Hitam, atau Biru+Hitam.';
-  }
-
-  return null;
-}
-
-// ─────────────────────────────────────────────────────────────
-// UTILITI
-// ─────────────────────────────────────────────────────────────
-
-function cache_(kunci, tempoh, fn) {
-  const c = CacheService.getScriptCache();
-  const ada = c.get(kunci);
-  if (ada) return ada;
-  const baru = fn();
-  try { c.put(kunci, baru, tempoh); } catch (e) {}   // >100KB tak boleh cache
-  return baru;
-}
-
-function lulusHadKadar_(sid) {
-  const c = CacheService.getScriptCache();
-  const n = Number(c.get('had_' + sid) || 0);
-  if (n >= CFG.HAD_SOALAN_SESI) return false;
-  c.put('had_' + sid, String(n + 1), CFG.TEMPOH_HAD);
-  return true;
-}
-
-function log_(soalan, jenis, bahasa) {
-  try {
-    const ss = SpreadsheetApp.openById(CFG.SHEET_GALA);
-    let sh = ss.getSheetByName(CFG.TAB_LOG);
-    if (!sh) {
-      sh = ss.insertSheet(CFG.TAB_LOG);
-      sh.appendRow(['Masa', 'Soalan', 'Jenis', 'Bahasa']);
-    }
-    sh.appendRow([new Date(), soalan, jenis, bahasa]);
-  } catch (e) {}
-}
-
-function baris_(ss, nama) {
-  const sh = ss.getSheetByName(nama);
-  return sh ? sh.getDataRange().getValues() : [];
-}
-
-function gabung_(pengepala, baris) {
-  return pengepala.map(function (h, i) {
-    return baris[i] ? h + ': ' + baris[i] : '';
-  }).filter(String).join(' | ');
-}
-
-function masaSekarang_() {
-  return Utilities.formatDate(new Date(), CFG.ZON, "d MMM yyyy, HH:mm") + ' (waktu Sabah)';
-}
-
-function teksKosong_(b) {
-  return b === 'en' ? 'Ask me anything about the summit.' : 'Tanya apa sahaja tentang summit ini.';
-}
-function teksHad_(b) {
-  return b === 'en'
-    ? 'You have reached the question limit for this session. Please visit the registration counter.'
-    : 'Anda telah mencapai had soalan untuk sesi ini. Sila ke kaunter pendaftaran.';
-}
-function teksGagal_(b) {
-  return b === 'en'
-    ? 'I could not retrieve that right now. Please try again or ask at the registration counter.'
-    : 'Maklumat tidak dapat diperoleh sekarang. Cuba lagi atau tanya di kaunter pendaftaran.';
-}
-
-// ─────────────────────────────────────────────────────────────
-// UJIAN — jalankan dalam editor untuk semak KB sebelum deploy
-// ─────────────────────────────────────────────────────────────
-
-function ujiKB() {
-  Logger.log(binaKB_('ms'));
-}
+];
+const TRACK_MS = { 'Main Stage':'Pentas Utama', 'Showcase':'Perkongsian', 'Explore':'Jelajah', 'Break':'Rehat' };
+const CFG = {conferenceStart:'2026-11-07T08:00:00+08:00',conferenceEnd:'2026-11-07T18:00:00+08:00'};
+const CFG = {conferenceStart:'2026-11-07T07:30:00+08:00',conferenceEnd:'2026-11-07T17:30:00+08:00'};
+let language='en';
+const byId=id=>document.getElementById(id);
+function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
